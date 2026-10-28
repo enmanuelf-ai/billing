@@ -24,7 +24,10 @@ if (!k || !c) { msg.textContent = "This link is incomplete. Please contact Aliad
 var url = BASE + "&sig=" + encodeURIComponent(k) + "&clinician=" + encodeURIComponent(c);
 fetch(url, { method: "GET", referrerPolicy: "no-referrer" })
 .then(function (r) { if (!r.ok) throw new Error(r.status); return r.text(); })
-.then(function (h) { document.open(); document.write(h); document.close(); })
+.then(function (h) {
+h = h.split("sun.setDate(now.getDate() - now.getDay());").join("sun.setDate(now.getDate() - ((now.getDay() + 6) % 7));");
+document.open(); document.write(h); document.close();
+})
 .catch(function () { msg.textContent = "We couldn't load your billing hours right now. Please try again in a moment."; });
 })();
 </script>
