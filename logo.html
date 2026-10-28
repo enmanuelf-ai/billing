@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aliado Logo</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; background: transparent; overflow: hidden; }
+  .stage { display: flex; justify-content: center; padding-top: 6px; }
+  .logo { position: relative; width: 200px; }
+  .logo img { display: block; width: 200px; height: auto; }
+  .hat { display: none; position: absolute; width: 96px; left: 50px; top: -2px; transform: rotate(-14deg); transform-origin: 50% 90%; filter: drop-shadow(0 3px 3px rgba(40, 20, 60, 0.25)); }
+  body.hw .stage { padding-top: 42px; }
+  body.hw .hat { display: block; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="logo">
+    <img src="https://www.jotform.com/uploads/enmanuelf59/form_files/Captura%20de%20pantalla%202026-04-22%20160244.69fbcf54529891.59675446.jpg" alt="Aliado Community Health">
+    <svg class="hat" viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <ellipse cx="60" cy="84" rx="57" ry="11" fill="#2b1840"/>
+      <path d="M24 82 C40 72, 46 42, 58 24 C66 12, 80 6, 94 14 C83 17, 75 27, 73 41 C71 57, 84 71, 97 82 Z" fill="#3d2160"/>
+      <path d="M27 76 C49 68, 73 68, 93 76 L96 83 C73 76, 49 76, 25 83 Z" fill="#ff7a1a"/>
+      <rect x="53.5" y="69.5" width="13" height="10" rx="1.5" fill="none" stroke="#f6d77a" stroke-width="2.5"/>
+      <path d="M100 8 l2 5 l5 2 l-5 2 l-2 5 l-2 -5 l-5 -2 l5 -2 z" fill="#f6d77a"/>
+    </svg>
+  </div>
+</div>
+<script>
+(function () {
+  var HALLOWEEN_END = new Date(2026, 10, 2);
+  var p = new URLSearchParams((location.hash || "").replace(/^#/, ""));
+  var force = p.get("theme");
+  var isHw = force ? force === "hw" : new Date() < HALLOWEEN_END;
+  if (isHw) { document.body.className = "hw"; }
+})();
+</script>
+</body>
+</html>
