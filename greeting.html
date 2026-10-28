@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aliado Greeting</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; overflow-x: hidden; font-family: 'Inter', sans-serif; background: transparent; color: #0f1729; }
+  .header { text-align: left; padding: 12px 12px 10px; }
+  .header-tagline { font-size: 0.62rem; font-weight: 700; color: #0891b2; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; }
+  .header-greeting { font-size: 1.1rem; font-weight: 800; color: #0f1729; }
+  .header-quote { font-family: 'Playfair Display', serif; font-style: italic; font-size: 0.8rem; color: #7a86a0; margin-top: 3px; }
+  body.hw .header-tagline { color: #f26a0f; }
+  body.hw .header-greeting { color: #2e9e0f; text-shadow: 0 0 6px rgba(120, 230, 70, 0.45); }
+  body.hw .header-quote { color: #6b4f8a; }
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="header-tagline" id="tagline">Partnering with Families to Build Resilience and Hope</div>
+  <div class="header-greeting" id="greeting"></div>
+  <div class="header-quote" id="quote"></div>
+</div>
+<script>
+(function () {
+  var quotes = [
+    "Every visit is an opportunity to change a life.",
+    "Small moments create lasting change.",
+    "Compassion makes every encounter meaningful.",
+    "Every family deserves to feel supported.",
+    "Your work changes lives one visit at a time.",
+    "Hope grows through every connection.",
+    "Consistency creates trust.",
+    "Today's visit can change tomorrow."
+  ];
+  var hwQuotes = [
+    "No tricks, just treats: every visit counts.",
+    "Spooky season, same big heart.",
+    "Be the light on someone's darkest night.",
+    "Thanks for being someone's hero this Halloween."
+  ];
+  var HALLOWEEN_END = new Date(2026, 10, 2);
+  var isHw = new Date() < HALLOWEEN_END;
+  var p = new URLSearchParams((location.hash || "").replace(/^#/, ""));
+  var full = (p.get("c") || "").trim();
+  var firstName = full.split(/\s+/)[0] || "";
+  var hour = new Date().getHours();
+  var greeting = hour < 12 ? "Good Morning" : hour < 18 ? "Good Afternoon" : "Good Evening";
+  var emoji = hour < 12 ? "\u2600\uFE0F" : hour < 18 ? "\uD83D\uDC4B" : "\uD83C\uDF19";
+  var list = quotes;
+  if (isHw) {
+    document.body.className = "hw";
+    emoji = hour < 12 ? "\uD83C\uDF83" : hour < 18 ? "\uD83D\uDC7B" : "\uD83E\uDD87";
+    document.getElementById("tagline").textContent = "\uD83C\uDF83 Happy Halloween from Aliado";
+    list = hwQuotes;
+  }
+  document.getElementById("greeting").textContent = greeting + (firstName ? ", " + firstName : "") + " " + emoji;
+  document.getElementById("quote").textContent = list[Math.floor(Math.random() * list.length)];
+})();
+</script>
+</body>
+</html>
