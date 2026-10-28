@@ -27,7 +27,8 @@ var HW = '<style id="hw">'
 + '@keyframes hwfly{0%,100%{transform:translate(0,0) rotate(-8deg)}50%{transform:translate(-46px,12px) rotate(8deg)}}'
 + '.avatar{background:#ff7a1a!important;color:#1b0f2e!important}'
 + '.kicker::before{content:"\uD83C\uDF83  "}'
-+ '.wrap::before{content:"\uD83C\uDF83  Happy Halloween from Aliado!  \uD83D\uDC7B";display:block;text-align:center;color:#ffd7a3;font-size:.8rem;font-weight:600;letter-spacing:.02em;margin-top:-6px}'
++ '.wrap{position:relative;z-index:2}'
++ '.wrap::before{content:"\uD83C\uDF83  Happy Halloween from Aliado!  \uD83D\uDC7B";display:block;text-align:center;color:#ffd7a3;font-size:.8rem;font-weight:600;letter-spacing:.02em;margin:-4px 0 2px;text-shadow:0 1px 6px rgba(0,0,0,.35)}'
 + '.card{border-color:#ecdff5!important}'
 + '</style>';
 var p = new URLSearchParams((location.hash || "").replace(/^#/, ""));
