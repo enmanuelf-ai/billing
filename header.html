@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aliado Header</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; overflow: hidden; font-family: 'Inter', sans-serif; background: transparent; color: #0f1729; }
+  .stage { display: flex; justify-content: center; padding-top: 6px; }
+  .logo { position: relative; width: 200px; }
+  .logo img { display: block; width: 200px; height: auto; }
+  .hat { display: none; position: absolute; width: 78px; left: 30px; top: -30px; transform: rotate(-20deg); transform-origin: 50% 85%; filter: drop-shadow(0 3px 3px rgba(40, 20, 60, 0.25)); }
+  .header { text-align: left; padding: 14px 12px 10px; }
+  .header-tagline { font-size: 0.62rem; font-weight: 700; color: #0891b2; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; }
+  .header-greeting { font-size: 1.1rem; font-weight: 800; color: #0f1729; }
+  .header-quote { font-family: 'Playfair Display', serif; font-style: italic; font-size: 0.8rem; color: #7a86a0; margin-top: 3px; }
+  body.hw .stage { padding-top: 34px; }
+  body.hw .hat { display: block; }
+  body.hw .header-tagline { color: #f26a0f; }
+  body.hw .header-greeting { color: #2e9e0f; text-shadow: 0 0 6px rgba(120, 230, 70, 0.45); }
+  body.hw .header-quote { color: #6b4f8a; }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="logo">
+    <img src="https://www.jotform.com/uploads/enmanuelf59/form_files/Captura%20de%20pantalla%202026-04-22%20160244.69fbcf54529891.59675446.jpg" alt="Aliado Community Health">
+    <svg class="hat" viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <ellipse cx="60" cy="84" rx="57" ry="11" fill="#2b1840"/>
+      <path d="M24 82 C40 72, 46 42, 58 24 C66 12, 80 6, 94 14 C83 17, 75 27, 73 41 C71 57, 84 71, 97 82 Z" fill="#3d2160"/>
+      <path d="M27 76 C49 68, 73 68, 93 76 L96 83 C73 76, 49 76, 25 83 Z" fill="#ff7a1a"/>
+      <rect x="53.5" y="69.5" width="13" height="10" rx="1.5" fill="none" stroke="#f6d77a" stroke-width="2.5"/>
+      <path d="M100 8 l2 5 l5 2 l-5 2 l-2 5 l-2 -5 l-5 -2 l5 -2 z" fill="#f6d77a"/>
+    </svg>
+  </div>
+</div>
+<div class="header">
+  <div class="header-tagline" id="tagline">Partnering with Families to Build Resilience and Hope</div>
+  <div class="header-greeting" id="greeting"></div>
+  <div class="header-quote" id="quote"></div>
+</div>
+<script>
+(function () {
+  var quotes = [
+    "Every visit is an opportunity to change a life.",
+    "Small moments create lasting change.",
+    "Compassion makes every encounter meaningful.",
+    "Every family deserves to feel supported.",
+    "Your work changes lives one visit at a time.",
+    "Hope grows through every connection.",
+    "Consistency creates trust.",
+    "Today's visit can change tomorrow."
+  ];
+  var hwQuotes = [
+    "No tricks, just treats: every visit counts.",
+    "Spooky season, same big heart.",
+    "Be the light on someone's darkest night.",
+    "Thanks for being someone's hero this Halloween."
+  ];
+  var HALLOWEEN_END = new Date(2026, 10, 2);
+  var p = new URLSearchParams((location.hash || "").replace(/^#/, ""));
+  var force = p.get("theme");
+  var isHw = force ? force === "hw" : new Date() < HALLOWEEN_END;
+  var full = (p.get("c") || "").trim();
+  var firstName = full.split(/\s+/)[0] || "";
+  var hour = new Date().getHours();
+  var greeting = hour < 12 ? "Good Morning" : hour < 18 ? "Good Afternoon" : "Good Evening";
+  var emoji = hour < 12 ? "\u2600\uFE0F" : hour < 18 ? "\uD83D\uDC4B" : "\uD83C\uDF19";
+  var list = quotes;
+  if (isHw) {
+    document.body.className = "hw";
+    emoji = hour < 12 ? "\uD83C\uDF83" : hour < 18 ? "\uD83D\uDC7B" : "\uD83E\uDD87";
+    document.getElementById("tagline").textContent = "\uD83C\uDF83 Happy Halloween from Aliado";
+    list = hwQuotes;
+  }
+  document.getElementById("greeting").textContent = greeting + (firstName ? ", " + firstName : "") + " " + emoji;
+  document.getElementById("quote").textContent = list[Math.floor(Math.random() * list.length)];
+})();
+</script>
+</body>
+</html>
