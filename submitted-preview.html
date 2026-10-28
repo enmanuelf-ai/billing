@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<title>Encounter Submitted</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 70px 18px 30px; color: #0f1729; overflow-x: hidden;
+    background: radial-gradient(circle at 15% 20%, #3b5fc0 0%, transparent 45%), radial-gradient(circle at 85% 85%, #16a34a33 0%, transparent 40%), linear-gradient(160deg, #0f2366 0%, #1a3a8f 55%, #2a4fb0 100%); }
+  .card { position: relative; background: #fff; border-radius: 26px; width: 100%; max-width: 420px; padding: 64px 30px 28px; text-align: center; box-shadow: 0 30px 60px rgba(5,15,50,0.35); animation: rise .6s cubic-bezier(.2,.9,.3,1.2) both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(24px) scale(.97); } to { opacity: 1; transform: none; } }
+  .logo { position: absolute; top: -46px; left: 50%; transform: translateX(-50%); width: 92px; height: 92px; border-radius: 50%; background: #fff; box-shadow: 0 8px 24px rgba(5,15,50,0.25); display: flex; align-items: center; justify-content: center; overflow: hidden; border: 4px solid #fff; }
+  .logo img { width: 100%; height: 100%; object-fit: contain; }
+  .check { width: 84px; height: 84px; margin: 4px auto 18px; }
+  .check circle { fill: #EDFCF2; stroke: #16a34a; stroke-width: 4; stroke-dasharray: 252; stroke-dashoffset: 252; animation: draw .7s .35s ease-out forwards; }
+  .check path { fill: none; stroke: #16a34a; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 60; stroke-dashoffset: 60; animation: draw .45s 1s ease-out forwards; }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  h1 { font-size: 1.55rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 6px; }
+  .sub { font-size: 0.95rem; color: #4a5568; }
+  .stamp { display: inline-flex; align-items: center; gap: 6px; margin-top: 14px; background: #f0f4ff; color: #1a3a8f; font-size: 0.78rem; font-weight: 700; padding: 7px 14px; border-radius: 999px; }
+  .divider { height: 1px; background: #eef1f6; margin: 22px 0 18px; }
+  .quote { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.02rem; color: #1a3a8f; line-height: 1.5; padding: 0 6px; }
+  .safe { margin-top: 22px; display: flex; align-items: center; gap: 12px; text-align: left; background: #EDFCF2; border: 1px solid #bbf7d0; border-radius: 14px; padding: 14px 16px; }
+  .safe-icon { width: 34px; height: 34px; border-radius: 50%; background: #16a34a; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; flex-shrink: 0; }
+  .safe b { display: block; font-size: 0.9rem; color: #15803d; }
+  .safe span { font-size: 0.78rem; color: #4a5568; }
+  .brand { margin-top: 22px; font-size: 0.66rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: #a0aab8; }
+  .confetti { position: fixed; top: -12px; width: 8px; height: 14px; border-radius: 2px; opacity: .9; animation: fall linear forwards; pointer-events: none; }
+  @keyframes fall { to { transform: translateY(110vh) rotate(540deg); opacity: 0; } }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo"><img src="https://www.jotform.com/uploads/enmanuelf59/form_files/Captura%20de%20pantalla%202026-04-22%20160244.69fbcf54529891.59675446.jpg" alt="Aliado"></div>
+    <svg class="check" viewBox="0 0 90 90"><circle cx="45" cy="45" r="40"/><path d="M28 46 l12 12 l22 -24"/></svg>
+    <h1>Encounter submitted!</h1>
+    <div class="sub">Your session was recorded successfully.</div>
+    <div class="stamp" id="stamp"></div>
+    <div class="divider"></div>
+    <div class="quote" id="quote"></div>
+    <div class="safe">
+      <div class="safe-icon">&#10003;</div>
+      <div><b>It's safe to close this tab</b><span>Your hours will show in My Billing Hours in a few minutes.</span></div>
+    </div>
+    <div class="brand">Aliado Community Health</div>
+  </div>
+<script>
+  try { history.replaceState(null, '', location.pathname); } catch (e) {}
+  var now = new Date();
+  document.getElementById('stamp').textContent = '\uD83D\uDCC5 ' + now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) + ' \u00B7 ' + now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  var quotes = ['Thank you for the care you bring to every family.', 'Another visit, another step forward for a family.', 'Your work today makes a difference tomorrow.', 'Small moments create lasting change.', 'Hope grows through every connection.'];
+  document.getElementById('quote').textContent = '\u201C' + quotes[Math.floor(Math.random() * quotes.length)] + '\u201D';
+  var colors = ['#1a3a8f', '#3b5fc0', '#16a34a', '#f59e0b', '#7c3aed', '#ffffff'];
+  for (var i = 0; i < 40; i++) { var c = document.createElement('div'); c.className = 'confetti'; c.style.left = Math.random() * 100 + 'vw'; c.style.background = colors[i % colors.length]; c.style.animationDuration = (2.2 + Math.random() * 1.8) + 's'; c.style.animationDelay = (Math.random() * 0.6) + 's'; document.body.appendChild(c); }
+</script>
+</body>
+</html>
