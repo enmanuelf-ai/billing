@@ -8,38 +8,70 @@
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html, body { width: 100%; overflow: hidden; font-family: 'Inter', sans-serif; background: transparent; color: #0f1729; }
-  .stage { display: flex; justify-content: center; padding-top: 6px; }
+  .panel { position: relative; }
+  .stage { display: flex; justify-content: center; padding-top: 6px; position: relative; z-index: 2; }
   .logo { position: relative; width: 200px; }
   .logo img { display: block; width: 200px; height: auto; }
-  .hat { display: none; position: absolute; width: 78px; left: 30px; top: -30px; transform: rotate(-20deg); transform-origin: 50% 85%; filter: drop-shadow(0 3px 3px rgba(40, 20, 60, 0.25)); }
-  .header { text-align: left; padding: 14px 12px 10px; }
+  .hat, .deco { display: none; }
+  .header { text-align: left; padding: 14px 12px 10px; position: relative; z-index: 2; }
   .header-tagline { font-size: 0.62rem; font-weight: 700; color: #0891b2; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 6px; }
   .header-greeting { font-size: 1.1rem; font-weight: 800; color: #0f1729; }
   .header-quote { font-family: 'Playfair Display', serif; font-style: italic; font-size: 0.8rem; color: #7a86a0; margin-top: 3px; }
+
+  /* ---------- Halloween ---------- */
+  body.hw .panel { margin: 4px 6px 0; height: 296px; border-radius: 18px; overflow: hidden;
+    background:
+      radial-gradient(1.5px 1.5px at 12% 18%, #fff 60%, transparent 61%),
+      radial-gradient(1px 1px at 28% 8%, #fff 60%, transparent 61%),
+      radial-gradient(1.5px 1.5px at 44% 22%, #ffe9a8 60%, transparent 61%),
+      radial-gradient(1px 1px at 62% 12%, #fff 60%, transparent 61%),
+      radial-gradient(1.5px 1.5px at 74% 30%, #fff 60%, transparent 61%),
+      radial-gradient(1px 1px at 8% 44%, #fff 60%, transparent 61%),
+      radial-gradient(1px 1px at 92% 52%, #ffe9a8 60%, transparent 61%),
+      radial-gradient(1px 1px at 36% 40%, #fff 60%, transparent 61%),
+      linear-gradient(160deg, #120a24 0%, #2a1446 55%, #4a1f5c 100%); }
   body.hw .stage { padding-top: 34px; }
-  body.hw .hat { display: block; }
-  body.hw .header-tagline { color: #f26a0f; }
-  body.hw .header-greeting { color: #2e9e0f; text-shadow: 0 0 6px rgba(120, 230, 70, 0.45); }
-  body.hw .header-quote { color: #6b4f8a; }
+  body.hw .logo { width: 150px; }
+  body.hw .logo img { width: 150px; border-radius: 50%; box-shadow: 0 0 0 6px #fff, 0 0 26px 10px rgba(246, 215, 122, 0.35); background: #fff; }
+  body.hw .hat { display: block; position: absolute; width: 66px; left: 18px; top: -30px; transform: rotate(-20deg); transform-origin: 50% 85%; filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.45)); z-index: 3; }
+  body.hw .deco { display: block; position: absolute; z-index: 1; pointer-events: none; }
+  body.hw .moon { right: 18px; top: 16px; width: 42px; height: 42px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #fff8d6, #f6d77a 60%, #e9b949); box-shadow: 0 0 30px 8px rgba(246, 215, 122, 0.30); }
+  body.hw .bat1 { right: 78px; top: 22px; font-size: 18px; animation: fly1 6s ease-in-out infinite; }
+  body.hw .bat2 { left: 22px; top: 70px; font-size: 14px; animation: fly2 7s ease-in-out infinite; }
+  body.hw .pump1 { right: 14px; bottom: 10px; font-size: 22px; }
+  body.hw .pump2 { right: 42px; bottom: 8px; font-size: 16px; }
+  @keyframes fly1 { 0%,100% { transform: translate(0,0) rotate(-8deg); } 50% { transform: translate(-46px,12px) rotate(8deg); } }
+  @keyframes fly2 { 0%,100% { transform: translate(0,0) rotate(6deg); } 50% { transform: translate(34px,-10px) rotate(-6deg); } }
+  body.hw .header { padding: 16px 16px 10px; }
+  body.hw .header-tagline { color: #ff9a3c; }
+  body.hw .header-greeting { color: #9cff57; text-shadow: 0 0 6px rgba(156, 255, 87, 0.55), 0 0 14px rgba(156, 255, 87, 0.25); }
+  body.hw .header-quote { color: #d9c7f0; }
 </style>
 </head>
 <body>
-<div class="stage">
-  <div class="logo">
-    <img src="https://www.jotform.com/uploads/enmanuelf59/form_files/Captura%20de%20pantalla%202026-04-22%20160244.69fbcf54529891.59675446.jpg" alt="Aliado Community Health">
-    <svg class="hat" viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <ellipse cx="60" cy="84" rx="57" ry="11" fill="#2b1840"/>
-      <path d="M24 82 C40 72, 46 42, 58 24 C66 12, 80 6, 94 14 C83 17, 75 27, 73 41 C71 57, 84 71, 97 82 Z" fill="#3d2160"/>
-      <path d="M27 76 C49 68, 73 68, 93 76 L96 83 C73 76, 49 76, 25 83 Z" fill="#ff7a1a"/>
-      <rect x="53.5" y="69.5" width="13" height="10" rx="1.5" fill="none" stroke="#f6d77a" stroke-width="2.5"/>
-      <path d="M100 8 l2 5 l5 2 l-5 2 l-2 5 l-2 -5 l-5 -2 l5 -2 z" fill="#f6d77a"/>
-    </svg>
+<div class="panel">
+  <div class="deco moon"></div>
+  <div class="deco bat1">&#x1F987;</div>
+  <div class="deco bat2">&#x1F987;</div>
+  <div class="deco pump1">&#x1F383;</div>
+  <div class="deco pump2">&#x1F383;</div>
+  <div class="stage">
+    <div class="logo">
+      <img src="https://www.jotform.com/uploads/enmanuelf59/form_files/Captura%20de%20pantalla%202026-04-22%20160244.69fbcf54529891.59675446.jpg" alt="Aliado Community Health">
+      <svg class="hat" viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <ellipse cx="60" cy="84" rx="57" ry="11" fill="#1c0f2b"/>
+        <path d="M24 82 C40 72, 46 42, 58 24 C66 12, 80 6, 94 14 C83 17, 75 27, 73 41 C71 57, 84 71, 97 82 Z" fill="#3d2160"/>
+        <path d="M27 76 C49 68, 73 68, 93 76 L96 83 C73 76, 49 76, 25 83 Z" fill="#ff7a1a"/>
+        <rect x="53.5" y="69.5" width="13" height="10" rx="1.5" fill="none" stroke="#f6d77a" stroke-width="2.5"/>
+        <path d="M100 8 l2 5 l5 2 l-5 2 l-2 5 l-2 -5 l-5 -2 l5 -2 z" fill="#f6d77a"/>
+      </svg>
+    </div>
   </div>
-</div>
-<div class="header">
-  <div class="header-tagline" id="tagline">Partnering with Families to Build Resilience and Hope</div>
-  <div class="header-greeting" id="greeting"></div>
-  <div class="header-quote" id="quote"></div>
+  <div class="header">
+    <div class="header-tagline" id="tagline">Partnering with Families to Build Resilience and Hope</div>
+    <div class="header-greeting" id="greeting"></div>
+    <div class="header-quote" id="quote"></div>
+  </div>
 </div>
 <script>
 (function () {
