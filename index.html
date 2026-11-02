@@ -42,6 +42,8 @@ fetch(url, { method: "GET", referrerPolicy: "no-referrer" })
 .then(function (h) {
 h = h.split("sun.setDate(now.getDate() - now.getDay());").join("sun.setDate(now.getDate() - ((now.getDay() + 6) % 7));");
 if (new Date() < HALLOWEEN_END) { h = h.replace("</head>", HW + "</head>"); }
+var FIX = '<script>setTimeout(function(){try{var e=function(i){return document.getElementById(i)};var g=parseFloat((typeof S!=="undefined"&&S.WeeklyGoal)||0);if(!g){var gt=e("goalTarget");if(gt&&gt.parentElement)gt.parentElement.textContent="hrs this week";var b=e("bar");if(b&&b.parentElement)b.parentElement.style.display="none";var r=e("remaining");if(r)r.textContent="No weekly goal";var p=e("pct");if(p)p.style.display="none";var c=e("celebrate");if(c)c.style.display="none";}var l=e("vLast");if(l&&/1900/.test(l.textContent))l.textContent="\u2014";}catch(x){}},60);<\/script>';
+if (h.indexOf("</body>") >= 0) { h = h.replace("</body>", FIX + "</body>"); } else { h = h + FIX; }
 document.open(); document.write(h); document.close();
 })
 .catch(function () { msg.textContent = "We couldn't load your billing hours right now. Please try again in a moment."; });
