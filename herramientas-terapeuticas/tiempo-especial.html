@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Tiempo especial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FFF6EE;--surface:#FFFFFF;--ink:#2A1E16;--muted:#7A6556;--line:#F0DFD0;--soft:#FBEADB;--accent:#E8763A;--ok:#2FA77A;--no:#C9483B;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#1C1410;--surface:#2A1F19;--ink:#FBEFE6;--muted:#C9B3A3;--line:#43332A;--soft:#382A22;--accent:#FF9A5E;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1C1410;--surface:#2A1F19;--ink:#FBEFE6;--muted:#C9B3A3;--line:#43332A;--soft:#382A22;--accent:#FF9A5E;color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.45 Lato,"Helvetica Neue",Arial,sans-serif;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:540px;margin:0 auto;padding:14px 18px 32px;display:flex;flex-direction:column;gap:16px;min-height:100vh}
+.top{display:flex;justify-content:space-between;align-items:center}
+.brand{font:700 18px "Baloo 2",sans-serif;color:var(--accent);display:flex;gap:8px;align-items:center}
+.brand i{width:10px;height:10px;border-radius:50%;background:#1A3A8F}
+.lang{display:flex;background:var(--soft);border-radius:999px;padding:3px}
+.lang button{border:0;background:none;color:var(--muted);font:700 14px Lato,sans-serif;padding:6px 14px;border-radius:999px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--surface);color:var(--accent)}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+h1{font:800 clamp(36px,10vw,50px)/1 "Baloo 2",sans-serif;margin:8px 0 0}
+h2{font:800 26px/1.1 "Baloo 2",sans-serif;margin:0}
+.lead{color:var(--muted);margin:0}
+.cols{display:grid;gap:12px}
+.box{background:var(--surface);border:2px solid var(--line);border-radius:22px;padding:16px}
+.box h3{margin:0 0 10px;font:700 20px "Baloo 2",sans-serif}
+.box ul{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+.box li{display:flex;gap:10px}
+.box li b{display:block}
+.box li span{color:var(--muted);font-size:15px}
+.do h3{color:var(--ok)} .dont h3{color:var(--no)}
+.primary{border:0;background:#E8763A;color:#fff;border-radius:999px;padding:15px 22px;font:700 18px Lato,sans-serif;cursor:pointer;width:100%}
+.ghost{border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:12px 20px;font:700 16px Lato,sans-serif;cursor:pointer;width:100%}
+.clock{font:800 clamp(80px,26vw,120px)/1 "Baloo 2",sans-serif;text-align:center;letter-spacing:-.02em;margin:4px 0 0}
+.ring{height:10px;border-radius:999px;background:var(--line);overflow:hidden}
+.ring i{display:block;height:100%;background:var(--accent);width:0;transition:width 1s linear}
+.tip{background:var(--soft);border-radius:20px;padding:14px 16px;font-size:18px;min-height:84px}
+.tip b{font-family:"Baloo 2",sans-serif;font-size:20px;display:block}
+.tally{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.t{border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:18px;padding:10px 12px;cursor:pointer;text-align:left;font:700 15px Lato,sans-serif;display:flex;justify-content:space-between;align-items:center;gap:8px;min-height:56px}
+.t em{font-style:normal;font:800 24px "Baloo 2",sans-serif}
+.t.g{border-color:color-mix(in srgb,var(--ok) 55%,var(--line))} .t.g em{color:var(--ok)}
+.t.r{border-color:color-mix(in srgb,var(--no) 45%,var(--line))} .t.r em{color:var(--no)}
+.label{font-weight:700;color:var(--muted);font-size:14px;margin:0}
+.ex{display:grid;gap:8px}
+.ex p{margin:0;background:var(--surface);border:2px solid var(--line);border-radius:16px;padding:10px 14px}
+.summary{background:var(--surface);border:2px solid var(--accent);border-radius:20px;padding:14px 16px;font-size:15.5px;line-height:1.5}
+.note{color:var(--muted);font-size:14px;margin:0;text-align:center}
+:root{--hc:#E8763A}
+.hbtn{border:2px solid var(--line);background:var(--surface);color:var(--hc);border-radius:999px;padding:5px 11px 5px 6px;font:700 13.5px Lato,sans-serif;cursor:pointer;display:flex;align-items:center;gap:6px}
+.hbtn i{font-style:normal;width:20px;height:20px;border-radius:50%;background:var(--hc);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:13px}
+.hsheet-bg{position:fixed;inset:0;z-index:50;background:rgba(10,15,30,.45);display:flex;align-items:flex-end;justify-content:center}
+.hsheet{background:var(--bg);color:var(--ink);width:100%;max-width:560px;max-height:88vh;overflow-y:auto;border-radius:26px 26px 0 0;padding:18px 18px calc(24px + env(safe-area-inset-bottom,0px))}
+.hsheet-head{display:flex;justify-content:space-between;align-items:center;gap:10px;position:sticky;top:-18px;background:var(--bg);padding:6px 0 10px}
+.hsheet-head h2{font:800 24px/1.1 "Baloo 2",Outfit,sans-serif;margin:0}
+.hsheet-head button{border:0;background:var(--soft);color:var(--ink);width:38px;height:38px;border-radius:50%;font-size:18px;cursor:pointer;flex:none}
+.hsec{background:var(--surface);border:2px solid var(--line);border-radius:20px;padding:14px 16px;margin-bottom:12px;font-size:16px;line-height:1.5}
+.hsec h3{margin:0 0 6px;font:700 19px/1.15 "Baloo 2",Outfit,sans-serif;color:var(--hc)}
+.hsec p{margin:0}
+.hsec ol{margin:0;padding-left:20px;display:grid;gap:5px}
+.hsec.tip{background:var(--soft);border-color:transparent}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><div style="display:flex;align-items:center;gap:10px"><div class="brand"><i></i>Aliado</div><button class="hbtn" id="helpBtn" aria-haspopup="dialog"><i aria-hidden="true">?</i><span id="helpLbl">Ayuda</span></button></div>
+    <div class="lang"><button data-lang="en" aria-pressed="true">EN</button><button data-lang="es" aria-pressed="false">ES</button></div></div>
+
+  <section id="s0" style="display:flex;flex-direction:column;gap:16px">
+    <h1 data-t="title"></h1>
+    <p class="lead" data-t="lead"></p>
+    <div class="cols">
+      <div class="box do"><h3 data-t="doT"></h3><ul id="doList"></ul></div>
+      <div class="box dont"><h3 data-t="dontT"></h3><ul id="dontList"></ul></div>
+    </div>
+    <button class="ghost" id="exBtn" data-t="exBtn"></button>
+    <div class="ex" id="ex" hidden></div>
+    <button class="primary" id="start" data-t="start"></button>
+  </section>
+
+  <section id="s1" hidden style="display:flex;flex-direction:column;gap:14px">
+    <div class="clock" id="clock">5:00</div>
+    <div class="ring"><i id="bar"></i></div>
+    <div class="tip" id="tip"></div>
+    <p class="label" data-t="tallyL"></p>
+    <div class="tally" id="tally"></div>
+    <button class="ghost" id="pause"></button>
+    <button class="ghost" id="finish" data-t="finish"></button>
+  </section>
+
+  <section id="s2" hidden style="display:flex;flex-direction:column;gap:14px">
+    <h2 data-t="doneT"></h2>
+    <p class="lead" data-t="doneLead"></p>
+    <div class="summary" id="summary"></div>
+    <button class="primary" id="copy" data-t="copy"></button>
+    <p class="note" id="copied"></p>
+    <button class="ghost" id="again" data-t="again"></button>
+  </section>
+</div>
+<script>
+const UI={es:{title:"Tiempo especial",lead:"5 minutos al día de juego donde el niño dirige y el padre lo acompaña. Fortalece la relación y mejora la conducta.",
+ doT:"Haz esto",dontT:"Evita esto",exBtn:"Ver ejemplos de elogio específico",start:"Empezar 5 minutos",
+ tallyL:"Toca cada vez que el padre lo haga (opcional, para la nota)",pause:"Pausar",resume:"Seguir",finish:"Terminar ahora",
+ doneT:"¡Tiempo especial completado!",doneLead:"Comenta con el padre qué salió bien y qué practicar esta semana en casa.",
+ copy:"Copiar resumen",copied:"Resumen copiado. Pégalo en tu nota de progreso.",again:"Hacer otro tiempo especial"},
+ en:{title:"Special time",lead:"5 minutes a day of play where the child leads and the parent follows. It strengthens the relationship and improves behavior.",
+ doT:"Do this",dontT:"Avoid this",exBtn:"See examples of specific praise",start:"Start 5 minutes",
+ tallyL:"Tap each time the parent does it (optional, for the note)",pause:"Pause",resume:"Resume",finish:"Finish now",
+ doneT:"Special time complete!",doneLead:"Talk with the parent about what went well and what to practice at home this week.",
+ copy:"Copy summary",copied:"Summary copied. Paste it into your progress note.",again:"Do another special time"}};
+const DO=[["👏",{es:["Elogia específico","Di qué hizo bien."],en:["Give specific praise","Say what they did well."]}],
+ ["🔁",{es:["Repite lo que dice","Muestra que lo escuchas."],en:["Reflect what they say","Show you're listening."]}],
+ ["🧸",{es:["Imita su juego","Juega a lo mismo que él."],en:["Imitate their play","Play the same way they do."]}],
+ ["🎙️",{es:["Describe lo que hace","Como un narrador de deportes."],en:["Describe what they do","Like a sports announcer."]}],
+ ["😊",{es:["Disfruta","Muestra que te gusta estar ahí."],en:["Enjoy","Show you like being there."]}]];
+const DONT=[["❓",{es:["Preguntas","Le quitan el control del juego."],en:["Questions","They take away the lead."]}],
+ ["📣",{es:["Órdenes","Hoy él dirige."],en:["Commands","Today the child leads."]}],
+ ["🙅",{es:["Críticas","Ni \u201cno\u201d ni \u201ceso está mal\u201d."],en:["Criticism","No \u201cno\u201d or \u201cthat's wrong\u201d."]}]];
+const EX={es:["\u201cMe encanta cómo compartes los bloques conmigo.\u201d","\u201cGracias por usar tu voz de adentro.\u201d","\u201cQué bien estás esperando tu turno.\u201d","\u201cTrabajaste muy duro para hacer esa torre tan alta.\u201d","\u201cMe gusta cómo guardaste los colores cuando terminaste.\u201d"],
+ en:["\u201cI love how you're sharing the blocks with me.\u201d","\u201cThank you for using your inside voice.\u201d","\u201cYou're doing a great job waiting for your turn.\u201d","\u201cYou worked so hard to build that tall tower.\u201d","\u201cI like how you put the crayons away when you finished.\u201d"]};
+const TIPS={es:[["👏 Elogia","\u201cQué bien coloreaste dentro de las líneas.\u201d"],["🎙️ Describe","\u201cEstás poniendo el carro rojo encima del azul.\u201d"],["🔁 Repite","Niño: \u201cEs un dinosaurio.\u201d Padre: \u201cEs un dinosaurio grande.\u201d"],["🧸 Imita","Si construye una torre, construye otra a su lado."],["❓ Cambia la pregunta","En vez de \u201c¿Qué es eso?\u201d di \u201cHiciste una casa.\u201d"],["😊 Disfruta","\u201c¡Qué divertido es jugar contigo!\u201d"]],
+ en:[["👏 Praise","\u201cGreat job coloring inside the lines.\u201d"],["🎙️ Describe","\u201cYou're putting the red car on top of the blue one.\u201d"],["🔁 Reflect","Child: \u201cIt's a dinosaur.\u201d Parent: \u201cIt's a big dinosaur.\u201d"],["🧸 Imitate","If they build a tower, build one next to it."],["❓ Swap the question","Instead of \u201cWhat is that?\u201d say \u201cYou made a house.\u201d"],["😊 Enjoy","\u201cIt's so much fun playing with you!\u201d"]]};
+const TALLY=[["praise","g",{es:"Elogio específico",en:"Labeled praise"}],["reflect","g",{es:"Repetir",en:"Reflection"}],["describe","g",{es:"Describir",en:"Description"}],["imitate","g",{es:"Imitar",en:"Imitation"}],
+ ["question","r",{es:"Pregunta",en:"Question"}],["command","r",{es:"Orden",en:"Command"}],["criticism","r",{es:"Crítica",en:"Criticism"}]];
+let lang="en",left=300,timer=null,running=false,counts={},tipI=0,tipTimer=null;
+const $=id=>document.getElementById(id);
+function list(el,arr,cls){el.innerHTML=arr.map(([e,t])=>`<li><span aria-hidden="true" style="font-size:22px;color:inherit">${e}</span><div><b>${t[lang][0]}</b><span>${t[lang][1]}</span></div></li>`).join("");}
+function paint(){document.documentElement.lang=lang;document.title=UI[lang].title;
+ document.querySelectorAll("[data-t]").forEach(el=>el.textContent=UI[lang][el.dataset.t]);
+ document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.lang===lang));
+ list($("doList"),DO);list($("dontList"),DONT);
+ $("ex").innerHTML=EX[lang].map(x=>`<p>${x}</p>`).join("");
+ $("pause").textContent=running?UI[lang].pause:UI[lang].resume;showTip();renderTally();if(!$("s2").hidden)$("summary").textContent=summary();}
+document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{lang=b.dataset.lang;paint();});
+function go(n){[0,1,2].forEach(i=>$("s"+i).hidden=i!==n);window.scrollTo(0,0);}
+function showTip(){const t=TIPS[lang][tipI%TIPS[lang].length];$("tip").innerHTML=`<b>${t[0]}</b>${t[1]}`;}
+function renderTally(){$("tally").innerHTML="";TALLY.forEach(([k,c,l])=>{const b=document.createElement("button");b.className="t "+c;b.innerHTML=`<span>${l[lang]}</span><em>${counts[k]||0}</em>`;b.onclick=()=>{counts[k]=(counts[k]||0)+1;renderTally();};$("tally").appendChild(b);});}
+function fmt(s){return Math.floor(s/60)+":"+String(s%60).padStart(2,"0");}
+function tick(){left--;$("clock").textContent=fmt(Math.max(left,0));$("bar").style.width=((300-left)/300*100)+"%";if(left<=0)end();}
+function play(){running=true;timer=setInterval(tick,1000);tipTimer=setInterval(()=>{tipI++;showTip();},20000);$("pause").textContent=UI[lang].pause;}
+function stop(){running=false;clearInterval(timer);clearInterval(tipTimer);$("pause").textContent=UI[lang].resume;}
+$("exBtn").onclick=()=>{$("ex").hidden=!$("ex").hidden;};
+$("start").onclick=()=>{left=300;counts={};tipI=0;$("clock").textContent="5:00";$("bar").style.width="0";renderTally();showTip();go(1);play();};
+$("pause").onclick=()=>running?stop():play();
+$("finish").onclick=end;
+function end(){stop();$("summary").textContent=summary();$("copied").textContent="";go(2);}
+function summary(){const mins=Math.max(1,Math.round((300-Math.max(left,0))/60));
+ const g=["praise","reflect","describe","imitate"].map(k=>counts[k]||0),r=["question","command","criticism"].map(k=>counts[k]||0);
+ let s=`Clinician coached caregiver through a ${mins}-minute child-led special time activity to strengthen the caregiver-child relationship and increase positive attention. Clinician modeled and reviewed specific (labeled) praise, reflecting, imitating, describing and enjoying the play, and avoiding questions, commands and criticism.`;
+ if(g.concat(r).some(x=>x>0)) s+=` During the activity, caregiver used ${g[0]} labeled praise(s), ${g[1]} reflection(s), ${g[2]} behavior description(s) and ${g[3]} imitation(s); caregiver used ${r[0]} question(s), ${r[1]} command(s) and ${r[2]} criticism(s).`;
+ return s+" Caregiver was encouraged to practice 5 minutes of special time daily at home.";}
+$("copy").onclick=async()=>{const t=$("summary").textContent;try{await navigator.clipboard.writeText(t);}catch(e){const a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();document.execCommand("copy");a.remove();}$("copied").textContent=UI[lang].copied;};
+$("again").onclick=()=>go(0);
+paint();go(0);
+</script>
+<div class="hsheet-bg" id="hBg" hidden><div class="hsheet" role="dialog" aria-modal="true" aria-labelledby="hT2"><div class="hsheet-head"><h2 id="hT2"></h2><button id="hX" aria-label="Cerrar">✕</button></div><div id="hB2"></div></div></div>
+<script>
+(function(){
+const H={"es": {"title": "¿Cómo funciona el tiempo especial?", "goal": "Enseña al padre a dar atención positiva en 5 minutos diarios de juego donde el niño dirige. Fortalece la relación y, con la práctica, mejora la conducta. Para Parent Coaching con niños pequeños, aproximadamente de 2 a 8 años.", "how": ["Antes de empezar, repasa con el padre lo que se hace y lo que se evita, y muéstrale los ejemplos de elogio específico.", "Que el niño escoja un juguete o actividad tranquila: bloques, dibujar, plastilina. Evita pantallas y juegos con reglas.", "Inicia el timer. El padre juega; tú observas y le das sugerencias en voz baja.", "Si quieres datos para la nota, toca los contadores cada vez que el padre elogia, describe, imita o repite, o cuando se le escapa una pregunta, una orden o una crítica.", "Al terminar, comenta con el padre qué salió bien, déjale la tarea de practicarlo cada día y copia el resumen."], "tips": ["Al principio es normal que el padre haga muchas preguntas. Más que corregirlo, enséñale a convertirlas en descripciones: en vez de “¿Qué haces?”, “Estás construyendo una casa”.", "Elogia también al padre cuando lo hace bien. Aprende igual que el niño."]}, "en": {"title": "How does special time work?", "goal": "Teaches the parent to give positive attention through 5 minutes a day of child-led play. It strengthens the relationship and, with practice, improves behavior. For Parent Coaching with young children, roughly ages 2 to 8.", "how": ["Before starting, review with the parent what to do and what to avoid, and show the examples of specific praise.", "Let the child pick a calm toy or activity: blocks, drawing, play dough. Avoid screens and games with rules.", "Start the timer. The parent plays; you observe and coach quietly.", "If you want data for the note, tap the counters each time the parent praises, describes, imitates or reflects, or slips into a question, command or criticism.", "When done, discuss with the parent what went well, assign daily practice and copy the summary."], "tips": ["At first it's normal for parents to ask lots of questions. Rather than correcting, teach them to turn questions into descriptions: instead of “What are you doing?”, “You're building a house”.", "Praise the parent when they get it right too. They learn just like the child does."]}};
+const L={es:{btn:"Ayuda",goal:"Para qué sirve",how:"Cómo usarlo",tip:"Consejo",close:"Cerrar"},en:{btn:"Help",goal:"What it's for",how:"How to use it",tip:"Tip",close:"Close"}};
+const g=id=>document.getElementById(id), lg=()=>document.documentElement.lang==="en"?"en":"es";
+function render(){const l=lg(),d=H[l],u=L[l];g("helpLbl").textContent=u.btn;g("hT2").textContent=d.title;g("hX").setAttribute("aria-label",u.close);
+ let h=`<div class="hsec"><h3>${u.goal}</h3><p>${d.goal}</p></div><div class="hsec"><h3>${u.how}</h3><ol>${d.how.map(x=>`<li>${x}</li>`).join("")}</ol></div>`;
+ d.tips.forEach(t=>h+=`<div class="hsec tip"><p>💡 ${t}</p></div>`);g("hB2").innerHTML=h;}
+g("helpBtn").onclick=()=>{render();g("hBg").hidden=false;g("hBg").firstElementChild.scrollTop=0;g("hX").focus();};
+g("hX").onclick=()=>{g("hBg").hidden=true;g("helpBtn").focus();};
+g("hBg").onclick=e=>{if(e.target.id==="hBg")g("hX").click();};
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!g("hBg").hidden)g("hX").click();});
+new MutationObserver(render).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});
+render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Herramientas terapéuticas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F3F5FB; --surface:#FFFFFF; --ink:#16224A; --muted:#5E6886; --line:#DDE3F1; --soft:#E7ECF8;
+  --navy:#1A3A8F;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1530; --surface:#1A2246; --ink:#EEF2FF; --muted:#A8B3D6; --line:#2C3766; --soft:#232D58; --navy:#8FA9FF; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1530; --surface:#1A2246; --ink:#EEF2FF; --muted:#A8B3D6; --line:#2C3766; --soft:#232D58; --navy:#8FA9FF; color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 70px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Lato,"Helvetica Neue",Arial,sans-serif;font-size:16px;line-height:1.45;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:720px;margin:0 auto;padding:14px 18px 40px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{font-family:"Baloo 2",system-ui,sans-serif;font-weight:700;font-size:18px;color:var(--navy);display:flex;align-items:center;gap:8px}
+.brand i{width:10px;height:10px;border-radius:50%;background:var(--navy);display:inline-block}
+.lang{display:flex;background:var(--soft);border-radius:999px;padding:3px}
+.lang button{border:0;background:transparent;color:var(--muted);font:700 14px Lato,sans-serif;padding:6px 14px;border-radius:999px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--surface);color:var(--navy);box-shadow:0 1px 3px rgba(22,34,74,.15)}
+button:focus-visible,a:focus-visible{outline:3px solid var(--navy);outline-offset:2px}
+
+header.hero{padding:26px 0 18px}
+h1{font-family:"Baloo 2",system-ui,sans-serif;font-weight:800;font-size:clamp(36px,9.5vw,52px);line-height:.98;margin:0 0 10px}
+.lead{margin:0;color:var(--muted);max-width:44ch}
+
+.filters{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0 12px;margin:0 -18px;padding-left:18px;padding-right:18px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:10}
+.filters{top:env(safe-area-inset-top,0px)}
+.row{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.row::-webkit-scrollbar{display:none}
+.chip{flex:none;border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:7px 14px;font:700 14px Lato,sans-serif;cursor:pointer;white-space:nowrap}
+.chip[aria-pressed="true"]{background:#1A3A8F;border-color:#1A3A8F;color:#fff}
+.flabel{font-size:13px;color:var(--muted);font-weight:700;margin:0 0 6px}
+
+section.cat{margin-top:26px}
+.cat-head{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.cat-ico{width:46px;height:46px;border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:24px;flex:none}
+.cat-head h2{font-family:"Baloo 2",system-ui,sans-serif;font-weight:800;font-size:24px;line-height:1.05;margin:0}
+.cat-head p{margin:2px 0 0;color:var(--muted);font-size:14px}
+.grid{display:grid;grid-template-columns:1fr;gap:10px}
+@media (min-width:560px){.grid{grid-template-columns:1fr 1fr}}
+
+.tool{position:relative;display:flex;gap:14px;align-items:flex-start;text-decoration:none;color:var(--ink);
+  background:var(--surface);border:2px solid var(--line);border-radius:20px;padding:14px 14px 14px 16px}
+a.tool{border-color:var(--c)}
+a.tool:active{transform:scale(.985)}
+.tool .e{font-size:30px;line-height:1;flex:none;width:36px;text-align:center;padding-top:2px}
+.tool h3{margin:0;font-family:"Baloo 2",system-ui,sans-serif;font-weight:700;font-size:19px;line-height:1.15}
+.tool p{margin:3px 0 8px;color:var(--muted);font-size:14.5px}
+.meta{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:12.5px;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--soft);color:var(--muted)}
+.tag.go{background:var(--c);color:#16224A}
+.soon .e,.soon h3,.soon p{opacity:.55}
+.empty{color:var(--muted);font-size:14px;margin:0;padding:6px 2px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="brand"><i></i>Aliado</div>
+    <div class="lang" role="group" aria-label="Idioma">
+      <button data-lang="en" aria-pressed="true">EN</button>
+      <button data-lang="es" aria-pressed="false">ES</button>
+    </div>
+  </div>
+
+  <header class="hero">
+    <h1 data-t="title"></h1>
+    <p class="lead" data-t="lead"></p>
+  </header>
+
+  <div class="filters">
+    <p class="flabel" data-t="ageLabel"></p>
+    <div class="row" id="ages" role="group"></div>
+  </div>
+
+  <main id="cats"></main>
+</div>
+
+<script>
+const LINKS = {
+  emotions: "juego-emociones.html",
+  monster:  "monstruo-preocupacion.html",
+  special:  "tiempo-especial.html",
+  ba:       "kit-conducta-ba.html",
+  anger:    "termometro-enojo.html",
+  body:     "kit-cuerpo-teens.html"
+};
+
+const UI = {
+  es:{title:"Herramientas terapéuticas",lead:"Juegos y actividades para usar con los niños y sus familias durante la sesión. Ninguna guarda datos.",
+      ageLabel:"Edad",all:"Todas",parents:"Padres",soon:"Próximamente",open:"Abrir",min:"min",none:"No hay herramientas de esta categoría para esa edad todavía."},
+  en:{title:"Therapeutic tools",lead:"Games and activities to use with children and their families during the session. None of them save data.",
+      ageLabel:"Age",all:"All",parents:"Parents",soon:"Coming soon",open:"Open",min:"min",none:"No tools in this category for that age yet."}
+};
+const AGES = ["5-8","9-12","13+","parents"];
+
+const CATS = [
+ {id:"emo",e:"😊",c:"#FFD66B",es:["Emociones","Identificar y expresar lo que sienten"],en:["Emotions","Recognize and express feelings"],tools:[
+   {e:"🎭",link:"emotions",ages:["5-8","9-12"],min:"10",es:["Juego de emociones","Reconocer emociones en caras y situaciones."],en:["Feelings game","Recognize feelings in faces and situations."]},
+   {e:"🌡️",link:"anger",ages:["5-8","9-12"],min:"10",es:["Termómetro del enojo","Medir el enojo y practicar estrategias para bajarlo."],en:["Anger thermometer","Rate anger and practice strategies to bring it down."]},
+   {e:"🧍",ages:["5-8","9-12"],min:"10–15",es:["Mapa del cuerpo","Pintar dónde se siente cada emoción en el cuerpo."],en:["Body map","Color where each feeling shows up in the body."]},
+   {e:"👋",ages:["5-8","9-12","13+"],min:"3",es:["¿Cómo llego hoy?","Check-in rápido para empezar la sesión."],en:["How am I today?","Quick check-in to start the session."]}
+ ]},
+ {id:"calm",e:"🌿",c:"#8ED6B4",es:["Calma y regulación","Bajar la intensidad y volver al cuerpo"],en:["Calm and regulation","Lower the intensity and come back to the body"],tools:[
+   {e:"🧊",link:"body",ages:["13+"],min:"10–15",es:["Kit para el cuerpo","Técnicas TIPP para bajar rápido una emoción intensa."],en:["Body toolkit","TIPP skills to quickly bring down an intense emotion."]},
+   {e:"🎈",ages:["5-8","9-12","13+"],min:"3–5",es:["Respiración guiada","Globo, respiración cuadrada y estrella de 5 dedos."],en:["Guided breathing","Balloon, box breathing and five-finger star."]},
+   {e:"🖐️",ages:["9-12","13+"],min:"5",es:["5-4-3-2-1","Anclarse en el presente usando los sentidos."],en:["5-4-3-2-1","Ground in the present using the senses."]},
+   {e:"🎡",ages:["5-8","9-12"],min:"10",es:["Ruleta de estrategias","Gira y practica una estrategia de afrontamiento."],en:["Coping wheel","Spin and practice a coping skill."]},
+   {e:"⏳",ages:["5-8"],min:"—",es:["Timer visual","Para pausas y transiciones difíciles."],en:["Visual timer","For breaks and hard transitions."]}
+ ]},
+ {id:"think",e:"💭",c:"#B9A3F5",es:["Pensamientos","Técnicas cognitivo-conductuales"],en:["Thoughts","Cognitive-behavioral techniques"],tools:[
+   {e:"👾",link:"monster",ages:["5-8","9-12"],min:"15–20",es:["Monstruo de la preocupación","Dibujar la preocupación y encogerla con estrategias."],en:["Worry monster","Draw the worry and shrink it with strategies."]},
+   {e:"🔍",ages:["9-12","13+"],min:"15",es:["Detective de pensamientos","¿Qué pienso? ¿Qué evidencia hay? ¿Qué me ayuda más?"],en:["Thought detective","What do I think? What's the evidence? What helps more?"]},
+   {e:"🗑️",ages:["5-8","9-12"],min:"10",es:["Pensamientos a la basura","Tirar pensamientos negativos y cambiarlos por otros."],en:["Toss the thought","Throw away negative thoughts and swap them."]}
+ ]},
+ {id:"social",e:"🤝",c:"#7FB6F5",es:["Habilidades sociales","Resolver problemas con otros"],en:["Social skills","Solve problems with others"],tools:[
+   {e:"🤔",ages:["5-8","9-12","13+"],min:"10–15",es:["¿Qué harías tú?","Escenarios sociales con opciones para conversar."],en:["What would you do?","Social scenarios with choices to discuss."]},
+   {e:"🚦",ages:["5-8","9-12"],min:"10",es:["Semáforo de decisiones","Parar, pensar y actuar."],en:["Decision traffic light","Stop, think, act."]}
+ ]},
+ {id:"family",e:"🏠",c:"#FFB07A",es:["Conducta y familia","Para BA y Parent Coaching"],en:["Behavior and family","For BA and Parent Coaching"],tools:[
+   {e:"🗓️",ages:["5-8"],min:"15",es:["Rutina visual","Armar la rutina de la mañana o la noche con dibujos."],en:["Visual routine","Build a morning or bedtime routine with pictures."]},
+   {e:"⭐",link:"ba",ages:["5-8","9-12"],min:"—",es:["Kit de conducta (BA)","Fichas, Primero / Después y registro ABC."],en:["Behavior kit (BA)","Tokens, First / Then and ABC log."]},
+   {e:"👨‍👧",link:"special",ages:["parents"],min:"5–15",es:["Tiempo especial","Coaching al padre: 5 minutos de juego donde el niño dirige."],en:["Special time","Parent coaching: 5 minutes of child-led play."]}
+ ]},
+ {id:"ice",e:"🎲",c:"#F5A3C0",es:["Romper el hielo","Para primeras sesiones y crear confianza"],en:["Icebreakers","For first sessions and building trust"],tools:[
+   {e:"🎲",ages:["5-8","9-12","13+"],min:"5–10",es:["Dado Conóceme","Preguntas al azar para conocerse."],en:["Get-to-know-me dice","Random questions to get to know each other."]},
+   {e:"🧱",ages:["9-12","13+"],min:"10–15",es:["Torre de preguntas","Preguntas tipo Jenga para adolescentes."],en:["Question tower","Jenga-style questions for teens."]}
+ ]}
+];
+
+let lang="en", age="all";
+const $=id=>document.getElementById(id);
+const ageName=a=>a==="parents"?UI[lang].parents:a;
+
+function renderAges(){
+  $("ages").innerHTML="";
+  ["all",...AGES].forEach(a=>{
+    const b=document.createElement("button"); b.className="chip";
+    b.textContent = a==="all"?UI[lang].all:ageName(a);
+    b.setAttribute("aria-pressed",a===age);
+    b.onclick=()=>{age=a;renderAges();renderCats();};
+    $("ages").appendChild(b);
+  });
+}
+function renderCats(){
+  $("cats").innerHTML = CATS.map(cat=>{
+    const list = cat.tools.filter(t=>age==="all"||t.ages.includes(age))
+      .sort((a,b)=>(b.link?1:0)-(a.link?1:0));
+    const cards = list.map(t=>{
+      const ready=!!t.link, L=t[lang];
+      const tags = t.ages.map(a=>`<span class="tag">${ageName(a)}</span>`).join("") +
+        (t.min!=="—"?`<span class="tag">${t.min} ${UI[lang].min}</span>`:"") +
+        `<span class="tag ${ready?"go":""}">${ready?UI[lang].open:UI[lang].soon}</span>`;
+      const inner = `<span class="e" aria-hidden="true">${t.e}</span><div><h3>${L[0]}</h3><p>${L[1]}</p><div class="meta">${tags}</div></div>`;
+      return ready
+        ? `<a class="tool" style="--c:${cat.c}" href="${LINKS[t.link]}">${inner}</a>`
+        : `<div class="tool soon">${inner}</div>`;
+    }).join("");
+    return `<section class="cat" id="${cat.id}">
+      <div class="cat-head"><div class="cat-ico" style="background:${cat.c}" aria-hidden="true">${cat.e}</div>
+      <div><h2>${cat[lang][0]}</h2><p>${cat[lang][1]}</p></div></div>
+      ${cards?`<div class="grid">${cards}</div>`:`<p class="empty">${UI[lang].none}</p>`}
+    </section>`;
+  }).join("");
+}
+function paint(){
+  document.documentElement.lang=lang; document.title=UI[lang].title;
+  document.querySelectorAll("[data-t]").forEach(el=>el.textContent=UI[lang][el.dataset.t]);
+  document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.lang===lang));
+  renderAges(); renderCats();
+}
+document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{lang=b.dataset.lang;paint();});
+paint();
+</script>
+</body>
+</html>

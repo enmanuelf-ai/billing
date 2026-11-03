@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Kit para el cuerpo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EEF1F4;--surface:#FFFFFF;--ink:#141C26;--muted:#5A6676;--line:#D7DEE6;--soft:#E3E8EE;--accent:#0F8F8A;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0D1218;--surface:#161E28;--ink:#EAF0F6;--muted:#9AA8B8;--line:#26313E;--soft:#1D2733;--accent:#3FD0C8;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0D1218;--surface:#161E28;--ink:#EAF0F6;--muted:#9AA8B8;--line:#26313E;--soft:#1D2733;--accent:#3FD0C8;color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 Lato,"Helvetica Neue",Arial,sans-serif;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:540px;margin:0 auto;padding:14px 18px 32px;display:flex;flex-direction:column;gap:16px;min-height:100vh}
+.top{display:flex;justify-content:space-between;align-items:center}
+.brand{font:600 17px Outfit,sans-serif;color:var(--muted);display:flex;gap:8px;align-items:center}
+.brand i{width:9px;height:9px;border-radius:50%;background:#1A3A8F}
+.lang{display:flex;background:var(--soft);border-radius:999px;padding:3px}
+.lang button{border:0;background:none;color:var(--muted);font:700 14px Lato,sans-serif;padding:6px 14px;border-radius:999px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--surface);color:var(--ink)}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+h1{font:800 clamp(38px,11vw,56px)/.95 Outfit,sans-serif;margin:10px 0 0;letter-spacing:-.02em}
+h2{font:800 28px/1.05 Outfit,sans-serif;margin:0;letter-spacing:-.01em}
+.lead{color:var(--muted);margin:0;max-width:38ch}
+.scale{display:grid;grid-template-columns:repeat(11,1fr);gap:4px}
+.scale button{border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;height:44px;font:700 15px Outfit,sans-serif;cursor:pointer;padding:0}
+.scale button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.ends{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}
+.skills{display:grid;gap:10px}
+.sk{display:grid;grid-template-columns:56px 1fr;gap:14px;align-items:center;text-align:left;border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:20px;padding:14px;cursor:pointer}
+.sk .L{font:800 40px/1 Outfit,sans-serif;color:var(--accent);text-align:center}
+.sk b{font:600 19px Outfit,sans-serif;display:block}
+.sk span{color:var(--muted);font-size:15px}
+.sk.done{border-color:var(--accent)}
+.sk.done b::after{content:" ✓";color:var(--accent)}
+.primary{border:0;background:#0F8F8A;color:#fff;border-radius:14px;padding:15px 22px;font:700 17px Lato,sans-serif;cursor:pointer;width:100%}
+.primary:disabled{opacity:.4}
+.ghost{border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:14px;padding:12px 20px;font:700 16px Lato,sans-serif;cursor:pointer;width:100%}
+.panel{background:var(--surface);border:2px solid var(--line);border-radius:24px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.steps{margin:0;padding-left:20px;display:grid;gap:6px}
+.warn{font-size:14px;color:var(--muted);border-left:4px solid var(--accent);padding-left:10px;margin:0}
+.big{font:800 72px/1 Outfit,sans-serif;text-align:center;color:var(--accent);letter-spacing:-.03em}
+.cue{font:600 22px Outfit,sans-serif;text-align:center;min-height:30px}
+.bar{height:14px;border-radius:999px;background:var(--soft);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--accent)}
+.summary{background:var(--surface);border:2px solid var(--accent);border-radius:20px;padding:14px 16px;font-size:15.5px;line-height:1.5}
+.note{color:var(--muted);font-size:14px;margin:0;text-align:center}
+:root{--hc:#0F8F8A}
+.hbtn{border:2px solid var(--line);background:var(--surface);color:var(--hc);border-radius:999px;padding:5px 11px 5px 6px;font:700 13.5px Lato,sans-serif;cursor:pointer;display:flex;align-items:center;gap:6px}
+.hbtn i{font-style:normal;width:20px;height:20px;border-radius:50%;background:var(--hc);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:13px}
+.hsheet-bg{position:fixed;inset:0;z-index:50;background:rgba(10,15,30,.45);display:flex;align-items:flex-end;justify-content:center}
+.hsheet{background:var(--bg);color:var(--ink);width:100%;max-width:560px;max-height:88vh;overflow-y:auto;border-radius:26px 26px 0 0;padding:18px 18px calc(24px + env(safe-area-inset-bottom,0px))}
+.hsheet-head{display:flex;justify-content:space-between;align-items:center;gap:10px;position:sticky;top:-18px;background:var(--bg);padding:6px 0 10px}
+.hsheet-head h2{font:800 24px/1.1 "Baloo 2",Outfit,sans-serif;margin:0}
+.hsheet-head button{border:0;background:var(--soft);color:var(--ink);width:38px;height:38px;border-radius:50%;font-size:18px;cursor:pointer;flex:none}
+.hsec{background:var(--surface);border:2px solid var(--line);border-radius:20px;padding:14px 16px;margin-bottom:12px;font-size:16px;line-height:1.5}
+.hsec h3{margin:0 0 6px;font:700 19px/1.15 "Baloo 2",Outfit,sans-serif;color:var(--hc)}
+.hsec p{margin:0}
+.hsec ol{margin:0;padding-left:20px;display:grid;gap:5px}
+.hsec.tip{background:var(--soft);border-color:transparent}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><div style="display:flex;align-items:center;gap:10px"><div class="brand"><i></i>Aliado</div><button class="hbtn" id="helpBtn" aria-haspopup="dialog"><i aria-hidden="true">?</i><span id="helpLbl">Ayuda</span></button></div>
+    <div class="lang"><button data-lang="en" aria-pressed="true">EN</button><button data-lang="es" aria-pressed="false">ES</button></div></div>
+
+  <section id="s0" style="display:flex;flex-direction:column;gap:16px">
+    <h1 data-t="title"></h1>
+    <p class="lead" data-t="lead"></p>
+    <p style="font-weight:700;margin:0" data-t="rate0"></p>
+    <div><div class="scale" id="sc0"></div><div class="ends"><span data-t="lo"></span><span data-t="hi"></span></div></div>
+    <button class="primary" id="go1" disabled data-t="go1"></button>
+  </section>
+
+  <section id="s1" hidden style="display:flex;flex-direction:column;gap:14px">
+    <h2 data-t="pickT"></h2>
+    <p class="lead" data-t="pickLead"></p>
+    <div class="skills" id="skills"></div>
+    <button class="ghost" id="toEnd" data-t="toEnd"></button>
+  </section>
+
+  <section id="s2" hidden style="display:flex;flex-direction:column;gap:14px">
+    <h2 id="kT"></h2>
+    <div class="panel">
+      <ol class="steps" id="kSteps"></ol>
+      <p class="warn" id="kWarn" hidden></p>
+      <div class="big" id="kBig"></div>
+      <div class="cue" id="kCue"></div>
+      <div class="bar"><i id="kBar"></i></div>
+      <button class="primary" id="kStart"></button>
+    </div>
+    <button class="ghost" id="kDone" data-t="kDone"></button>
+  </section>
+
+  <section id="s3" hidden style="display:flex;flex-direction:column;gap:14px">
+    <h2 data-t="rate1"></h2>
+    <div><div class="scale" id="sc1"></div><div class="ends"><span data-t="lo"></span><span data-t="hi"></span></div></div>
+    <div id="res" hidden style="display:flex;flex-direction:column;gap:14px">
+      <p class="lead" id="msg"></p>
+      <div class="summary" id="summary"></div>
+      <button class="primary" id="copy" data-t="copy"></button>
+      <p class="note" id="copied"></p>
+      <button class="ghost" id="again" data-t="again"></button>
+    </div>
+  </section>
+</div>
+<script>
+const UI={es:{title:"Kit para el cuerpo",lead:"Cuando la emoción está al máximo, pensar no funciona. Primero hay que bajarle al cuerpo. Estas 4 técnicas lo hacen rápido.",
+ rate0:"¿Qué tan intenso está todo ahora mismo?",lo:"0 · Tranquilo",hi:"10 · Al máximo",go1:"Bajarle al cuerpo",
+ pickT:"Elige una técnica",pickLead:"Pruébalas todas en algún momento. Cada persona tiene su favorita.",toEnd:"Ya terminé",kDone:"Volver a las técnicas",
+ start:"Empezar",restart:"Otra vez",rate1:"¿Y ahora, qué tan intenso está?",copy:"Copiar resumen",copied:"Resumen copiado. Pégalo en tu nota.",again:"Empezar de nuevo",
+ down:(a,b)=>`Bajaste de ${a} a ${b}. Tu cuerpo responde a estas técnicas: guarda tu favorita para cuando la necesites.`,same:()=>"A veces hace falta más de una técnica o repetirla. Eso también es parte de aprender a usarlas.",
+ in_:"Inhala",out:"Exhala",tense:"Aprieta",release:"Suelta",go:"¡Dale!",done:"Listo"},
+ en:{title:"Body toolkit",lead:"When emotions max out, thinking doesn't work. First you have to bring your body down. These 4 techniques do it fast.",
+ rate0:"How intense is everything right now?",lo:"0 · Calm",hi:"10 · Maxed out",go1:"Bring my body down",
+ pickT:"Pick a technique",pickLead:"Try them all at some point. Everyone has a favorite.",toEnd:"I'm done",kDone:"Back to techniques",
+ start:"Start",restart:"Again",rate1:"And now, how intense is it?",copy:"Copy summary",copied:"Summary copied. Paste it into your note.",again:"Start over",
+ down:(a,b)=>`You went from ${a} to ${b}. Your body responds to these techniques: keep your favorite for when you need it.`,same:()=>"Sometimes it takes more than one technique, or repeating one. That's part of learning to use them.",
+ in_:"Breathe in",out:"Breathe out",tense:"Tense",release:"Release",go:"Go!",done:"Done"}};
+const SK=[
+ {id:"temp",L:"T",enN:"temperature (cold water)",es:["Temperatura","Agua fría en la cara para frenar el cuerpo",["Llena un recipiente con agua fría o moja una toalla con agua fría.","Aguanta la respiración y pon la cara en el agua (o la toalla en los ojos y mejillas).","Mantenlo unos 30 segundos y respira normal al terminar."],"Si tienes alguna condición del corazón, consulta antes con tu médico."],
+  en:["Temperature","Cold water on your face to slow your body down",["Fill a bowl with cold water or soak a towel in cold water.","Hold your breath and put your face in the water (or the towel on your eyes and cheeks).","Keep it there about 30 seconds and breathe normally after."],"If you have a heart condition, check with your doctor first."],run:"timer",secs:30},
+ {id:"exer",L:"I",enN:"intense exercise",es:["Ejercicio intenso","Gastar la energía de la emoción",["Elige algo: saltos de tijera, correr en el lugar, subir escaleras o sentadillas.","Hazlo lo más fuerte que puedas durante 60 segundos.","Al terminar, quédate quieto y siente cómo baja tu respiración."]],
+  en:["Intense exercise","Burn off the emotion's energy",["Pick one: jumping jacks, running in place, stairs or squats.","Go as hard as you can for 60 seconds.","When you finish, stay still and notice your breathing slow down."]],run:"timer",secs:60},
+ {id:"breath",L:"P",enN:"paced breathing",es:["Respiración pausada","Exhalar más largo que inhalar",["Inhala por la nariz contando hasta 5.","Exhala por la boca más lento, contando hasta 7.","Sigue el ritmo de la pantalla durante 1 minuto."]],
+  en:["Paced breathing","Breathe out longer than you breathe in",["Breathe in through your nose for 5 counts.","Breathe out through your mouth more slowly, for 7 counts.","Follow the rhythm on the screen for 1 minute."]],run:"breath"},
+ {id:"muscle",L:"P",enN:"paired muscle relaxation",es:["Relajación muscular","Apretar y soltar para soltar la tensión",["Vamos por partes del cuerpo, una a la vez.","Aprieta esa parte mientras inhalas (5 segundos).","Suéltala de golpe mientras exhalas (7 segundos) y nota la diferencia."]],
+  en:["Paired muscle relaxation","Tense and release to let go of tension",["We'll go through body parts, one at a time.","Tense that part while breathing in (5 seconds).","Let it go all at once while breathing out (7 seconds) and notice the difference."]],run:"muscle"}];
+const PARTS={es:["Manos (puños)","Brazos","Hombros (súbelos a las orejas)","Cara (aprieta los ojos)","Abdomen","Piernas","Pies (dedos hacia abajo)"],en:["Hands (fists)","Arms","Shoulders (up to your ears)","Face (squeeze your eyes)","Stomach","Legs","Feet (curl your toes)"]};
+let lang="en",r0=null,r1=null,done=[],cur=null,iv=null;
+const $=id=>document.getElementById(id);
+function scale(el,v,on){el.innerHTML="";for(let n=0;n<=10;n++){const b=document.createElement("button");b.textContent=n;b.setAttribute("aria-pressed",v===n);b.onclick=()=>on(n);el.appendChild(b);}}
+function paint(){document.documentElement.lang=lang;document.title=UI[lang].title;
+ document.querySelectorAll("[data-t]").forEach(el=>el.textContent=UI[lang][el.dataset.t]);
+ document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.lang===lang));
+ scale($("sc0"),r0,n=>{r0=n;paint();});scale($("sc1"),r1,n=>{r1=n;paint();result();});$("go1").disabled=r0===null;
+ $("skills").innerHTML="";SK.forEach(s=>{const b=document.createElement("button");b.className="sk"+(done.includes(s.id)?" done":"");
+  b.innerHTML=`<span class="L" aria-hidden="true">${s.L}</span><div><b>${s[lang][0]}</b><span>${s[lang][1]}</span></div>`;b.onclick=()=>openSk(s.id);$("skills").appendChild(b);});
+ if(cur)fillSk();if(r1!==null)result();}
+document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{lang=b.dataset.lang;paint();});
+function go(n){[0,1,2,3].forEach(i=>$("s"+i).hidden=i!==n);window.scrollTo(0,0);}
+function fillSk(){const s=SK.find(x=>x.id===cur),t=s[lang];$("kT").textContent=`${s.L} · ${t[0]}`;$("kSteps").innerHTML=t[2].map(x=>`<li>${x}</li>`).join("");
+ $("kWarn").hidden=!t[3];$("kWarn").textContent=t[3]||"";if(!iv){$("kStart").textContent=UI[lang].start;}}
+function openSk(id){stop();cur=id;$("kBig").textContent="";$("kCue").textContent="";$("kBar").style.width="0";fillSk();go(2);}
+function stop(){clearInterval(iv);iv=null;}
+function mark(){if(!done.includes(cur))done.push(cur);$("kStart").textContent=UI[lang].restart;}
+$("kStart").onclick=()=>{stop();const s=SK.find(x=>x.id===cur);$("kStart").textContent="…";
+ if(s.run==="timer"){let t=s.secs;$("kBig").textContent=t;$("kCue").textContent=UI[lang].go;$("kBar").style.width="0";
+  iv=setInterval(()=>{t--;$("kBig").textContent=Math.max(t,0);$("kBar").style.width=((s.secs-t)/s.secs*100)+"%";if(t<=0){stop();$("kCue").textContent=UI[lang].done;mark();}},1000);}
+ if(s.run==="breath"){let sec=0,total=60;iv=setInterval(()=>{const ph=sec%12,inh=ph<5;$("kCue").textContent=inh?UI[lang].in_:UI[lang].out;$("kBig").textContent=inh?ph+1:ph-4;
+  $("kBar").style.width=(sec/total*100)+"%";sec++;if(sec>total){stop();$("kCue").textContent=UI[lang].done;$("kBig").textContent="✓";mark();}},1000);}
+ if(s.run==="muscle"){let sec=0;const per=12,total=PARTS.es.length*per;iv=setInterval(()=>{const p=Math.floor(sec/per),ph=sec%per,ten=ph<5;
+  if(p>=PARTS.es.length){stop();$("kCue").textContent=UI[lang].done;$("kBig").textContent="✓";mark();return;}
+  $("kCue").textContent=`${ten?UI[lang].tense:UI[lang].release}: ${PARTS[lang][p]}`;$("kBig").textContent=ten?5-ph:per-ph;$("kBar").style.width=(sec/total*100)+"%";sec++;},1000);}};
+$("kDone").onclick=()=>{stop();cur=null;paint();go(1);};
+$("go1").onclick=()=>{done=[];paint();go(1);};
+$("toEnd").onclick=()=>{r1=null;$("res").hidden=true;paint();go(3);};
+function result(){if(r1===null)return;$("msg").textContent=r1<r0?UI[lang].down(r0,r1):UI[lang].same();$("summary").textContent=summary();$("res").hidden=false;}
+function summary(){const s=done.map(id=>SK.find(x=>x.id===id).enN);
+ let t=`Youth rated their emotional distress at ${r0}/10. Clinician introduced DBT-informed distress tolerance skills (TIPP) to reduce physiological arousal`;
+ t+= s.length?`, and youth practiced: ${s.join(", ")}.`:`.`;
+ t+=` Following the intervention, youth rated distress at ${r1}/10${r1<r0?`, a decrease of ${r0-r1} point(s)`:""}. Youth was encouraged to identify a preferred skill to use when distress is high.`;
+ return t;}
+$("copy").onclick=async()=>{const t=$("summary").textContent;try{await navigator.clipboard.writeText(t);}catch(e){const a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();document.execCommand("copy");a.remove();}$("copied").textContent=UI[lang].copied;};
+$("again").onclick=()=>{r0=null;r1=null;done=[];paint();go(0);};
+paint();go(0);
+</script>
+<div class="hsheet-bg" id="hBg" hidden><div class="hsheet" role="dialog" aria-modal="true" aria-labelledby="hT2"><div class="hsheet-head"><h2 id="hT2"></h2><button id="hX" aria-label="Cerrar">✕</button></div><div id="hB2"></div></div></div>
+<script>
+(function(){
+const H={"es": {"title": "¿Cómo funciona el kit?", "goal": "Enseña a adolescentes las técnicas TIPP de DBT para bajar rápido una emoción muy intensa actuando sobre el cuerpo. Se presenta como un “kit para el cuerpo” y no como “estrategias de afrontamiento”, para que el joven lo sienta suyo.", "how": ["El joven marca qué tan intenso está todo, de 0 a 10.", "Elige una técnica: <b>T</b> temperatura, <b>I</b> ejercicio intenso, <b>P</b> respiración pausada o <b>P</b> relajación muscular. Cada una tiene un timer guiado.", "Pueden probar varias. Al final vuelve a medir y copias el resumen para la nota."], "tips": ["Practíquenlas primero en calma, durante la sesión, para que sepa usarlas cuando llegue una crisis.", "La técnica de agua fría no se recomienda si el joven tiene una condición del corazón; consulta con su médico.", "Si hay una crisis o un riesgo de seguridad, sigue el protocolo de crisis de la agencia. Esta herramienta no lo reemplaza."]}, "en": {"title": "How does the kit work?", "goal": "Teaches teens the DBT TIPP skills to quickly bring down a very intense emotion by working through the body. It's framed as a “body toolkit”, not “coping skills”, so the teen feels it's theirs.", "how": ["The teen rates how intense everything is, from 0 to 10.", "They pick a technique: <b>T</b> temperature, <b>I</b> intense exercise, <b>P</b> paced breathing or <b>P</b> paired muscle relaxation. Each has a guided timer.", "They can try several. At the end they rate again and you copy the summary for the note."], "tips": ["Practice them first while calm, in session, so they know how to use them when a crisis comes.", "The cold water technique isn't recommended if the teen has a heart condition; check with their doctor.", "If there is a crisis or a safety risk, follow the agency's crisis protocol. This tool does not replace it."]}};
+const L={es:{btn:"Ayuda",goal:"Para qué sirve",how:"Cómo usarlo",tip:"Consejo",close:"Cerrar"},en:{btn:"Help",goal:"What it's for",how:"How to use it",tip:"Tip",close:"Close"}};
+const g=id=>document.getElementById(id), lg=()=>document.documentElement.lang==="en"?"en":"es";
+function render(){const l=lg(),d=H[l],u=L[l];g("helpLbl").textContent=u.btn;g("hT2").textContent=d.title;g("hX").setAttribute("aria-label",u.close);
+ let h=`<div class="hsec"><h3>${u.goal}</h3><p>${d.goal}</p></div><div class="hsec"><h3>${u.how}</h3><ol>${d.how.map(x=>`<li>${x}</li>`).join("")}</ol></div>`;
+ d.tips.forEach(t=>h+=`<div class="hsec tip"><p>💡 ${t}</p></div>`);g("hB2").innerHTML=h;}
+g("helpBtn").onclick=()=>{render();g("hBg").hidden=false;g("hBg").firstElementChild.scrollTop=0;g("hX").focus();};
+g("hX").onclick=()=>{g("hBg").hidden=true;g("helpBtn").focus();};
+g("hBg").onclick=e=>{if(e.target.id==="hBg")g("hX").click();};
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!g("hBg").hidden)g("hX").click();});
+new MutationObserver(render).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});
+render();
+})();
+</script>
+</body>
+</html>

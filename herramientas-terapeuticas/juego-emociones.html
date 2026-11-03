@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>¿Cómo me siento?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF3FF; --surface:#FFFFFF; --ink:#16224A; --muted:#5A6688;
+  --navy:#1A3A8F; --line:#D5DEF5; --sun:#FFC93C; --ok:#2FA77A; --soft:#E3EAFB;
+  --mood:#FFC93C;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0F1530; --surface:#1A2246; --ink:#EEF2FF; --muted:#A8B3D6;
+    --navy:#8FA9FF; --line:#2C3766; --soft:#232D58; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F1530; --surface:#1A2246; --ink:#EEF2FF; --muted:#A8B3D6;
+  --navy:#8FA9FF; --line:#2C3766; --soft:#232D58; color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{
+  margin:0; min-height:100%; background:var(--bg); color:var(--ink);
+  font-family:Lato,"Helvetica Neue",Arial,sans-serif; font-size:17px; line-height:1.45;
+  -webkit-tap-highlight-color:transparent;
+}
+.wrap{max-width:520px;margin:0 auto;padding:14px 18px 28px;display:flex;flex-direction:column;min-height:100vh}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{font-family:"Baloo 2",system-ui,sans-serif;font-weight:700;font-size:18px;color:var(--navy);display:flex;align-items:center;gap:8px}
+.brand i{width:10px;height:10px;border-radius:50%;background:var(--navy);display:inline-block}
+.lang{display:flex;background:var(--soft);border-radius:999px;padding:3px}
+.lang button{border:0;background:transparent;color:var(--muted);font:700 14px Lato,sans-serif;padding:6px 14px;border-radius:999px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--surface);color:var(--navy);box-shadow:0 1px 3px rgba(22,34,74,.15)}
+button:focus-visible{outline:3px solid var(--navy);outline-offset:2px}
+
+/* Start screen */
+.start{flex:1;display:flex;flex-direction:column;justify-content:center;gap:22px;padding-top:10px}
+h1{font-family:"Baloo 2",system-ui,sans-serif;font-weight:800;font-size:clamp(40px,11vw,58px);line-height:.98;margin:0;letter-spacing:-.01em}
+.faces-row{font-size:44px;display:flex;gap:6px;flex-wrap:wrap}
+.lead{color:var(--muted);margin:0;max-width:34ch}
+.modes{display:grid;gap:12px}
+.mode{
+  display:flex;align-items:center;gap:16px;text-align:left;cursor:pointer;
+  background:var(--surface);border:2px solid var(--line);border-radius:22px;padding:16px 18px;color:var(--ink);
+}
+.mode .ico{font-size:40px;line-height:1}
+.mode b{display:block;font-family:"Baloo 2",system-ui,sans-serif;font-size:22px;line-height:1.1}
+.mode span{color:var(--muted);font-size:15px}
+.mode:active{transform:scale(.98)}
+
+/* Game */
+.game{flex:1;display:flex;flex-direction:column;gap:16px;padding-top:8px}
+.progress{display:flex;gap:5px}
+.progress i{flex:1;height:8px;border-radius:999px;background:var(--line);transition:background .3s}
+.progress i.done{background:var(--sun)}
+.progress i.now{background:var(--navy)}
+.stage{
+  position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:250px;border-radius:40px;padding:22px;text-align:center;
+  background:var(--surface);border:2px solid var(--line);overflow:hidden;
+}
+.stage::before{
+  content:"";position:absolute;inset:auto;width:260px;height:260px;border-radius:46% 54% 50% 50%/55% 45% 55% 45%;
+  background:var(--mood);opacity:.0;transform:scale(.6);transition:opacity .45s, transform .6s cubic-bezier(.2,1.4,.4,1);
+}
+.stage.reveal::before{opacity:.35;transform:scale(1.15)}
+.face{position:relative;font-size:clamp(110px,34vw,150px);line-height:1}
+.scene-ico{position:relative;font-size:72px;line-height:1;margin-bottom:10px}
+.scene{position:relative;font-family:"Baloo 2",system-ui,sans-serif;font-weight:700;font-size:23px;line-height:1.2;max-width:22ch;margin:0}
+.ask{font-family:"Baloo 2",system-ui,sans-serif;font-weight:700;font-size:22px;margin:0;text-align:center}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opt{
+  border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:20px;
+  min-height:64px;padding:10px 8px;font:700 19px Lato,sans-serif;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.opt .e{font-size:26px}
+.opt:disabled{cursor:default}
+.opt.wrong{opacity:.35;animation:shake .35s}
+.opt.right{background:var(--mood);border-color:var(--mood);color:#16224A}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.hint{min-height:24px;margin:0;text-align:center;color:var(--muted);font-weight:700}
+
+.talk{
+  display:none;background:var(--surface);border:2px solid var(--mood);border-radius:24px;padding:16px 18px;gap:14px;flex-direction:column;
+}
+.talk.show{display:flex}
+.talk .word{font-family:"Baloo 2",system-ui,sans-serif;font-weight:800;font-size:28px;line-height:1}
+.talk p{margin:0;font-size:19px}
+.next{
+  border:0;background:#1A3A8F;color:#fff;border-radius:999px;padding:14px 22px;
+  font:700 18px Lato,sans-serif;cursor:pointer;align-self:stretch;
+}
+.quit{border:0;background:none;color:var(--muted);font:700 15px Lato,sans-serif;cursor:pointer;padding:6px 0;align-self:center}
+
+/* End */
+.end{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:18px;text-align:center}
+.stars{font-size:46px;letter-spacing:4px}
+.end h2{font-family:"Baloo 2",system-ui,sans-serif;font-weight:800;font-size:42px;line-height:1;margin:0}
+.end p{color:var(--muted);margin:0;max-width:30ch}
+.end .row{display:grid;gap:10px;width:100%}
+.ghost{border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:13px 22px;font:700 17px Lato,sans-serif;cursor:pointer}
+
+:root{--hc:#1A3A8F}
+.hbtn{border:2px solid var(--line);background:var(--surface);color:var(--hc);border-radius:999px;padding:5px 11px 5px 6px;font:700 13.5px Lato,sans-serif;cursor:pointer;display:flex;align-items:center;gap:6px}
+.hbtn i{font-style:normal;width:20px;height:20px;border-radius:50%;background:var(--hc);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:13px}
+.hsheet-bg{position:fixed;inset:0;z-index:50;background:rgba(10,15,30,.45);display:flex;align-items:flex-end;justify-content:center}
+.hsheet{background:var(--bg);color:var(--ink);width:100%;max-width:560px;max-height:88vh;overflow-y:auto;border-radius:26px 26px 0 0;padding:18px 18px calc(24px + env(safe-area-inset-bottom,0px))}
+.hsheet-head{display:flex;justify-content:space-between;align-items:center;gap:10px;position:sticky;top:-18px;background:var(--bg);padding:6px 0 10px}
+.hsheet-head h2{font:800 24px/1.1 "Baloo 2",Outfit,sans-serif;margin:0}
+.hsheet-head button{border:0;background:var(--soft);color:var(--ink);width:38px;height:38px;border-radius:50%;font-size:18px;cursor:pointer;flex:none}
+.hsec{background:var(--surface);border:2px solid var(--line);border-radius:20px;padding:14px 16px;margin-bottom:12px;font-size:16px;line-height:1.5}
+.hsec h3{margin:0 0 6px;font:700 19px/1.15 "Baloo 2",Outfit,sans-serif;color:var(--hc)}
+.hsec p{margin:0}
+.hsec ol{margin:0;padding-left:20px;display:grid;gap:5px}
+.hsec.tip{background:var(--soft);border-color:transparent}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion: reduce){
+  *{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div style="display:flex;align-items:center;gap:10px"><div class="brand"><i></i>Aliado</div><button class="hbtn" id="helpBtn" aria-haspopup="dialog"><i aria-hidden="true">?</i><span id="helpLbl">Ayuda</span></button></div>
+    <div class="lang" role="group" aria-label="Idioma">
+      <button data-lang="en" aria-pressed="true">EN</button>
+      <button data-lang="es" aria-pressed="false">ES</button>
+    </div>
+  </div>
+
+  <!-- Start -->
+  <section class="start" id="start">
+    <div class="faces-row" aria-hidden="true">😄😢😠😨😲</div>
+    <h1 data-t="title"></h1>
+    <p class="lead" data-t="lead"></p>
+    <div class="modes">
+      <button class="mode" data-mode="faces"><span class="ico" aria-hidden="true">🙂</span><div><b data-t="mFaces"></b><span data-t="mFacesSub"></span></div></button>
+      <button class="mode" data-mode="scenes"><span class="ico" aria-hidden="true">🎈</span><div><b data-t="mScenes"></b><span data-t="mScenesSub"></span></div></button>
+    </div>
+  </section>
+
+  <!-- Game -->
+  <section class="game" id="game" hidden>
+    <div class="progress" id="progress" aria-hidden="true"></div>
+    <div class="stage" id="stage" aria-live="polite"></div>
+    <p class="ask" id="ask"></p>
+    <div class="opts" id="opts"></div>
+    <p class="hint" id="hint" aria-live="polite"></p>
+    <div class="talk" id="talk">
+      <div class="word" id="talkWord"></div>
+      <p id="talkQ"></p>
+      <button class="next" id="next"></button>
+    </div>
+    <button class="quit" id="quit" data-t="quit"></button>
+  </section>
+
+  <!-- End -->
+  <section class="end" id="end" hidden>
+    <div class="stars" id="stars" aria-hidden="true"></div>
+    <h2 data-t="endTitle"></h2>
+    <p id="endMsg"></p>
+    <div class="row">
+      <button class="next" id="again" data-t="again"></button>
+      <button class="ghost" id="home" data-t="home"></button>
+    </div>
+  </section>
+</div>
+
+<script>
+const UI = {
+  es:{
+    title:"¿Cómo me siento?",
+    lead:"Mira, piensa y elige la emoción. Después hablamos de ella.",
+    mFaces:"Caras", mFacesSub:"¿Qué emoción muestra esta cara?",
+    mScenes:"Situaciones", mScenesSub:"¿Cómo te sentirías si pasara esto?",
+    askFace:"¿Qué siente esta cara?", askScene:"¿Cómo te sentirías?",
+    tryAgain:"Casi. Mira otra vez y elige de nuevo.",
+    next:"Siguiente", finish:"Terminar", quit:"Salir del juego",
+    endTitle:"¡Lo lograste!",
+    endMsg:(n,t)=>`Reconociste ${n} de ${t} emociones al primer intento.`,
+    again:"Jugar otra vez", home:"Volver al inicio"
+  },
+  en:{
+    title:"How do I feel?",
+    lead:"Look, think and pick the feeling. Then we'll talk about it.",
+    mFaces:"Faces", mFacesSub:"What feeling does this face show?",
+    mScenes:"Situations", mScenesSub:"How would you feel if this happened?",
+    askFace:"How is this face feeling?", askScene:"How would you feel?",
+    tryAgain:"Almost. Look again and pick another one.",
+    next:"Next", finish:"Finish", quit:"Leave the game",
+    endTitle:"You did it!",
+    endMsg:(n,t)=>`You recognized ${n} of ${t} feelings on the first try.`,
+    again:"Play again", home:"Back to start"
+  }
+};
+
+const EMO = {
+  happy:{e:"😄",c:"#FFC93C",es:"Alegría",en:"Happy",
+    q:{es:"¿Cuándo te has sentido así? ¿Qué te hace sentir alegría?",en:"When have you felt this way? What makes you feel happy?"}},
+  sad:{e:"😢",c:"#6C9CF2",es:"Tristeza",en:"Sad",
+    q:{es:"¿Qué te ayuda cuando sientes tristeza? ¿A quién se lo puedes contar?",en:"What helps you when you feel sad? Who can you tell?"}},
+  angry:{e:"😠",c:"#EF6461",es:"Enojo",en:"Angry",
+    q:{es:"¿Dónde sientes el enojo en tu cuerpo? ¿Qué puedes hacer para calmarte?",en:"Where do you feel anger in your body? What can you do to calm down?"}},
+  scared:{e:"😨",c:"#9A7FE0",es:"Miedo",en:"Scared",
+    q:{es:"¿Qué cosas te dan miedo? ¿Quién te ayuda a sentirte seguro?",en:"What things scare you? Who helps you feel safe?"}},
+  surprised:{e:"😲",c:"#FFA552",es:"Sorpresa",en:"Surprised",
+    q:{es:"¿Cuál ha sido la mejor sorpresa que te han dado?",en:"What is the best surprise you have ever had?"}},
+  worried:{e:"😟",c:"#5FB3B3",es:"Preocupación",en:"Worried",
+    q:{es:"¿Qué te preocupa a veces? ¿Qué te ayuda a sentirte mejor?",en:"What worries you sometimes? What helps you feel better?"}},
+  embarrassed:{e:"😳",c:"#F28DB2",es:"Vergüenza",en:"Embarrassed",
+    q:{es:"¿Te ha pasado algo que te dio vergüenza? ¿Qué hiciste?",en:"Has something embarrassing happened to you? What did you do?"}},
+  calm:{e:"😌",c:"#7CCB9E",es:"Calma",en:"Calm",
+    q:{es:"¿Dónde o con quién te sientes en calma?",en:"Where or with whom do you feel calm?"}},
+  disgusted:{e:"🤢",c:"#A6C85A",es:"Asco",en:"Disgusted",
+    q:{es:"¿Qué cosas te dan asco? ¿Cómo lo muestra tu cara?",en:"What things feel gross to you? How does your face show it?"}},
+  proud:{e:"🥳",c:"#FFB938",es:"Orgullo",en:"Proud",
+    q:{es:"¿De qué te sientes orgulloso u orgullosa?",en:"What are you proud of?"}},
+  frustrated:{e:"😤",c:"#F08A5D",es:"Frustración",en:"Frustrated",
+    q:{es:"Cuando algo no te sale, ¿qué puedes decirte a ti mismo?",en:"When something isn't working, what can you tell yourself?"}}
+};
+const FACE_SET = ["happy","sad","angry","scared","surprised","worried","embarrassed","calm","disgusted"];
+
+const SCENES = [
+  {i:"🎂",a:["happy"],ok:["surprised","proud"],es:"Es tu cumpleaños y tus amigos llegan a tu fiesta.",en:"It's your birthday and your friends come to your party."},
+  {i:"🐶",a:["sad"],ok:["worried","scared"],es:"Tu perrito se perdió y no lo encuentras.",en:"Your puppy got lost and you can't find it."},
+  {i:"🧱",a:["angry"],ok:["frustrated","sad"],es:"Alguien tumba tu torre de bloques a propósito.",en:"Someone knocks down your block tower on purpose."},
+  {i:"⛈️",a:["scared"],ok:["worried","surprised"],es:"Hay truenos muy fuertes en la noche.",en:"There is very loud thunder at night."},
+  {i:"🎁",a:["surprised"],ok:["happy"],es:"Te dan un regalo que no esperabas.",en:"You get a present you weren't expecting."},
+  {i:"📝",a:["worried"],ok:["scared","frustrated"],es:"Mañana tienes un examen muy importante.",en:"Tomorrow you have a very important test."},
+  {i:"🚲",a:["proud"],ok:["happy","surprised"],es:"Por fin aprendiste a montar bicicleta solo.",en:"You finally learned to ride your bike by yourself."},
+  {i:"🧩",a:["frustrated"],ok:["angry","sad"],es:"Llevas mucho rato y las piezas del rompecabezas no encajan.",en:"You have tried for a long time and the puzzle pieces won't fit."},
+  {i:"🏫",a:["embarrassed"],ok:["sad","surprised"],es:"Te tropiezas frente a toda la clase.",en:"You trip in front of the whole class."},
+  {i:"🛁",a:["calm"],ok:["happy"],es:"Un baño tibio y música suave antes de dormir.",en:"A warm bath and soft music before bed."},
+  {i:"🍽️",a:["disgusted"],ok:["surprised"],es:"La comida huele a podrido.",en:"The food smells rotten."},
+  {i:"👋",a:["sad"],ok:["worried","angry"],es:"Tu mejor amigo se muda a otra ciudad.",en:"Your best friend is moving to another city."}
+];
+
+const ROUND = 8;
+let lang = "en", mode = null, deck = [], idx = 0, firstTry = 0, missed = false;
+const $ = id => document.getElementById(id);
+const shuffle = a => { a = a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; };
+
+function paintUI(){
+  document.documentElement.lang = lang;
+  document.querySelectorAll("[data-t]").forEach(el=>{ const v = UI[lang][el.dataset.t]; if(typeof v==="string") el.textContent=v; });
+  document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.lang===lang));
+  document.title = UI[lang].title;
+}
+document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{
+  lang=b.dataset.lang; paintUI();
+  if(!$("game").hidden) renderItem(true);
+  if(!$("end").hidden) $("endMsg").textContent = UI[lang].endMsg(firstTry, deck.length);
+});
+
+function show(id){ ["start","game","end"].forEach(s=>$(s).hidden = s!==id); window.scrollTo(0,0); }
+
+function startGame(m){
+  mode = m; idx = 0; firstTry = 0;
+  if(m==="faces"){
+    deck = shuffle(FACE_SET).slice(0,ROUND).map(k=>({a:[k],ok:[],face:k}));
+  } else {
+    deck = shuffle(SCENES).slice(0,ROUND);
+  }
+  $("progress").innerHTML = deck.map(()=>"<i></i>").join("");
+  show("game"); renderItem();
+}
+
+let current = null;
+function renderItem(keepState){
+  const it = deck[idx];
+  const st = $("stage");
+  if(!keepState){
+    missed = false;
+    const answer = it.a[0];
+    const pool = (mode==="faces"?FACE_SET:Object.keys(EMO)).filter(k=>!it.a.includes(k) && !it.ok.includes(k));
+    current = { answer, opts: shuffle([answer, ...shuffle(pool).slice(0,3)]), solved:false, wrong:[] };
+    st.classList.remove("reveal");
+    $("talk").classList.remove("show");
+    $("hint").textContent = "";
+  }
+  document.documentElement.style.setProperty("--mood", EMO[current.answer].c);
+  [...$("progress").children].forEach((p,i)=>p.className = i<idx?"done":(i===idx?"now":""));
+
+  if(mode==="faces"){
+    st.innerHTML = `<div class="face" role="img" aria-label="${lang==="es"?"Cara":"Face"}">${EMO[it.face].e}</div>`;
+    $("ask").textContent = UI[lang].askFace;
+  } else {
+    st.innerHTML = `<div class="scene-ico" aria-hidden="true">${it.i}</div><p class="scene">${it[lang]}</p>`;
+    $("ask").textContent = UI[lang].askScene;
+  }
+
+  $("opts").innerHTML = "";
+  current.opts.forEach(k=>{
+    const b = document.createElement("button");
+    b.className = "opt";
+    b.innerHTML = (mode==="scenes"?`<span class="e" aria-hidden="true">${EMO[k].e}</span>`:"") + `<span>${EMO[k][lang]}</span>`;
+    if(current.wrong.includes(k)){ b.classList.add("wrong"); b.disabled = true; b.style.animation="none"; }
+    if(current.solved){ b.disabled = true; if(k===current.answer) b.classList.add("right"); }
+    b.onclick = ()=>choose(k,b);
+    $("opts").appendChild(b);
+  });
+  if(current.solved){ fillTalk(); }
+  if(current.wrong.length && !current.solved) $("hint").textContent = UI[lang].tryAgain;
+}
+
+function choose(k,b){
+  if(current.solved) return;
+  if(k===current.answer){
+    current.solved = true;
+    if(!missed) firstTry++;
+    $("stage").classList.add("reveal");
+    $("hint").textContent = "";
+    [...$("opts").children].forEach(x=>x.disabled=true);
+    b.classList.add("right");
+    fillTalk();
+    $("talk").classList.add("show");
+    setTimeout(()=>$("talk").scrollIntoView({behavior:"smooth",block:"nearest"}),80);
+  } else {
+    missed = true;
+    current.wrong.push(k);
+    b.classList.add("wrong"); b.disabled = true;
+    $("hint").textContent = UI[lang].tryAgain;
+  }
+}
+
+function fillTalk(){
+  const em = EMO[current.answer];
+  $("talkWord").textContent = `${em.e} ${em[lang]}`;
+  $("talkQ").textContent = em.q[lang];
+  $("next").textContent = idx===deck.length-1 ? UI[lang].finish : UI[lang].next;
+  $("talk").classList.add("show");
+}
+
+$("next").onclick = ()=>{
+  if(idx < deck.length-1){ idx++; renderItem(); window.scrollTo({top:0}); }
+  else endGame();
+};
+function endGame(){
+  const n = deck.length;
+  const stars = firstTry >= n-1 ? 3 : firstTry >= Math.ceil(n/2) ? 2 : 1;
+  $("stars").textContent = "⭐".repeat(stars);
+  $("endMsg").textContent = UI[lang].endMsg(firstTry, n);
+  show("end");
+}
+document.querySelectorAll(".mode").forEach(b=>b.onclick=()=>startGame(b.dataset.mode));
+$("again").onclick = ()=>startGame(mode);
+$("home").onclick = ()=>show("start");
+$("quit").onclick = ()=>show("start");
+
+paintUI();
+</script>
+<div class="hsheet-bg" id="hBg" hidden><div class="hsheet" role="dialog" aria-modal="true" aria-labelledby="hT2"><div class="hsheet-head"><h2 id="hT2"></h2><button id="hX" aria-label="Cerrar">✕</button></div><div id="hB2"></div></div></div>
+<script>
+(function(){
+const H={"es": {"title": "¿Cómo funciona el juego?", "goal": "Ayuda al niño a reconocer y nombrar emociones, que es la base para poder manejarlas. Recomendado para niños de 5 a 12 años.", "how": ["Elige el modo: <b>Caras</b> (reconocer la emoción en una cara) o <b>Situaciones</b> (cómo se sentiría en una escena).", "Deja que el niño escoja la respuesta. Si se equivoca, esa opción se apaga y vuelve a intentar, sin regaños.", "Al acertar, lean juntos la pregunta para conversar. Es el momento más importante: conecta la emoción con su propia vida.", "Cada ronda tiene 8 preguntas y dura unos 10 minutos."], "tips": ["No apures la conversación. Si el niño comparte algo importante, quédate ahí; no hace falta terminar la ronda.", "Con niños pequeños empieza por Caras. Situaciones funciona mejor desde los 7 u 8 años."]}, "en": {"title": "How does the game work?", "goal": "Helps the child recognize and name feelings, the foundation for managing them. Recommended for ages 5 to 12.", "how": ["Pick the mode: <b>Faces</b> (recognize the feeling on a face) or <b>Situations</b> (how they would feel in a scene).", "Let the child choose the answer. If it's wrong, that option fades and they try again, no scolding.", "When they get it right, read the conversation question together. This is the most important moment: it connects the feeling to their own life.", "Each round has 8 questions and takes about 10 minutes."], "tips": ["Don't rush the conversation. If the child shares something important, stay with it; you don't need to finish the round.", "With young children start with Faces. Situations works better from age 7 or 8."]}};
+const L={es:{btn:"Ayuda",goal:"Para qué sirve",how:"Cómo usarlo",tip:"Consejo",close:"Cerrar"},en:{btn:"Help",goal:"What it's for",how:"How to use it",tip:"Tip",close:"Close"}};
+const g=id=>document.getElementById(id), lg=()=>document.documentElement.lang==="en"?"en":"es";
+function render(){const l=lg(),d=H[l],u=L[l];g("helpLbl").textContent=u.btn;g("hT2").textContent=d.title;g("hX").setAttribute("aria-label",u.close);
+ let h=`<div class="hsec"><h3>${u.goal}</h3><p>${d.goal}</p></div><div class="hsec"><h3>${u.how}</h3><ol>${d.how.map(x=>`<li>${x}</li>`).join("")}</ol></div>`;
+ d.tips.forEach(t=>h+=`<div class="hsec tip"><p>💡 ${t}</p></div>`);g("hB2").innerHTML=h;}
+g("helpBtn").onclick=()=>{render();g("hBg").hidden=false;g("hBg").firstElementChild.scrollTop=0;g("hX").focus();};
+g("hX").onclick=()=>{g("hBg").hidden=true;g("helpBtn").focus();};
+g("hBg").onclick=e=>{if(e.target.id==="hBg")g("hX").click();};
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!g("hBg").hidden)g("hX").click();});
+new MutationObserver(render).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});
+render();
+})();
+</script>
+</body>
+</html>

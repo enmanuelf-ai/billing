@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mi monstruo de la preocupación</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F1EEFB; --surface:#FFFFFF; --ink:#1E1B3F; --muted:#615C86;
+  --navy:#1A3A8F; --plum:#6B4FC8; --line:#DCD5F3; --soft:#E8E2FA; --mint:#2FA77A; --sun:#FFC93C;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#15122B; --surface:#211D40; --ink:#F1EEFF; --muted:#B4ADD8;
+    --plum:#A891FF; --line:#352F62; --soft:#2B2652; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15122B; --surface:#211D40; --ink:#F1EEFF; --muted:#B4ADD8;
+  --plum:#A891FF; --line:#352F62; --soft:#2B2652; color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:Lato,"Helvetica Neue",Arial,sans-serif;font-size:17px;line-height:1.45;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:520px;margin:0 auto;padding:14px 18px 28px;display:flex;flex-direction:column;min-height:100vh;gap:16px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{font-family:"Baloo 2",system-ui,sans-serif;font-weight:700;font-size:18px;color:var(--plum);display:flex;align-items:center;gap:8px}
+.brand i{width:10px;height:10px;border-radius:50%;background:var(--navy);display:inline-block}
+.lang{display:flex;background:var(--soft);border-radius:999px;padding:3px}
+.lang button{border:0;background:transparent;color:var(--muted);font:700 14px Lato,sans-serif;padding:6px 14px;border-radius:999px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--surface);color:var(--plum);box-shadow:0 1px 3px rgba(30,27,63,.15)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--plum);outline-offset:2px}
+.steps{display:flex;gap:6px}
+.steps i{flex:1;height:8px;border-radius:999px;background:var(--line)}
+.steps i.on{background:var(--plum)}
+h1{font-family:"Baloo 2",system-ui,sans-serif;font-weight:800;font-size:clamp(38px,10.5vw,54px);line-height:.98;margin:0}
+h2{font-family:"Baloo 2",system-ui,sans-serif;font-weight:800;font-size:30px;line-height:1.05;margin:0}
+.lead{color:var(--muted);margin:0;max-width:36ch}
+.primary{border:0;background:#6B4FC8;color:#fff;border-radius:999px;padding:15px 22px;font:700 18px Lato,sans-serif;cursor:pointer;width:100%}
+.primary:disabled{opacity:.45;cursor:default}
+.ghost{border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:13px 20px;font:700 17px Lato,sans-serif;cursor:pointer;width:100%}
+.link{border:0;background:none;color:var(--muted);font:700 15px Lato,sans-serif;cursor:pointer;padding:4px 0;align-self:center}
+.hint{min-height:22px;margin:0;color:var(--muted);font-weight:700;text-align:center}
+:root{--hc:#6B4FC8}
+.hbtn{border:2px solid var(--line);background:var(--surface);color:var(--hc);border-radius:999px;padding:5px 11px 5px 6px;font:700 13.5px Lato,sans-serif;cursor:pointer;display:flex;align-items:center;gap:6px}
+.hbtn i{font-style:normal;width:20px;height:20px;border-radius:50%;background:var(--hc);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:13px}
+.hsheet-bg{position:fixed;inset:0;z-index:50;background:rgba(10,15,30,.45);display:flex;align-items:flex-end;justify-content:center}
+.hsheet{background:var(--bg);color:var(--ink);width:100%;max-width:560px;max-height:88vh;overflow-y:auto;border-radius:26px 26px 0 0;padding:18px 18px calc(24px + env(safe-area-inset-bottom,0px))}
+.hsheet-head{display:flex;justify-content:space-between;align-items:center;gap:10px;position:sticky;top:-18px;background:var(--bg);padding:6px 0 10px}
+.hsheet-head h2{font:800 24px/1.1 "Baloo 2",Outfit,sans-serif;margin:0}
+.hsheet-head button{border:0;background:var(--soft);color:var(--ink);width:38px;height:38px;border-radius:50%;font-size:18px;cursor:pointer;flex:none}
+.hsec{background:var(--surface);border:2px solid var(--line);border-radius:20px;padding:14px 16px;margin-bottom:12px;font-size:16px;line-height:1.5}
+.hsec h3{margin:0 0 6px;font:700 19px/1.15 "Baloo 2",Outfit,sans-serif;color:var(--hc)}
+.hsec p{margin:0}
+.hsec ol{margin:0;padding-left:20px;display:grid;gap:5px}
+.hsec.tip{background:var(--soft);border-color:transparent}
+[hidden]{display:none!important}
+
+/* Intro */
+.intro{flex:1;display:flex;flex-direction:column;justify-content:center;gap:20px}
+.blob{width:150px;height:130px;border-radius:52% 48% 46% 54%/58% 52% 48% 42%;background:#8D6CF0;position:relative;animation:bob 3s ease-in-out infinite}
+.blob::before,.blob::after{content:"";position:absolute;top:38px;width:30px;height:30px;border-radius:50%;background:#fff;box-shadow:inset 6px 4px 0 6px #1E1B3F}
+.blob::before{left:34px}.blob::after{right:34px}
+.blob span{position:absolute;left:50%;bottom:28px;width:44px;height:18px;margin-left:-22px;border-radius:0 0 22px 22px;background:#1E1B3F}
+@keyframes bob{50%{transform:translateY(-8px) rotate(-3deg)}}
+
+/* Draw */
+.board{position:relative;background:#fff;border:2px solid var(--line);border-radius:28px;overflow:hidden;aspect-ratio:1/1;width:100%;touch-action:none}
+canvas{display:block;width:100%;height:100%;touch-action:none;cursor:crosshair}
+.palette{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.sw{width:38px;height:38px;border-radius:50%;border:3px solid var(--surface);box-shadow:0 0 0 2px var(--line);cursor:pointer;padding:0}
+.sw[aria-pressed="true"]{box-shadow:0 0 0 3px var(--plum);transform:scale(1.08)}
+.tools{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.tool{border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 14px;font:700 15px Lato,sans-serif;cursor:pointer;display:flex;align-items:center;gap:6px}
+.tool[aria-pressed="true"]{border-color:var(--plum);color:var(--plum)}
+.dot{display:inline-block;border-radius:50%;background:currentColor}
+
+/* Name */
+.thumb{align-self:center;width:170px;height:170px;border-radius:24px;background:#fff;border:2px solid var(--line);object-fit:contain}
+label.q{font-family:"Baloo 2",system-ui,sans-serif;font-weight:700;font-size:21px;display:block;margin-bottom:6px}
+.field{width:100%;border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:16px;padding:13px 14px;font:400 18px Lato,sans-serif}
+.scale{display:grid;grid-template-columns:repeat(10,1fr);gap:4px}
+.scale button{border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:12px;height:46px;font:800 17px "Baloo 2",sans-serif;cursor:pointer;padding:0}
+.scale button[aria-pressed="true"]{background:#6B4FC8;border-color:#6B4FC8;color:#fff}
+.scale-ends{display:flex;justify-content:space-between;color:var(--muted);font-size:14px;margin-top:4px}
+
+/* Shrink */
+.arena{position:relative;height:300px;border-radius:32px;background:var(--surface);border:2px solid var(--line);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.arena img{width:250px;height:250px;object-fit:contain;transition:transform .9s cubic-bezier(.3,1.5,.5,1)}
+.arena .tag{position:absolute;left:14px;top:12px;font-family:"Baloo 2",sans-serif;font-weight:700;font-size:18px;color:var(--plum)}
+.poof{position:absolute;font-size:44px;pointer-events:none;animation:poof .9s ease-out forwards}
+@keyframes poof{from{opacity:1;transform:translateY(0) scale(.6)}to{opacity:0;transform:translateY(-70px) scale(1.3)}}
+.strats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.strat{border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:20px;padding:12px 10px;text-align:left;cursor:pointer;font:700 16px Lato,sans-serif;display:flex;gap:8px;align-items:center;min-height:64px}
+.strat .e{font-size:26px}
+.strat.done{border-color:var(--mint);background:color-mix(in srgb,var(--mint) 12%,var(--surface))}
+.strat.done::after{content:"✓";margin-left:auto;color:var(--mint);font-size:20px}
+.card{background:var(--surface);border:2px solid var(--plum);border-radius:24px;padding:16px 18px;display:flex;flex-direction:column;gap:12px}
+.card h3{margin:0;font-family:"Baloo 2",sans-serif;font-size:24px;line-height:1.1}
+.card p{margin:0;font-size:18px}
+.breath{align-self:center;width:120px;height:120px;border-radius:50%;background:color-mix(in srgb,#6CB6F2 45%,transparent);display:flex;align-items:center;justify-content:center;font:800 18px "Baloo 2",sans-serif;color:var(--ink);animation:breathe 8s ease-in-out infinite}
+@keyframes breathe{0%,100%{transform:scale(.6)}50%{transform:scale(1)}}
+
+/* End */
+.compare{display:flex;align-items:flex-end;justify-content:center;gap:22px;padding:8px 0}
+.compare figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:6px}
+.compare img{object-fit:contain;background:#fff;border-radius:18px;border:2px solid var(--line)}
+.compare figcaption{font-family:"Baloo 2",sans-serif;font-weight:700;font-size:18px}
+.compare b{font-size:32px;color:var(--plum)}
+
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div style="display:flex;align-items:center;gap:10px"><div class="brand"><i></i>Aliado</div><button class="hbtn" id="helpBtn" aria-haspopup="dialog"><i aria-hidden="true">?</i><span id="helpLbl">Ayuda</span></button></div>
+    <div class="lang" role="group" aria-label="Idioma">
+      <button data-lang="en" aria-pressed="true">EN</button>
+      <button data-lang="es" aria-pressed="false">ES</button>
+    </div>
+  </div>
+  <div class="steps" id="steps" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+
+  <!-- 0 Intro -->
+  <section class="intro" id="s0">
+    <div class="blob" aria-hidden="true"><span></span></div>
+    <h1 data-t="title"></h1>
+    <p class="lead" data-t="introLead"></p>
+    <button class="primary" id="goDraw" data-t="start"></button>
+  </section>
+
+  <!-- 1 Draw -->
+  <section id="s1" hidden style="display:flex;flex-direction:column;gap:14px">
+    <h2 data-t="drawTitle"></h2>
+    <div class="board" id="board"><canvas id="cv"></canvas></div>
+    <div class="palette" id="palette"></div>
+    <div class="tools">
+      <button class="tool" id="sizeBtn"><span class="dot" id="sizeDot" style="width:10px;height:10px"></span><span data-t="size"></span></button>
+      <button class="tool" id="eraser" aria-pressed="false">🧽 <span data-t="eraser"></span></button>
+      <button class="tool" id="undo">↩︎ <span data-t="undo"></span></button>
+      <button class="tool" id="clear">🗑️ <span data-t="clear"></span></button>
+    </div>
+    <p class="hint" id="drawHint"></p>
+    <button class="primary" id="doneDraw" data-t="doneDraw"></button>
+  </section>
+
+  <!-- 2 Name & size -->
+  <section id="s2" hidden style="display:flex;flex-direction:column;gap:18px">
+    <img class="thumb" id="thumb" alt="">
+    <div>
+      <label class="q" for="mname" data-t="nameQ"></label>
+      <input class="field" id="mname" maxlength="30" autocomplete="off">
+    </div>
+    <div>
+      <label class="q" for="msays" data-t="saysQ"></label>
+      <input class="field" id="msays" maxlength="80" autocomplete="off">
+    </div>
+    <div>
+      <span class="q" style="font-family:'Baloo 2',sans-serif;font-weight:700;font-size:21px;display:block;margin-bottom:6px" data-t="bigQ"></span>
+      <div class="scale" id="scaleBefore" role="group"></div>
+      <div class="scale-ends"><span data-t="tiny"></span><span data-t="giant"></span></div>
+    </div>
+    <p class="hint" id="nameHint"></p>
+    <button class="primary" id="goShrink" data-t="goShrink"></button>
+  </section>
+
+  <!-- 3 Shrink -->
+  <section id="s3" hidden style="display:flex;flex-direction:column;gap:14px">
+    <div class="arena" id="arena"><span class="tag" id="mtag"></span><img id="mimg" alt=""></div>
+    <h2 data-t="shrinkTitle"></h2>
+    <div class="card" id="card" hidden>
+      <h3 id="cardTitle"></h3>
+      <div class="breath" id="breath" hidden></div>
+      <p id="cardText"></p>
+      <button class="primary" id="did" data-t="did"></button>
+      <button class="link" id="cancelCard" data-t="other"></button>
+    </div>
+    <div class="strats" id="strats"></div>
+    <button class="ghost" id="goEnd" data-t="goEnd"></button>
+  </section>
+
+  <!-- 4 End -->
+  <section id="s4" hidden style="display:flex;flex-direction:column;gap:18px">
+    <h2 data-t="endQ"></h2>
+    <div class="scale" id="scaleAfter" role="group"></div>
+    <div class="scale-ends"><span data-t="tiny"></span><span data-t="giant"></span></div>
+    <div id="result" hidden style="display:flex;flex-direction:column;gap:14px">
+      <div class="compare">
+        <figure><img id="imgBefore" alt=""><figcaption><span data-t="before"></span> <b id="nBefore"></b></figcaption></figure>
+        <figure><img id="imgAfter" alt=""><figcaption><span data-t="now"></span> <b id="nAfter"></b></figcaption></figure>
+      </div>
+      <p class="lead" id="endMsg" style="text-align:center;align-self:center"></p>
+      <button class="primary" id="restart" data-t="restart"></button>
+    </div>
+  </section>
+</div>
+
+<script>
+const UI={
+ es:{title:"Mi monstruo de la preocupación",introLead:"Todos tenemos preocupaciones. Hoy vamos a dibujar la tuya como un monstruo, para conocerlo y hacerlo más pequeño.",start:"Empezar",
+  drawTitle:"Dibuja tu monstruo",size:"Grosor",eraser:"Borrar",undo:"Deshacer",clear:"Limpiar",doneDraw:"Listo, ya lo dibujé",needDraw:"Primero dibuja tu monstruo.",
+  nameQ:"¿Cómo se llama tu monstruo?",saysQ:"¿Qué cosas te dice tu monstruo?",bigQ:"¿Qué tan grande es hoy?",tiny:"Pequeñito",giant:"Gigante",
+  needSize:"Elige qué tan grande es hoy.",goShrink:"Vamos a encogerlo",namePh:"Ej: Gruñón",saysPh:"Ej: Te va a salir mal",
+  shrinkTitle:"Elige una estrategia y practícala. Cada vez que la hagas, tu monstruo se encoge.",did:"¡Lo hicimos!",other:"Elegir otra",goEnd:"Terminar",
+  endQ:"¿Qué tan grande es tu monstruo ahora?",before:"Antes",now:"Ahora",restart:"Dibujar otro monstruo",
+  endDown:(a,b)=>`Tu monstruo pasó de ${a} a ${b}. Las estrategias que practicaste te ayudan. Puedes usarlas cuando vuelva.`,
+  endSame:()=>`Hay monstruos que tardan más en encogerse, y está bien. Seguimos practicando juntos.`,
+  monster:"Monstruo",inhale:"Inhala",exhale:"Exhala"},
+ en:{title:"My worry monster",introLead:"Everyone has worries. Today we'll draw yours as a monster, so we can get to know it and make it smaller.",start:"Start",
+  drawTitle:"Draw your monster",size:"Size",eraser:"Erase",undo:"Undo",clear:"Clear",doneDraw:"Done, I drew it",needDraw:"Draw your monster first.",
+  nameQ:"What is your monster's name?",saysQ:"What does your monster tell you?",bigQ:"How big is it today?",tiny:"Tiny",giant:"Giant",
+  needSize:"Pick how big it is today.",goShrink:"Let's shrink it",namePh:"E.g. Grumbles",saysPh:"E.g. It's going to go wrong",
+  shrinkTitle:"Pick a strategy and practice it. Each time you do one, your monster shrinks.",did:"We did it!",other:"Pick another one",goEnd:"Finish",
+  endQ:"How big is your monster now?",before:"Before",now:"Now",restart:"Draw another monster",
+  endDown:(a,b)=>`Your monster went from ${a} to ${b}. The strategies you practiced help. You can use them when it comes back.`,
+  endSame:()=>`Some monsters take longer to shrink, and that's okay. We'll keep practicing together.`,
+  monster:"Monster",inhale:"Breathe in",exhale:"Breathe out"}
+};
+const STRATS=[
+ {id:"breath",e:"🎈",es:["Respira como globo","Inhala despacio inflando la barriga como un globo y suelta el aire suave. Hazlo 5 veces siguiendo el círculo."],en:["Balloon breathing","Breathe in slowly, filling your belly like a balloon, then let the air out gently. Do it 5 times with the circle."]},
+ {id:"brave",e:"🦁",es:["Dile algo valiente","Mírate al monstruo y dile en voz alta: \u201cTe veo, pero yo soy más fuerte.\u201d Inventa tu propia frase valiente."],en:["Say something brave","Look at your monster and say out loud: \u201cI see you, but I'm stronger.\u201d Make up your own brave words."]},
+ {id:"helpers",e:"🤝",es:["¿Quién me ayuda?","Nombra 3 personas que te ayudan cuando te preocupas. ¿Qué te dicen o qué hacen?"],en:["Who helps me?","Name 3 people who help you when you worry. What do they say or do?"]},
+ {id:"shake",e:"🏃",es:["Sacúdelo","Ponte de pie y sacude las manos, los brazos y las piernas. Luego salta 10 veces."],en:["Shake it off","Stand up and shake your hands, arms and legs. Then jump 10 times."]},
+ {id:"true",e:"🔍",es:["¿Es verdad?","Piensa en lo que dice tu monstruo. ¿Qué es lo que más probablemente va a pasar de verdad?"],en:["Is it true?","Think about what your monster says. What is most likely to really happen?"]},
+ {id:"place",e:"🌈",es:["Mi lugar tranquilo","Cierra los ojos e imagina tu lugar favorito. ¿Qué ves, qué oyes, qué hueles?"],en:["My calm place","Close your eyes and imagine your favorite place. What do you see, hear and smell?"]}
+];
+const COLORS=["#1E1B3F","#8D6CF0","#2F80ED","#2FA77A","#FFC93C","#FF8A3D","#EF4B5C","#F28DB2","#8B5A2B"];
+const SIZES=[4,9,16];
+
+let lang="en",step=0,color=COLORS[1],sizeI=1,erasing=false,strokes=[],cur=null,img="",before=0,after=0,scale=1,done=new Set(),openStrat=null,breathTimer=null;
+const $=id=>document.getElementById(id);
+
+function paint(){
+ document.documentElement.lang=lang; document.title=UI[lang].title;
+ document.querySelectorAll("[data-t]").forEach(el=>{const v=UI[lang][el.dataset.t]; if(typeof v==="string") el.textContent=v;});
+ document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.lang===lang));
+ $("mname").placeholder=UI[lang].namePh; $("msays").placeholder=UI[lang].saysPh;
+ renderStrats(); if(openStrat) openCard(openStrat); updateTag();
+ if(!$("result").hidden) showResult();
+}
+document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{lang=b.dataset.lang;paint();});
+
+function go(n){
+ step=n; for(let i=0;i<5;i++) $("s"+i).hidden = i!==n;
+ [...$("steps").children].forEach((s,i)=>s.className = (n>0 && i<n)?"on":"");
+ $("steps").style.visibility = n===0?"hidden":"visible";
+ window.scrollTo(0,0);
+ if(n===1) requestAnimationFrame(sizeCanvas);
+}
+
+/* ---------- Drawing ---------- */
+const cv=$("cv"), ctx=cv.getContext("2d");
+function sizeCanvas(){
+ const r=cv.getBoundingClientRect(), d=window.devicePixelRatio||1;
+ cv.width=Math.round(r.width*d); cv.height=Math.round(r.height*d);
+ redraw();
+}
+function drawStroke(s){
+ const w=cv.width; ctx.strokeStyle=s.c; ctx.fillStyle=s.c; ctx.lineWidth=s.w*w; ctx.lineCap="round"; ctx.lineJoin="round";
+ if(s.p.length===1){ctx.beginPath();ctx.arc(s.p[0][0]*w,s.p[0][1]*cv.height,s.w*w/2,0,Math.PI*2);ctx.fill();return;}
+ ctx.beginPath(); ctx.moveTo(s.p[0][0]*w,s.p[0][1]*cv.height);
+ for(let i=1;i<s.p.length;i++) ctx.lineTo(s.p[i][0]*w,s.p[i][1]*cv.height);
+ ctx.stroke();
+}
+function redraw(){ ctx.fillStyle="#fff"; ctx.fillRect(0,0,cv.width,cv.height); strokes.forEach(drawStroke); }
+function pt(e){ const r=cv.getBoundingClientRect(); return [(e.clientX-r.left)/r.width,(e.clientY-r.top)/r.height]; }
+cv.addEventListener("pointerdown",e=>{ e.preventDefault(); cv.setPointerCapture(e.pointerId);
+ cur={c:erasing?"#fff":color,w:(erasing?SIZES[2]*1.6:SIZES[sizeI])/340,p:[pt(e)]}; strokes.push(cur); drawStroke(cur); $("drawHint").textContent=""; });
+cv.addEventListener("pointermove",e=>{ if(!cur) return; e.preventDefault(); cur.p.push(pt(e)); redraw(); });
+["pointerup","pointercancel","pointerleave"].forEach(t=>cv.addEventListener(t,()=>{cur=null;}));
+window.addEventListener("resize",()=>{ if(step===1) sizeCanvas(); });
+
+COLORS.forEach((c,i)=>{ const b=document.createElement("button"); b.className="sw"; b.style.background=c; b.setAttribute("aria-label",c);
+ b.setAttribute("aria-pressed", c===color); b.onclick=()=>{color=c; erasing=false; $("eraser").setAttribute("aria-pressed",false);
+ document.querySelectorAll(".sw").forEach(x=>x.setAttribute("aria-pressed",x===b));}; $("palette").appendChild(b); });
+$("sizeBtn").onclick=()=>{ sizeI=(sizeI+1)%SIZES.length; const d=[6,11,18][sizeI]; $("sizeDot").style.width=d+"px"; $("sizeDot").style.height=d+"px"; };
+$("sizeDot").style.width="11px"; $("sizeDot").style.height="11px";
+$("eraser").onclick=()=>{ erasing=!erasing; $("eraser").setAttribute("aria-pressed",erasing); };
+$("undo").onclick=()=>{ strokes.pop(); redraw(); };
+$("clear").onclick=()=>{ strokes=[]; redraw(); };
+
+/* Trim drawing to its content with transparent background */
+function exportMonster(){
+ const w=cv.width,h=cv.height, data=ctx.getImageData(0,0,w,h).data;
+ let x0=w,y0=h,x1=0,y1=0;
+ for(let y=0;y<h;y+=2) for(let x=0;x<w;x+=2){ const i=(y*w+x)*4; if(data[i]<245||data[i+1]<245||data[i+2]<245){ if(x<x0)x0=x; if(y<y0)y0=y; if(x>x1)x1=x; if(y>y1)y1=y; } }
+ if(x1<=x0) return null;
+ const pad=Math.round(w*0.04); x0=Math.max(0,x0-pad); y0=Math.max(0,y0-pad); x1=Math.min(w,x1+pad); y1=Math.min(h,y1+pad);
+ const side=Math.max(x1-x0,y1-y0), o=document.createElement("canvas"); o.width=side; o.height=side;
+ const oc=o.getContext("2d"); oc.fillStyle="#fff"; oc.fillRect(0,0,side,side);
+ oc.drawImage(cv,x0,y0,x1-x0,y1-y0,(side-(x1-x0))/2,(side-(y1-y0))/2,x1-x0,y1-y0);
+ return o.toDataURL("image/png");
+}
+
+/* ---------- Scales ---------- */
+function buildScale(el,onPick){
+ el.innerHTML="";
+ for(let n=1;n<=10;n++){ const b=document.createElement("button"); b.textContent=n; b.setAttribute("aria-pressed","false");
+  b.onclick=()=>{ [...el.children].forEach(x=>x.setAttribute("aria-pressed",x===b)); onPick(n); }; el.appendChild(b); }
+}
+buildScale($("scaleBefore"),n=>{before=n;$("nameHint").textContent="";});
+buildScale($("scaleAfter"),n=>{after=n;showResult();});
+
+/* ---------- Shrink ---------- */
+const scaleFor=n=>0.35+0.65*(n/10);
+function updateTag(){ const nm=$("mname").value.trim(); $("mtag").textContent = nm || UI[lang].monster; }
+function renderStrats(){
+ $("strats").innerHTML="";
+ STRATS.forEach(s=>{ const b=document.createElement("button"); b.className="strat"+(done.has(s.id)?" done":"");
+  b.innerHTML=`<span class="e" aria-hidden="true">${s.e}</span><span>${s[lang][0]}</span>`; b.onclick=()=>openCard(s.id); $("strats").appendChild(b); });
+}
+function openCard(id){
+ openStrat=id; const s=STRATS.find(x=>x.id===id);
+ $("cardTitle").textContent=`${s.e} ${s[lang][0]}`; $("cardText").textContent=s[lang][1];
+ $("breath").hidden = id!=="breath"; clearInterval(breathTimer);
+ if(id==="breath"){ let inn=true; $("breath").textContent=UI[lang].inhale; breathTimer=setInterval(()=>{inn=!inn;$("breath").textContent=inn?UI[lang].inhale:UI[lang].exhale;},4000); }
+ $("card").hidden=false; $("strats").hidden=true;
+ $("card").scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+function closeCard(){ openStrat=null; clearInterval(breathTimer); $("card").hidden=true; $("strats").hidden=false; }
+$("cancelCard").onclick=closeCard;
+$("did").onclick=()=>{
+ done.add(openStrat); scale=Math.max(0.18,scale*0.78);
+ $("mimg").style.transform=`scale(${scale}) rotate(${(Math.random()*10-5).toFixed(1)}deg)`;
+ const p=document.createElement("span"); p.className="poof"; p.textContent="✨"; $("arena").appendChild(p); setTimeout(()=>p.remove(),950);
+ closeCard(); renderStrats(); window.scrollTo({top:0,behavior:"smooth"});
+};
+
+/* ---------- Flow ---------- */
+$("goDraw").onclick=()=>go(1);
+$("doneDraw").onclick=()=>{
+ const d=exportMonster(); if(!d){ $("drawHint").textContent=UI[lang].needDraw; return; }
+ img=d; $("thumb").src=img; go(2);
+};
+$("goShrink").onclick=()=>{
+ if(!before){ $("nameHint").textContent=UI[lang].needSize; return; }
+ scale=scaleFor(before); done=new Set(); $("mimg").src=img; $("mimg").style.transform=`scale(${scale})`;
+ updateTag(); renderStrats(); closeCard(); go(3);
+};
+$("goEnd").onclick=()=>{ closeCard(); after=0; buildScale($("scaleAfter"),n=>{after=n;showResult();}); $("result").hidden=true; go(4); };
+function showResult(){
+ if(!after) return;
+ $("imgBefore").src=img; $("imgAfter").src=img;
+ const big=120; $("imgBefore").style.width=$("imgBefore").style.height=Math.round(big*scaleFor(before))+"px";
+ $("imgAfter").style.width=$("imgAfter").style.height=Math.round(big*scaleFor(after))+"px";
+ $("nBefore").textContent=before; $("nAfter").textContent=after;
+ $("endMsg").textContent = after<before ? UI[lang].endDown(before,after) : UI[lang].endSame();
+ $("result").hidden=false;
+}
+$("restart").onclick=()=>{ strokes=[]; img=""; before=0; after=0; $("mname").value=""; $("msays").value="";
+ buildScale($("scaleBefore"),n=>{before=n;$("nameHint").textContent="";}); go(1); };
+
+paint(); go(0);
+</script>
+<div class="hsheet-bg" id="hBg" hidden><div class="hsheet" role="dialog" aria-modal="true" aria-labelledby="hT2"><div class="hsheet-head"><h2 id="hT2"></h2><button id="hX" aria-label="Cerrar">✕</button></div><div id="hB2"></div></div></div>
+<script>
+(function(){
+const H={"es": {"title": "¿Cómo funciona el monstruo?", "goal": "Es una técnica de <b>externalización</b>: el niño separa la preocupación de sí mismo al dibujarla como un monstruo con nombre. Así es más fácil hablar de ella y sentir que la puede controlar. Para ansiedad y preocupaciones, de 5 a 12 años.", "how": ["El niño dibuja su monstruo con el dedo. No importa que quede perfecto.", "Le pone nombre, escribe qué le dice el monstruo y marca qué tan grande es hoy, del 1 al 10.", "Escoge estrategias y las practican juntos. Cada vez que tocan “¡Lo hicimos!”, el monstruo se encoge.", "Al final vuelve a medir el tamaño y ven el antes y el después."], "tips": ["Lo que “le dice el monstruo” es el pensamiento ansioso. Úsalo para conversar: ¿eso siempre es verdad? ¿Qué pasaría de verdad?", "El dibujo no se guarda. Si quieres conservarlo, toma una captura de pantalla antes de cerrar."]}, "en": {"title": "How does the monster work?", "goal": "It's an <b>externalizing</b> technique: the child separates the worry from themselves by drawing it as a monster with a name. That makes it easier to talk about and to feel they can control it. For anxiety and worries, ages 5 to 12.", "how": ["The child draws their monster with a finger. It doesn't need to be perfect.", "They name it, write what the monster tells them and rate how big it is today, from 1 to 10.", "They pick strategies and practice them together. Each time you tap “We did it!”, the monster shrinks.", "At the end they rate its size again and see the before and after."], "tips": ["What “the monster says” is the anxious thought. Use it to talk: is that always true? What would really happen?", "The drawing isn't saved. To keep it, take a screenshot before closing."]}};
+const L={es:{btn:"Ayuda",goal:"Para qué sirve",how:"Cómo usarlo",tip:"Consejo",close:"Cerrar"},en:{btn:"Help",goal:"What it's for",how:"How to use it",tip:"Tip",close:"Close"}};
+const g=id=>document.getElementById(id), lg=()=>document.documentElement.lang==="en"?"en":"es";
+function render(){const l=lg(),d=H[l],u=L[l];g("helpLbl").textContent=u.btn;g("hT2").textContent=d.title;g("hX").setAttribute("aria-label",u.close);
+ let h=`<div class="hsec"><h3>${u.goal}</h3><p>${d.goal}</p></div><div class="hsec"><h3>${u.how}</h3><ol>${d.how.map(x=>`<li>${x}</li>`).join("")}</ol></div>`;
+ d.tips.forEach(t=>h+=`<div class="hsec tip"><p>💡 ${t}</p></div>`);g("hB2").innerHTML=h;}
+g("helpBtn").onclick=()=>{render();g("hBg").hidden=false;g("hBg").firstElementChild.scrollTop=0;g("hX").focus();};
+g("hX").onclick=()=>{g("hBg").hidden=true;g("helpBtn").focus();};
+g("hBg").onclick=e=>{if(e.target.id==="hBg")g("hX").click();};
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!g("hBg").hidden)g("hX").click();});
+new MutationObserver(render).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});
+render();
+})();
+</script>
+</body>
+</html>

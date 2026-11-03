@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Termómetro del enojo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FFF3F0;--surface:#FFFFFF;--ink:#33161A;--muted:#7D5A5E;--line:#F3D9D4;--soft:#FBE5E0;--accent:#D9483B;--lvl:#7CCB9E;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#1D1012;--surface:#2B191C;--ink:#FCECEC;--muted:#CFAAAE;--line:#462A2E;--soft:#3A2226;--accent:#FF7466;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1D1012;--surface:#2B191C;--ink:#FCECEC;--muted:#CFAAAE;--line:#462A2E;--soft:#3A2226;--accent:#FF7466;color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.45 Lato,"Helvetica Neue",Arial,sans-serif;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:520px;margin:0 auto;padding:14px 18px 32px;display:flex;flex-direction:column;gap:16px;min-height:100vh}
+.top{display:flex;justify-content:space-between;align-items:center}
+.brand{font:700 18px "Baloo 2",sans-serif;color:var(--accent);display:flex;gap:8px;align-items:center}
+.brand i{width:10px;height:10px;border-radius:50%;background:#1A3A8F}
+.lang{display:flex;background:var(--soft);border-radius:999px;padding:3px}
+.lang button{border:0;background:none;color:var(--muted);font:700 14px Lato,sans-serif;padding:6px 14px;border-radius:999px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--surface);color:var(--accent)}
+button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+h1{font:800 clamp(34px,9.5vw,48px)/1 "Baloo 2",sans-serif;margin:6px 0 0}
+h2{font:800 26px/1.1 "Baloo 2",sans-serif;margin:0}
+.lead{color:var(--muted);margin:0}
+.thermo{display:grid;grid-template-columns:96px 1fr;gap:14px;align-items:stretch}
+.tube{position:relative;background:var(--surface);border:3px solid var(--line);border-radius:48px 48px 48px 48px;overflow:hidden;min-height:340px}
+.fill{position:absolute;left:0;right:0;bottom:0;height:0;background:var(--lvl);transition:height .6s cubic-bezier(.3,1.3,.5,1),background .4s}
+.bulbface{position:absolute;left:0;right:0;bottom:12px;text-align:center;font-size:44px;transition:transform .3s}
+.levels{display:flex;flex-direction:column-reverse;gap:8px}
+.lv{border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:18px;padding:10px 14px;text-align:left;cursor:pointer;display:flex;gap:12px;align-items:center;font:700 17px Lato,sans-serif;min-height:58px}
+.lv i{width:16px;height:16px;border-radius:50%;flex:none}
+.lv small{display:block;color:var(--muted);font-weight:400;font-size:14px}
+.lv[aria-pressed="true"]{border-color:var(--c);background:color-mix(in srgb,var(--c) 18%,var(--surface))}
+.primary{border:0;background:#D9483B;color:#fff;border-radius:999px;padding:15px 22px;font:700 18px Lato,sans-serif;cursor:pointer;width:100%}
+.primary:disabled{opacity:.45}
+.ghost{border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:12px 20px;font:700 16px Lato,sans-serif;cursor:pointer;width:100%}
+.label{font-weight:700;margin:0 0 8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 14px;font:700 15px Lato,sans-serif;cursor:pointer}
+.chip[aria-pressed="true"]{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,var(--surface))}
+.strats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.st{border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:20px;padding:12px;text-align:left;cursor:pointer;font:700 16px Lato,sans-serif;display:flex;gap:8px;align-items:center;min-height:64px}
+.st .e{font-size:26px}
+.st.done{border-color:#2FA77A}
+.st.done::after{content:"✓";margin-left:auto;color:#2FA77A;font-size:20px}
+.card{background:var(--surface);border:2px solid var(--accent);border-radius:24px;padding:16px 18px;display:flex;flex-direction:column;gap:12px}
+.card h3{margin:0;font:800 24px/1.1 "Baloo 2",sans-serif}
+.card p{margin:0;font-size:18px}
+.count{align-self:center;font:800 64px/1 "Baloo 2",sans-serif;color:var(--accent)}
+.breath{align-self:center;width:120px;height:120px;border-radius:50%;background:color-mix(in srgb,#6CB6F2 45%,transparent);display:flex;align-items:center;justify-content:center;font:800 18px "Baloo 2",sans-serif;animation:br 8s ease-in-out infinite}
+@keyframes br{0%,100%{transform:scale(.6)}50%{transform:scale(1)}}
+.compare{display:flex;justify-content:center;gap:28px;align-items:flex-end}
+.compare div{text-align:center}
+.compare .f{font-size:56px;line-height:1}
+.compare b{display:block;font:800 20px "Baloo 2",sans-serif}
+.compare span{color:var(--muted);font-size:14px;font-weight:700}
+.summary{background:var(--surface);border:2px solid var(--accent);border-radius:20px;padding:14px 16px;font-size:15.5px;line-height:1.5}
+.note{color:var(--muted);font-size:14px;margin:0;text-align:center}
+:root{--hc:#D9483B}
+.hbtn{border:2px solid var(--line);background:var(--surface);color:var(--hc);border-radius:999px;padding:5px 11px 5px 6px;font:700 13.5px Lato,sans-serif;cursor:pointer;display:flex;align-items:center;gap:6px}
+.hbtn i{font-style:normal;width:20px;height:20px;border-radius:50%;background:var(--hc);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:13px}
+.hsheet-bg{position:fixed;inset:0;z-index:50;background:rgba(10,15,30,.45);display:flex;align-items:flex-end;justify-content:center}
+.hsheet{background:var(--bg);color:var(--ink);width:100%;max-width:560px;max-height:88vh;overflow-y:auto;border-radius:26px 26px 0 0;padding:18px 18px calc(24px + env(safe-area-inset-bottom,0px))}
+.hsheet-head{display:flex;justify-content:space-between;align-items:center;gap:10px;position:sticky;top:-18px;background:var(--bg);padding:6px 0 10px}
+.hsheet-head h2{font:800 24px/1.1 "Baloo 2",Outfit,sans-serif;margin:0}
+.hsheet-head button{border:0;background:var(--soft);color:var(--ink);width:38px;height:38px;border-radius:50%;font-size:18px;cursor:pointer;flex:none}
+.hsec{background:var(--surface);border:2px solid var(--line);border-radius:20px;padding:14px 16px;margin-bottom:12px;font-size:16px;line-height:1.5}
+.hsec h3{margin:0 0 6px;font:700 19px/1.15 "Baloo 2",Outfit,sans-serif;color:var(--hc)}
+.hsec p{margin:0}
+.hsec ol{margin:0;padding-left:20px;display:grid;gap:5px}
+.hsec.tip{background:var(--soft);border-color:transparent}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><div style="display:flex;align-items:center;gap:10px"><div class="brand"><i></i>Aliado</div><button class="hbtn" id="helpBtn" aria-haspopup="dialog"><i aria-hidden="true">?</i><span id="helpLbl">Ayuda</span></button></div>
+    <div class="lang"><button data-lang="en" aria-pressed="true">EN</button><button data-lang="es" aria-pressed="false">ES</button></div></div>
+
+  <section id="s0" style="display:flex;flex-direction:column;gap:16px">
+    <h1 data-t="title"></h1>
+    <p class="lead" id="ask0"></p>
+    <div class="thermo">
+      <div class="tube"><div class="fill" id="fill"></div><div class="bulbface" id="face">🙂</div></div>
+      <div class="levels" id="levels"></div>
+    </div>
+    <div id="trigWrap" hidden>
+      <p class="label" data-t="trigQ"></p>
+      <div class="chips" id="trigs"></div>
+    </div>
+    <button class="primary" id="next0" disabled data-t="next0"></button>
+  </section>
+
+  <section id="s1" hidden style="display:flex;flex-direction:column;gap:14px">
+    <h2 data-t="stratT"></h2>
+    <p class="lead" data-t="stratLead"></p>
+    <div class="card" id="card" hidden>
+      <h3 id="cT"></h3><div class="breath" id="breath" hidden></div><div class="count" id="count" hidden></div>
+      <p id="cX"></p>
+      <button class="primary" id="did" data-t="did"></button>
+      <button class="ghost" id="other" data-t="other"></button>
+    </div>
+    <div class="strats" id="strats"></div>
+    <button class="ghost" id="toEnd" data-t="toEnd"></button>
+  </section>
+
+  <section id="s2" hidden style="display:flex;flex-direction:column;gap:14px">
+    <div id="reWrap" style="display:flex;flex-direction:column;gap:14px">
+      <h2 data-t="reQ"></h2>
+      <div class="levels" id="levels2"></div>
+    </div>
+    <div id="res" hidden style="display:flex;flex-direction:column;gap:14px">
+      <div class="compare"><div><span data-t="before"></span><div class="f" id="bF"></div><b id="bL"></b></div><div><span data-t="now"></span><div class="f" id="aF"></div><b id="aL"></b></div></div>
+      <p class="lead" id="msg" style="text-align:center"></p>
+      <div class="summary" id="summary"></div>
+      <button class="primary" id="copy" data-t="copy"></button>
+      <p class="note" id="copied"></p>
+      <button class="ghost" id="again" data-t="again"></button>
+    </div>
+  </section>
+</div>
+<script>
+const UI={es:{title:"Termómetro del enojo",ask0:"¿Qué tan enojado te sientes ahora mismo? Toca tu nivel.",trigQ:"¿Qué te hizo enojar? (opcional)",next0:"Vamos a bajar la temperatura",
+ stratT:"Elige una estrategia",stratLead:"Practícala ahora. Puedes hacer todas las que quieras.",did:"¡Lo hice!",other:"Elegir otra",toEnd:"Ya terminé",
+ reQ:"¿Y cómo está tu termómetro ahora?",before:"Antes",now:"Ahora",copy:"Copiar resumen",copied:"Resumen copiado. Pégalo en tu nota.",again:"Empezar otra vez",
+ down:"¡Bajaste la temperatura! Estas estrategias te sirven cuando el enojo suba.",same:"El enojo a veces tarda en bajar, y está bien. Sigamos practicando.",go:"¡Vamos!"},
+ en:{title:"Anger thermometer",ask0:"How angry do you feel right now? Tap your level.",trigQ:"What made you angry? (optional)",next0:"Let's cool it down",
+ stratT:"Pick a strategy",stratLead:"Practice it now. You can do as many as you want.",did:"I did it!",other:"Pick another one",toEnd:"I'm done",
+ reQ:"How is your thermometer now?",before:"Before",now:"Now",copy:"Copy summary",copied:"Summary copied. Paste it into your note.",again:"Start again",
+ down:"You cooled it down! These strategies help when anger goes up.",same:"Sometimes anger takes a while to come down, and that's okay. Let's keep practicing.",go:"Go!"}};
+const LV=[{c:"#7CCB9E",f:"😌",es:["Tranquilo","Me siento bien"],en:["Calm","I feel okay"],enN:"calm"},
+ {c:"#C9D86A",f:"😕",es:["Molesto","Algo me molesta"],en:["Bothered","Something bugs me"],enN:"bothered"},
+ {c:"#FFC14D",f:"😠",es:["Enojado","Me está costando"],en:["Angry","It's getting hard"],enN:"angry"},
+ {c:"#FF8A3D",f:"😡",es:["Muy enojado","Casi exploto"],en:["Very angry","About to blow"],enN:"very angry"},
+ {c:"#E5483B",f:"🤯",es:["Explotando","Perdí el control"],en:["Exploding","Lost control"],enN:"exploding"}];
+const TRIG=[["no",{es:"Me dijeron que no",en:"I was told no"}],["unfair",{es:"Algo injusto",en:"Something unfair"}],["sib",{es:"Mi hermano/a",en:"My sibling"}],
+ ["school",{es:"La escuela",en:"School"}],["lose",{es:"Perdí en un juego",en:"I lost a game"}],["tease",{es:"Se burlaron de mí",en:"Someone teased me"}],["chores",{es:"Tareas o deberes",en:"Chores or homework"}]];
+const ST=[{id:"walk",e:"🚶",es:["Alejarme","Sal un momento del lugar donde pasó. Camina despacio hasta otro cuarto o rincón tranquilo."],en:["Walk away","Leave the place where it happened for a moment. Walk slowly to another room or calm corner."],enN:"walking away"},
+ {id:"breath",e:"🌬️",es:["Respirar profundo","Inhala despacio por la nariz y suelta el aire por la boca, como apagando una vela. 5 veces."],en:["Deep breaths","Breathe in slowly through your nose and blow out through your mouth, like blowing out a candle. 5 times."],enN:"deep breathing"},
+ {id:"count",e:"🔢",es:["Contar hasta 10","Cuenta despacio del 1 al 10 en tu mente. Si sigues muy enojado, cuenta otra vez."],en:["Count to 10","Count slowly from 1 to 10 in your head. If you're still very angry, count again."],enN:"counting to 10"},
+ {id:"squeeze",e:"✊",es:["Apretar y soltar","Aprieta los puños muy fuerte mientras cuentas hasta 5, y luego suéltalos. 3 veces."],en:["Squeeze and release","Squeeze your fists really tight while you count to 5, then let go. 3 times."],enN:"squeeze-and-release muscle relaxation"},
+ {id:"wall",e:"🧱",es:["Empujar la pared","Pon las manos en la pared y empuja con toda tu fuerza por 10 segundos."],en:["Push the wall","Put your hands on the wall and push with all your strength for 10 seconds."],enN:"wall push"},
+ {id:"water",e:"💧",es:["Tomar agua fría","Toma un vaso de agua fría despacio, sorbo a sorbo."],en:["Cold water","Drink a glass of cold water slowly, sip by sip."],enN:"drinking cold water"},
+ {id:"fun",e:"🎨",es:["Hacer algo que me gusta","Dibuja, escucha una canción o juega con algo que te calme por unos minutos."],en:["Do something I like","Draw, listen to a song or play with something calming for a few minutes."],enN:"engaging in a preferred calming activity"},
+ {id:"talk",e:"🗣️",es:["Hablarlo","Cuéntale a alguien de confianza qué pasó y cómo te sentiste."],en:["Talk about it","Tell someone you trust what happened and how you felt."],enN:"talking about it with a trusted adult"}];
+let lang="en",lvl=null,lvl2=null,trig=new Set(),done=[],open=null,tmr=null;
+const $=id=>document.getElementById(id);
+function levels(el,cur,on){el.innerHTML="";LV.forEach((v,i)=>{const b=document.createElement("button");b.className="lv";b.style.setProperty("--c",v.c);b.setAttribute("aria-pressed",cur===i);
+ b.innerHTML=`<i style="background:${v.c}"></i><div>${v[lang][0]}<small>${v[lang][1]}</small></div>`;b.onclick=()=>on(i);el.appendChild(b);});}
+function paint(){document.documentElement.lang=lang;document.title=UI[lang].title;
+ document.querySelectorAll("[data-t]").forEach(el=>el.textContent=UI[lang][el.dataset.t]);$("ask0").textContent=UI[lang].ask0;
+ document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.lang===lang));
+ levels($("levels"),lvl,i=>{lvl=i;setTube();paint();});levels($("levels2"),lvl2,i=>{lvl2=i;result();paint();});
+ $("trigs").innerHTML="";TRIG.forEach(([k,l])=>{const b=document.createElement("button");b.className="chip";b.setAttribute("aria-pressed",trig.has(k));b.textContent=l[lang];
+  b.onclick=()=>{trig.has(k)?trig.delete(k):trig.add(k);paint();};$("trigs").appendChild(b);});
+ $("trigWrap").hidden=lvl===null;$("next0").disabled=lvl===null;
+ $("strats").innerHTML="";ST.forEach(s=>{const b=document.createElement("button");b.className="st"+(done.includes(s.id)?" done":"");b.innerHTML=`<span class="e" aria-hidden="true">${s.e}</span><span>${s[lang][0]}</span>`;b.onclick=()=>openCard(s.id);$("strats").appendChild(b);});
+ if(open)openCard(open,true);if(lvl2!==null)result();}
+document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{lang=b.dataset.lang;paint();});
+function setTube(){const v=LV[lvl];$("fill").style.height=((lvl+1)/5*100)+"%";$("fill").style.background=v.c;$("face").textContent=v.f;}
+function go(n){[0,1,2].forEach(i=>$("s"+i).hidden=i!==n);window.scrollTo(0,0);}
+function openCard(id,keep){open=id;const s=ST.find(x=>x.id===id);$("cT").textContent=`${s.e} ${s[lang][0]}`;$("cX").textContent=s[lang][1];
+ $("breath").hidden=id!=="breath";$("count").hidden=!(id==="wall"||id==="count");
+ if(!keep){clearInterval(tmr);
+  if(id==="breath"){let i=true;$("breath").textContent=lang==="es"?"Inhala":"Breathe in";tmr=setInterval(()=>{i=!i;$("breath").textContent=i?(lang==="es"?"Inhala":"Breathe in"):(lang==="es"?"Exhala":"Breathe out");},4000);}
+  if(id==="wall"){let n=10;$("count").textContent=n;tmr=setInterval(()=>{n--;$("count").textContent=n>0?n:"✓";if(n<=0)clearInterval(tmr);},1000);}
+  if(id==="count"){let n=1;$("count").textContent=n;tmr=setInterval(()=>{n++;$("count").textContent=n<=10?n:"✓";if(n>10)clearInterval(tmr);},1200);}}
+ $("card").hidden=false;$("strats").hidden=true;}
+function closeCard(){open=null;clearInterval(tmr);$("card").hidden=true;$("strats").hidden=false;}
+$("did").onclick=()=>{if(!done.includes(open))done.push(open);closeCard();paint();window.scrollTo(0,0);};
+$("other").onclick=closeCard;
+$("next0").onclick=()=>{done=[];closeCard();paint();go(1);};
+$("toEnd").onclick=()=>{closeCard();lvl2=null;$("res").hidden=true;$("reWrap").hidden=false;paint();go(2);};
+function result(){const a=LV[lvl],b=LV[lvl2];$("bF").textContent=a.f;$("bL").textContent=`${lvl+1}/5`;$("aF").textContent=b.f;$("aL").textContent=`${lvl2+1}/5`;
+ $("msg").textContent=lvl2<lvl?UI[lang].down:UI[lang].same;$("summary").textContent=summary();$("res").hidden=false;}
+function summary(){const t=[...trig].map(k=>TRIG.find(x=>x[0]===k)[1].en.toLowerCase());
+ const s=done.map(id=>ST.find(x=>x.id===id).enN);
+ let r=`Youth used an anger thermometer to identify and rate the intensity of their anger at ${lvl+1}/5 ("${LV[lvl].enN}").`;
+ if(t.length) r+=` Identified trigger(s): ${t.join(", ")}.`;
+ r+= s.length?` Clinician guided youth in practicing anger coping skills: ${s.join(", ")}.`:` Clinician reviewed anger coping skills with youth.`;
+ r+=` Post-intervention, youth rated their anger at ${lvl2+1}/5 ("${LV[lvl2].enN}")`;
+ r+= lvl2<lvl?`, indicating a decrease in anger intensity.`:`.`;
+ return r;}
+$("copy").onclick=async()=>{const t=$("summary").textContent;try{await navigator.clipboard.writeText(t);}catch(e){const a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();document.execCommand("copy");a.remove();}$("copied").textContent=UI[lang].copied;};
+$("again").onclick=()=>{lvl=null;lvl2=null;trig=new Set();done=[];$("fill").style.height="0";$("face").textContent="🙂";paint();go(0);};
+paint();go(0);
+</script>
+<div class="hsheet-bg" id="hBg" hidden><div class="hsheet" role="dialog" aria-modal="true" aria-labelledby="hT2"><div class="hsheet-head"><h2 id="hT2"></h2><button id="hX" aria-label="Cerrar">✕</button></div><div id="hB2"></div></div></div>
+<script>
+(function(){
+const H={"es": {"title": "¿Cómo funciona el termómetro?", "goal": "Ayuda al niño a reconocer qué tan fuerte es su enojo y a practicar estrategias para bajarlo. Al medir antes y después, ve con sus propios ojos que sí puede controlarlo. De 5 a 12 años.", "how": ["El niño toca su nivel en el termómetro. Si quiere, marca qué lo hizo enojar.", "Elige una estrategia y la practican juntos siguiendo la guía en pantalla. Pueden hacer varias.", "Al terminar, vuelve a marcar su nivel y ven el antes y el después.", "Copia el resumen para la nota."], "tips": ["Lo ideal es practicar las estrategias cuando el niño está tranquilo, para que las tenga aprendidas cuando el enojo suba.", "En plena crisis, primero ayuda a calmar. La conversación y la herramienta vienen después."]}, "en": {"title": "How does the thermometer work?", "goal": "Helps the child recognize how strong their anger is and practice strategies to bring it down. Rating before and after lets them see for themselves that they can control it. Ages 5 to 12.", "how": ["The child taps their level on the thermometer. If they want, they mark what made them angry.", "They pick a strategy and practice it together with the on-screen guide. They can do several.", "When done, they rate their level again and see the before and after.", "Copy the summary for the note."], "tips": ["Ideally, practice the strategies when the child is calm, so they've learned them by the time anger goes up.", "In the middle of a crisis, help them calm down first. The conversation and the tool come later."]}};
+const L={es:{btn:"Ayuda",goal:"Para qué sirve",how:"Cómo usarlo",tip:"Consejo",close:"Cerrar"},en:{btn:"Help",goal:"What it's for",how:"How to use it",tip:"Tip",close:"Close"}};
+const g=id=>document.getElementById(id), lg=()=>document.documentElement.lang==="en"?"en":"es";
+function render(){const l=lg(),d=H[l],u=L[l];g("helpLbl").textContent=u.btn;g("hT2").textContent=d.title;g("hX").setAttribute("aria-label",u.close);
+ let h=`<div class="hsec"><h3>${u.goal}</h3><p>${d.goal}</p></div><div class="hsec"><h3>${u.how}</h3><ol>${d.how.map(x=>`<li>${x}</li>`).join("")}</ol></div>`;
+ d.tips.forEach(t=>h+=`<div class="hsec tip"><p>💡 ${t}</p></div>`);g("hB2").innerHTML=h;}
+g("helpBtn").onclick=()=>{render();g("hBg").hidden=false;g("hBg").firstElementChild.scrollTop=0;g("hX").focus();};
+g("hX").onclick=()=>{g("hBg").hidden=true;g("helpBtn").focus();};
+g("hBg").onclick=e=>{if(e.target.id==="hBg")g("hX").click();};
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!g("hBg").hidden)g("hX").click();});
+new MutationObserver(render).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});
+render();
+})();
+</script>
+</body>
+</html>
