@@ -265,15 +265,20 @@ document.querySelectorAll(".mic").forEach(function(b){
   b.onclick=function(){ if(rec&&recT===b.getAttribute("data-t")){rec.stop();return;} startRec(b); };
 });
 if(!SR){$("micHint").textContent="Tip: tap the microphone on your keyboard to dictate.";}
+var recWait=null;
 function startRec(b){
-  if(rec){try{rec.stop()}catch(e){}}
-  var t=$(b.getAttribute("data-t")); recT=b.getAttribute("data-t");
-  rec=new SR(); rec.lang="en-US"; rec.continuous=true; rec.interimResults=true;
-  var base=t.value?t.value.replace(/\s*$/," "):""; var fin="";
-  rec.onresult=function(e){var interim="";for(var i=e.resultIndex;i<e.results.length;i++){var r=e.results[i];if(r.isFinal)fin+=r[0].transcript;else interim+=r[0].transcript;}t.value=base+fin+interim;save();};
-  rec.onerror=function(e){if(e.error==="not-allowed"||e.error==="service-not-allowed"){toast("Microphone blocked. Use the mic on your keyboard.");}};
-  rec.onend=function(){b.classList.remove("rec");b.innerHTML=MIC+"Tap to dictate";rec=null;recT=null;};
-  try{rec.start();b.classList.add("rec");b.innerHTML=MIC+"Listening… tap to stop";}catch(e){toast("Dictation not available. Use the mic on your keyboard.");}
+  /* another field is still listening: stop it and start this one only after it has fully ended */
+  if(rec){var old=rec;recWait=b;try{old.stop()}catch(e){}setTimeout(function(){if(recWait===b&&rec===old){rec=null;recT=null;recWait=null;startRec(b);}},2000);return;}
+  recWait=null;
+  var t=$(b.getAttribute("data-t")), me=new SR(); rec=me; recT=b.getAttribute("data-t");
+  me.lang="en-US"; me.continuous=true; me.interimResults=true;
+  var base=t.value?t.value.replace(/\s*$/," "):"", done={}, fin="";
+  me.onresult=function(e){var interim="";for(var i=e.resultIndex;i<e.results.length;i++){var r=e.results[i];if(r.isFinal){if(!done[i]){done[i]=1;fin+=r[0].transcript+" ";}}else interim+=r[0].transcript;}t.value=base+fin+interim;save();};
+  me.onerror=function(e){if(e.error==="not-allowed"||e.error==="service-not-allowed"){toast("Microphone blocked. Use the mic on your keyboard.");}};
+  me.onend=function(){b.classList.remove("rec");b.innerHTML=MIC+"Tap to dictate";t.value=t.value.replace(/\s+$/,"");save();
+    if(rec===me){rec=null;recT=null;}
+    if(recWait){var nb=recWait;recWait=null;setTimeout(function(){startRec(nb);},250);}};
+  try{me.start();b.classList.add("rec");b.innerHTML=MIC+"Listening… tap to stop";}catch(e){rec=null;recT=null;toast("Dictation not available. Use the mic on your keyboard.");}
 }
 
 /* next session */
