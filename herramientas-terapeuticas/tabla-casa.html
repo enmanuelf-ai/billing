@@ -352,6 +352,7 @@ $("saveImg").onclick=async()=>{const u=UI[lang];const W=1100,H=1260,c=document.c
   try{const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="star-chart.png";document.body.appendChild(a);a.click();a.remove();$("printNote").textContent=u.imgSaved;}catch(e){$("printNote").textContent=u.printFail;}
  },"image/png");};
 
+{const ql=new URLSearchParams(location.search).get('lang');if(ql==='es'||ql==='en')lang=ql;}
 if(st&&st.lang)lang=st.lang;
 if(st&&!st.roundLog)st.roundLog=[];
 if(st){draft={reward:st.rewardCustom?null:st.reward,n:st.n};}

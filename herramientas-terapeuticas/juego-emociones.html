@@ -37,6 +37,7 @@ body{
 .top{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .brand{font-family:"Baloo 2",system-ui,sans-serif;font-weight:700;font-size:18px;color:var(--navy);display:flex;align-items:center;gap:8px}
 .brand i{width:10px;height:10px;border-radius:50%;background:var(--navy);display:inline-block}
+.alogo{display:block;height:44px;width:auto;border-radius:10px;background:#fff;padding:2px 6px}
 .lang{display:flex;background:var(--soft);border-radius:999px;padding:3px}
 .lang button{border:0;background:transparent;color:var(--muted);font:700 14px Lato,sans-serif;padding:6px 14px;border-radius:999px;cursor:pointer}
 .lang button[aria-pressed="true"]{background:var(--surface);color:var(--navy);box-shadow:0 1px 3px rgba(22,34,74,.15)}
@@ -132,7 +133,7 @@ h1{font-family:"Baloo 2",system-ui,sans-serif;font-weight:800;font-size:clamp(40
 <body>
 <div class="wrap">
   <div class="top">
-    <div style="display:flex;align-items:center;gap:10px"><div class="brand"><i></i>Aliado</div><button class="hbtn" id="helpBtn" aria-haspopup="dialog"><i aria-hidden="true">?</i><span id="helpLbl">Ayuda</span></button></div>
+    <div style="display:flex;align-items:center;gap:10px"><img class="alogo" src="https://www.jotform.com/uploads/enmanuelf59/form_files/Captura%20de%20pantalla%202026-04-22%20160244.69fbcf54529891.59675446.jpg" alt="Aliado Community Health"><button class="hbtn" id="helpBtn" aria-haspopup="dialog"><i aria-hidden="true">?</i><span id="helpLbl">Ayuda</span></button></div>
     <div class="lang" role="group" aria-label="Idioma">
       <button data-lang="en" aria-pressed="true">EN</button>
       <button data-lang="es" aria-pressed="false">ES</button>

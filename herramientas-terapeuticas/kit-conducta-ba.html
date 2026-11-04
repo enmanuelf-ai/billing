@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
@@ -20,6 +21,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .top{display:flex;justify-content:space-between;align-items:center}
 .brand{font:700 18px "Baloo 2",sans-serif;color:var(--accent);display:flex;gap:8px;align-items:center}
 .brand i{width:10px;height:10px;border-radius:50%;background:#1A3A8F}
+.alogo{display:block;height:44px;width:auto;border-radius:10px;background:#fff;padding:2px 6px}
 .lang{display:flex;background:var(--soft);border-radius:999px;padding:3px}
 .lang button{border:0;background:none;color:var(--muted);font:700 14px Lato,sans-serif;padding:6px 14px;border-radius:999px;cursor:pointer}
 .lang button[aria-pressed="true"]{background:var(--surface);color:var(--accent)}
@@ -60,6 +62,12 @@ h1{font:800 clamp(32px,9vw,44px)/1 "Baloo 2",sans-serif;margin:4px 0 0}
 .summary{background:var(--surface);border:2px solid var(--accent);border-radius:20px;padding:14px 16px;font-size:15.5px;line-height:1.5}
 .note{color:var(--muted);font-size:14px;margin:0;text-align:center}
 .hint{color:var(--muted);font-weight:700;margin:0;text-align:center;min-height:20px}
+.homebtn{width:100%;border:2px dashed var(--accent);background:color-mix(in srgb,var(--accent) 8%,var(--surface));color:var(--ink);border-radius:18px;padding:12px 14px;font:700 16px Lato,sans-serif;cursor:pointer;display:flex;align-items:center;gap:10px;text-align:left}
+.homebtn span{font-size:26px}
+.qrbox{background:#fff;border-radius:22px;padding:18px;display:flex;justify-content:center;margin:6px auto 0;width:fit-content;border:2px solid var(--line)}
+.qrbox img,.qrbox canvas{width:240px!important;height:240px!important}
+.qrlangs{display:flex;gap:8px;justify-content:center;margin:10px 0 4px}
+.qrsteps{margin:10px 0 0;padding-left:20px;display:grid;gap:5px}
 .head{display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
 .help{flex:none;border:2px solid var(--line);background:var(--surface);color:var(--accent);border-radius:999px;padding:8px 13px;font:700 14px Lato,sans-serif;cursor:pointer;display:flex;align-items:center;gap:6px}
 .help i{font-style:normal;width:20px;height:20px;border-radius:50%;background:var(--accent);color:var(--surface);display:inline-flex;align-items:center;justify-content:center;font-size:13px}
@@ -82,9 +90,10 @@ h1{font:800 clamp(32px,9vw,44px)/1 "Baloo 2",sans-serif;margin:4px 0 0}
 </head>
 <body>
 <div class="wrap">
-  <div class="top"><div class="brand"><i></i>Aliado</div>
+  <div class="top"><img class="alogo" src="https://www.jotform.com/uploads/enmanuelf59/form_files/Captura%20de%20pantalla%202026-04-22%20160244.69fbcf54529891.59675446.jpg" alt="Aliado Community Health">
     <div class="lang"><button data-lang="en" aria-pressed="true">EN</button><button data-lang="es" aria-pressed="false">ES</button></div></div>
   <div class="head"><h1 data-t="title"></h1><button class="help" id="helpBtn" aria-haspopup="dialog"><i aria-hidden="true">?</i><span data-t="help"></span></button></div>
+  <button class="homebtn" id="qrBtn"><span aria-hidden="true">🏠</span><div><b data-t="qrBtn"></b><br><small data-t="qrBtnSub" style="color:var(--muted)"></small></div></button>
   <div class="tabs" role="tablist" id="tabs"></div>
 
   <!-- Tokens -->
@@ -144,6 +153,16 @@ h1{font:800 clamp(32px,9vw,44px)/1 "Baloo 2",sans-serif;margin:4px 0 0}
     <p class="note" id="copied"></p>
   </section>
 </div>
+<div class="sheet-bg" id="qrBg" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="qrT">
+    <div class="sheet-head"><h2 id="qrT"></h2><button id="qrClose" aria-label="Close">✕</button></div>
+    <p class="intro" id="qrP"></p>
+    <p class="label" id="qrLangL" style="text-align:center"></p>
+    <div class="qrlangs" id="qrLangs"></div>
+    <div class="qrbox" id="qrBox"></div>
+    <ol class="qrsteps" id="qrSteps"></ol>
+  </div>
+</div>
 <div class="sheet-bg" id="sheetBg" hidden>
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="hT">
     <div class="sheet-head"><h2 id="hT"></h2><button id="hClose" aria-label="Cerrar">✕</button></div>
@@ -151,14 +170,14 @@ h1{font:800 clamp(32px,9vw,44px)/1 "Baloo 2",sans-serif;margin:4px 0 0}
   </div>
 </div>
 <script>
-const UI={es:{title:"Kit de conducta",help:"¿Cómo funciona?",hTitle:"¿Cómo funciona el kit?",goalL:"Para qué sirve",howL:"Cómo usarlo",nowL:"Estás aquí",
+const UI={es:{title:"Kit de conducta",qrBtn:"Tabla de estrellas para casa",qrBtnSub:"Muéstrale al padre el código QR para que la abra en su celular",qrT:"Tabla para casa",qrP:"El padre escanea este código con la cámara de su celular y se le abre la tabla de estrellas para usar en casa durante la semana.",qrLangL:"Idioma de la familia",qrSteps:["Pídele al padre que abra la cámara de su celular y apunte al código.","Que toque el enlace que aparece en la pantalla.","Configuren la tabla juntos con el niño antes de terminar la sesión."],help:"¿Cómo funciona?",hTitle:"¿Cómo funciona el kit?",goalL:"Para qué sirve",howL:"Cómo usarlo",nowL:"Estás aquí",
  intro:"Este kit reúne las herramientas que el BA usa para aplicar el plan de conducta en la casa: reforzar conductas positivas, apoyar las transiciones y entender las conductas problemáticas. Nada se guarda: al cerrar la página se borra todo.",tTokens:"Fichas",tFt:"Primero",tAbc:"Registro",tSum:"Resumen",
  behavQ:"¿Qué conducta vamos a reforzar?",behavPh:"Ej: Seguir instrucciones",rewardQ:"¿Qué quiere ganar?",howMany:"¿Cuántas estrellas para ganarlo?",
  tkStart:"Empezar tablero",needSetup:"Escribe la conducta y elige la recompensa.",tkAgain:"Empezar otra ronda",undo:"Quitar estrella",edit:"Cambiar meta",
  earned:"¡Ganaste",first:"Primero",then:"Después",ftDone:"¡Terminé lo primero!",pickFirst:"Elige lo primero (la tarea)",pickThen:"Elige lo de después (lo que le gusta)",
  aQ:"Antes: ¿qué pasó?",bQ:"Conducta: ¿qué hizo?",cQ:"Después: ¿qué pasó?",abcSave:"Guardar en el registro",needAbc:"Elige una opción en cada parte.",
  copy:"Copiar resumen",copied:"Resumen copiado. Pégalo en tu nota.",nothing:"Usa las fichas, el tablero o el registro durante la sesión y aquí aparecerá el resumen."},
- en:{title:"Behavior kit",help:"How it works",hTitle:"How does the kit work?",goalL:"What it's for",howL:"How to use it",nowL:"You are here",
+ en:{title:"Behavior kit",qrBtn:"Star chart for home",qrBtnSub:"Show the parent the QR code so they open it on their phone",qrT:"Chart for home",qrP:"The parent scans this code with their phone camera and the star chart opens, ready to use at home during the week.",qrLangL:"Family's language",qrSteps:["Ask the parent to open their phone camera and point it at the code.","Have them tap the link that appears on the screen.","Set up the chart together with the child before the session ends."],help:"How it works",hTitle:"How does the kit work?",goalL:"What it's for",howL:"How to use it",nowL:"You are here",
  intro:"This kit brings together the tools a BA uses to carry out the behavior plan at home: reinforce positive behaviors, support transitions and understand problem behaviors. Nothing is saved: closing the page erases everything.",tTokens:"Tokens",tFt:"First",tAbc:"Log",tSum:"Summary",
  behavQ:"Which behavior are we reinforcing?",behavPh:"E.g. Following directions",rewardQ:"What do they want to earn?",howMany:"How many stars to earn it?",
  tkStart:"Start board",needSetup:"Type the behavior and pick the reward.",tkAgain:"Start another round",undo:"Remove star",edit:"Change goal",
@@ -251,6 +270,15 @@ function renderSum(){const p=[];
  if(log.length){p.push(`ABC data were collected for ${log.length} incident(s). Most frequent antecedent: ${topOf("A")}. Most frequent behavior: ${topOf("B")}. Most frequent consequence: ${topOf("C")}.`);}
  $("summary").textContent=p.length?p.join(" "):UI[lang].nothing;$("copy").hidden=!p.length;$("copied").textContent="";}
 $("copy").onclick=async()=>{const t=$("summary").textContent;try{await navigator.clipboard.writeText(t);}catch(e){const a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();document.execCommand("copy");a.remove();}$("copied").textContent=UI[lang].copied;};
+let qrLang="en";
+function renderQR(){const u=UI[lang];$("qrT").textContent=u.qrT;$("qrP").textContent=u.qrP;$("qrLangL").textContent=u.qrLangL;
+ $("qrSteps").innerHTML=u.qrSteps.map(x=>`<li>${x}</li>`).join("");
+ $("qrLangs").innerHTML="";[["en","English"],["es","Español"]].forEach(([k,l])=>{const b=document.createElement("button");b.className="chip";b.textContent=l;b.setAttribute("aria-pressed",qrLang===k);b.onclick=()=>{qrLang=k;renderQR();};$("qrLangs").appendChild(b);});
+ const url="https://enmanuelf-ai.github.io/billing/herramientas-terapeuticas/tabla-casa.html?lang="+qrLang;$("qrBox").innerHTML="";
+ try{new QRCode($("qrBox"),{text:url,width:240,height:240,correctLevel:QRCode.CorrectLevel.M});$("qrBox").removeAttribute("title");}catch(e){$("qrBox").textContent="QR not available";}}
+$("qrBtn").onclick=()=>{qrLang=lang;renderQR();$("qrBg").hidden=false;$("qrClose").focus();};
+$("qrClose").onclick=()=>{$("qrBg").hidden=true;$("qrBtn").focus();};
+$("qrBg").onclick=e=>{if(e.target.id==="qrBg")$("qrClose").click();};
 $("helpBtn").onclick=()=>{renderHelp();$("sheetBg").hidden=false;$("sheetBg").querySelector(".sheet").scrollTop=0;$("hClose").focus();};
 $("hClose").onclick=()=>{$("sheetBg").hidden=true;$("helpBtn").focus();};
 $("sheetBg").onclick=e=>{if(e.target.id==="sheetBg")$("hClose").click();};
