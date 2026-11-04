@@ -192,6 +192,7 @@ select{width:100%;border:1.5px solid var(--line);border-radius:14px;padding:12px
       <div class="acts hide" id="acts">
         <button class="btn" id="copyBtn">Copy note for CYBER</button>
         <button class="btn ghost" id="mailBtn" style="flex:none">Email me this note</button>
+        <button class="btn hide" id="markBtn" style="flex:none;background:#16a34a">I pasted it in CYBER &mdash; mark as done</button>
         <div class="hint" style="text-align:center">Paste it into CYBER. Review before signing.</div>
       </div>
       <div class="card hide" id="failCard"><b>We couldn't write the note.</b><div class="sub" style="margin-top:6px">Check your connection and try again. Nothing you entered was lost.</div><button class="btn" id="retryBtn" style="width:100%">Try again</button></div>
@@ -208,6 +209,7 @@ var BASE="https://default5c737bedc35d48c39a6d89e766c7c7.03.environment.api.power
 var P=new URLSearchParams((location.hash||"").replace(/^#/,""));
 var C=(P.get("c")||"").trim(), K=P.get("k")||"", DEMO=P.get("demo")==="1";
 var ENC={date:P.get("d")||"",start:P.get("s")||"",end:P.get("e")||"",type:P.get("t")||"",mod:P.get("m")||""};
+var YOUTH=(P.get("y")||"").trim(), FROM=P.get("from")||"";
 try{history.replaceState(null,"",location.pathname+(DEMO?"#demo=1":""));}catch(e){}
 
 var O={
@@ -336,10 +338,14 @@ function generate(){
     NOTE=d.note;SIG=d.signature||C;
     $("noteView").textContent=NOTE;$("sig").textContent=SIG;$("noteEdit").value=NOTE;
     $("loadCard").classList.add("hide");$("noteCard").classList.remove("hide");$("acts").classList.remove("hide");
-    $("noteView").classList.remove("hide");$("noteEdit").classList.add("hide");$("editBtn").textContent="Edit";
+    $("noteView").classList.remove("hide");$("noteEdit").classList.add("hide");$("editBtn").textContent="Edit";$("markBtn").classList.toggle("hide",!canMark());
   }).catch(function(){$("loadCard").classList.add("hide");$("failCard").classList.remove("hide");});
 }
 $("retryBtn").onclick=generate;
+function canMark(){var e=encVals();return !!(YOUTH&&e.date&&e.start);}
+$("markBtn").onclick=function(){var b=this,e=encVals();b.disabled=true;b.textContent="Saving\u2026";
+  call({action:"mark",clinician:C,youth:YOUTH,date:e.date,start:e.start,end:e.end,source:"note-page"}).then(function(d){if(!d||!d.ok)throw 0;b.textContent="\u2713 Marked as in CYBER";toast("Marked. It will show in My Billing Hours.");try{sessionStorage.removeItem("pn_draft")}catch(x){}})
+  .catch(function(){b.disabled=false;b.textContent="I pasted it in CYBER \u2014 mark as done";toast("Couldn't save. Try again.");});};
 $("redoBtn").onclick=generate;
 $("editBtn").onclick=function(){var v=$("noteView"),t=$("noteEdit");if(t.classList.contains("hide")){t.value=NOTE;t.classList.remove("hide");v.classList.add("hide");this.textContent="Done";t.focus();}else{NOTE=t.value.trim();v.textContent=NOTE;t.classList.add("hide");v.classList.remove("hide");this.textContent="Edit";}};
 function full(){if(!$("noteEdit").classList.contains("hide"))NOTE=$("noteEdit").value.trim();return NOTE+"\n\n"+SIG;}
@@ -364,6 +370,7 @@ var APPMODE=!ENC.date&&!ENC.start;
 $("later").onclick=function(){$("pnCard").classList.add("hide");$("laterMsg").classList.remove("hide");};
 function begin(){$("s0").classList.add("hide");$("app").classList.remove("hide");renderEnc();document.querySelectorAll("#st1 .card:last-child .chips, #st3 .chips").forEach(buildChips);show(1);}
 $("go").onclick=function(){load();begin();};
+if(FROM==="bh"&&ENC.date&&C&&K){$("encT").textContent="\uD83D\uDCCB Your session";if(YOUTH){$("who").textContent="with "+YOUTH.replace(/\s*\(CFT\)$/,"");$("who").classList.remove("hide");}try{sessionStorage.removeItem("pn_draft")}catch(e){}begin();}
 if(APPMODE&&(C&&K||DEMO)){
   $("s0h").textContent="Progress Note";$("s0s").textContent="Write a DAP note in 3 quick steps.";
   document.querySelector(".ok").innerHTML="&#9998;";
@@ -376,7 +383,7 @@ if(APPMODE&&(C&&K||DEMO)){
     if(!L.length){box.innerHTML='<div class="sub">No recent sessions found. Start blank.</div>';return;}
     L.forEach(function(x){var b=document.createElement("button");b.type="button";b.className="sess";
       b.innerHTML='<div class="av">'+esc((x.y||"?").charAt(0).toUpperCase())+'</div><div><b>'+esc(x.y)+'</b><span>'+esc(x.d)+' · '+esc(x.s)+' – '+esc(x.e)+'</span></div><i>&#8250;</i>';
-      b.onclick=function(){try{sessionStorage.removeItem("pn_draft")}catch(e){}ENC={date:x.d,start:x.s,end:x.e,type:"",mod:""};$("encT").textContent="📋 Your session";$("who").textContent="with "+x.y;$("who").classList.remove("hide");begin();};
+      b.onclick=function(){try{sessionStorage.removeItem("pn_draft")}catch(e){}ENC={date:x.d,start:x.s,end:x.e,type:"",mod:""};YOUTH=x.yf||x.y||"";$("encT").textContent="📋 Your session";$("who").textContent="with "+x.y;$("who").classList.remove("hide");begin();};
       box.appendChild(b);});
   }).catch(function(){$("sessList").innerHTML='<div class="sub">Couldn\'t load your sessions. You can start blank.</div>';});
 }
