@@ -25,6 +25,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 Lato,"Helveti
 .top{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .brand{font:700 18px "Baloo 2",system-ui,sans-serif;color:var(--navy);display:flex;align-items:center;gap:8px}
 .brand i{width:10px;height:10px;border-radius:50%;background:var(--navy);display:inline-block}
+.alogo{display:block;height:44px;width:auto;border-radius:10px;background:#fff;padding:2px 6px}
 .lang{display:flex;background:var(--soft);border-radius:999px;padding:3px}
 .lang button{border:0;background:transparent;color:var(--muted);font:700 14px Lato,sans-serif;padding:6px 14px;border-radius:999px;cursor:pointer}
 .lang button[aria-pressed="true"]{background:var(--surface);color:var(--navy);box-shadow:0 1px 3px rgba(22,34,74,.15)}
@@ -73,7 +74,7 @@ h1{font:800 clamp(34px,9vw,48px)/1 "Baloo 2",system-ui,sans-serif;margin:22px 0 
 <body>
 <div class="wrap">
   <div class="top">
-    <div class="brand"><i></i>Aliado</div>
+    <img class="alogo" src="https://www.jotform.com/uploads/enmanuelf59/form_files/Captura%20de%20pantalla%202026-04-22%20160244.69fbcf54529891.59675446.jpg" alt="Aliado Community Health">
     <div class="lang" role="group" aria-label="Language">
       <button data-lang="en" aria-pressed="true">EN</button>
       <button data-lang="es" aria-pressed="false">ES</button>
@@ -104,7 +105,8 @@ const LINKS = {
   special:  "tiempo-especial.html",
   ba:       "kit-conducta-ba.html",
   anger:    "termometro-enojo.html",
-  body:     "kit-cuerpo-teens.html"
+  body:     "kit-cuerpo-teens.html",
+  home:     "tabla-casa.html"
 };
 
 const UI = {
@@ -139,6 +141,8 @@ const TOOLS = [
    en:["Worry monster","Draw the worry and shrink it with strategies."],           es:["Monstruo de la preocupación","Dibujar la preocupación y encogerla con estrategias."]},
   {e:"⭐",link:"ba",      needs:["behave","parent"],roles:["ba","pc"],age:"5–12",
    en:["Behavior kit","Tokens, First / Then board and ABC log."],                  es:["Kit de conducta","Fichas, Primero / Después y registro ABC."]},
+  {e:"🏠",link:"home",    needs:["parent","behave"],roles:["ba","pc"],age:"3–12",
+   en:["Star chart at home","A weekly star chart parents use at home between sessions."], es:["Tabla de estrellas en casa","Tabla semanal que los padres usan en casa entre sesiones."]},
   {e:"👨‍👧",link:"special",needs:["parent"],       roles:["pc"],       age:"2–8",
    en:["Special time","5 minutes of child-led play, with parent coaching."],       es:["Tiempo especial","5 minutos de juego dirigido por el niño, con coaching al padre."]}
 ];

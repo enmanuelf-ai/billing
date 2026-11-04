@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Star chart at home</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EEF6F3;--surface:#FFFFFF;--ink:#13302A;--muted:#55716A;--line:#D3E6DF;--soft:#DDEEE8;--accent:#1F8A6B;--sun:#FFC93C;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0F1D1A;--surface:#182B27;--ink:#E7F5F0;--muted:#A3C2B9;--line:#2A433D;--soft:#203632;--accent:#4FC9A2;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0F1D1A;--surface:#182B27;--ink:#E7F5F0;--muted:#A3C2B9;--line:#2A433D;--soft:#203632;--accent:#4FC9A2;color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.45 Lato,"Helvetica Neue",Arial,sans-serif;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:540px;margin:0 auto;padding:14px 18px 32px;display:flex;flex-direction:column;gap:16px;min-height:100vh}
+.top{display:flex;justify-content:space-between;align-items:center}
+.brand{font:700 18px "Baloo 2",sans-serif;color:var(--accent);display:flex;gap:8px;align-items:center}
+.brand i{width:10px;height:10px;border-radius:50%;background:#1A3A8F}
+.alogo{display:block;height:44px;width:auto;border-radius:10px;background:#fff;padding:2px 6px}
+.lang{display:flex;background:var(--soft);border-radius:999px;padding:3px}
+.lang button{border:0;background:none;color:var(--muted);font:700 14px Lato,sans-serif;padding:6px 14px;border-radius:999px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--surface);color:var(--accent)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+h1{font:800 clamp(32px,9vw,44px)/1 "Baloo 2",sans-serif;margin:6px 0 0}
+h2{font:800 24px/1.1 "Baloo 2",sans-serif;margin:0}
+.lead{color:var(--muted);margin:0}
+.label{font-weight:700;margin:0 0 8px;font-size:16px}
+.field{width:100%;border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:14px;padding:12px 13px;font:400 17px Lato,sans-serif}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 14px;font:700 15px Lato,sans-serif;cursor:pointer}
+.chip[aria-pressed="true"]{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,var(--surface))}
+.pick{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.pick button{border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:16px;padding:8px 2px;cursor:pointer;font:700 12.5px Lato,sans-serif;display:flex;flex-direction:column;align-items:center;gap:2px}
+.pick button span{font-size:28px}
+.pick button[aria-pressed="true"]{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,var(--surface))}
+.primary{border:0;background:#1F8A6B;color:#fff;border-radius:999px;padding:15px 22px;font:700 18px Lato,sans-serif;cursor:pointer;width:100%}
+.ghost{border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:12px 18px;font:700 15px Lato,sans-serif;cursor:pointer}
+.row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.hint{color:#C9483B;font-weight:700;margin:0;min-height:20px;text-align:center}
+
+.board{background:var(--surface);border:2px solid var(--line);border-radius:28px;padding:20px 16px;display:flex;flex-direction:column;gap:14px;align-items:center;text-align:center}
+.who{font:700 15px Lato,sans-serif;color:var(--muted);margin:0}
+.goal{font:800 24px/1.15 "Baloo 2",sans-serif;margin:0}
+.tokens{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;max-width:380px}
+.tk{width:54px;height:54px;border-radius:50%;border:3px dashed var(--line);display:flex;align-items:center;justify-content:center;font-size:30px}
+.tk.on{border:3px solid var(--sun);background:color-mix(in srgb,var(--sun) 22%,var(--surface));animation:pop .35s}
+@keyframes pop{50%{transform:scale(1.2)}}
+.rw{display:flex;align-items:center;gap:10px;font:700 18px Lato,sans-serif}
+.rw span{font-size:40px}
+.add{border:0;background:var(--sun);color:#13302A;border-radius:999px;padding:16px 26px;font:800 20px "Baloo 2",sans-serif;cursor:pointer;width:100%}
+.win{background:color-mix(in srgb,var(--sun) 25%,var(--surface));border:2px solid var(--sun);border-radius:22px;padding:16px;text-align:center}
+.win b{display:block;font:800 26px "Baloo 2",sans-serif}
+
+.week{background:var(--surface);border:2px solid var(--line);border-radius:22px;padding:16px}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:10px}
+.wkhead{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.wkhead button{border:2px solid var(--line);background:var(--surface);color:var(--ink);width:38px;height:38px;border-radius:50%;font:800 18px Lato,sans-serif;cursor:pointer;flex:none}
+.wkhead button:disabled{opacity:.3;cursor:default}
+.wkhint{margin:6px 0 0;color:var(--muted);font-size:14px;text-align:center}
+.day{display:flex;flex-direction:column;align-items:center;gap:6px;border:2px solid transparent;background:none;color:var(--ink);border-radius:14px;padding:4px 2px;cursor:pointer;font:inherit}
+.day:disabled{opacity:.35;cursor:default}
+.day[aria-pressed="true"]{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.dayact{margin-top:12px;background:var(--soft);border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center}
+.dayact b{font-size:16px}
+.dayact .row button{padding:9px 14px}
+.bar{width:100%;height:90px;background:var(--soft);border-radius:12px;display:flex;align-items:flex-end;overflow:hidden}
+.bar i{display:block;width:100%;background:var(--sun);border-radius:12px 12px 0 0}
+.day b{font-size:15px}
+.day small{font-size:12px;color:var(--muted);font-weight:700}
+.day.today small{color:var(--accent)}
+.stat{display:flex;justify-content:space-around;text-align:center;margin-top:12px}
+.stat b{display:block;font:800 26px "Baloo 2",sans-serif;color:var(--accent)}
+.stat span{font-size:13px;color:var(--muted);font-weight:700}
+.summary{background:var(--surface);border:2px solid var(--accent);border-radius:20px;padding:14px 16px;font-size:15.5px;line-height:1.5}
+.note{color:var(--muted);font-size:14px;margin:0;text-align:center}
+.why{background:var(--surface);border:2px solid var(--line);border-left:6px solid var(--sun);border-radius:18px;padding:14px 16px}
+.why b{display:block;font:800 19px/1.2 "Baloo 2",sans-serif;margin-bottom:4px}
+.why p{margin:0;font-size:16px}
+.why ul{margin:8px 0 0;padding-left:20px;display:grid;gap:3px;font-size:15.5px}
+.howlink{border:0;background:none;color:var(--accent);font:700 15px Lato,sans-serif;cursor:pointer;padding:4px 0;align-self:center;text-decoration:underline}
+.privacy{font-size:13px;color:var(--muted);text-align:center;margin:0}
+
+/* results */
+.eyebrow{margin:0;font-weight:800;color:var(--accent);font-size:15px;text-transform:uppercase;letter-spacing:.04em}
+.rhero{background:var(--surface);border:2px solid var(--line);border-radius:28px;padding:22px 18px;text-align:center;display:flex;flex-direction:column;gap:6px;align-items:center}
+.rbig{font-size:72px;line-height:1}
+.rhero h1{margin:4px 0 0}
+.rhero #rMsg{margin:4px 0 0;font-size:17px;max-width:34ch}
+.rstats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rtile{background:var(--surface);border:2px solid var(--line);border-radius:20px;padding:14px;text-align:center}
+.rtile b{display:block;font:800 32px/1.1 "Baloo 2",sans-serif;color:var(--accent)}
+.rtile span{font-size:14px;color:var(--muted);font-weight:700}
+.rcompare{margin:0;text-align:center;font-weight:700}
+details.ther{background:var(--surface);border:2px solid var(--line);border-radius:18px;padding:12px 14px}
+details.ther summary{cursor:pointer;font-weight:700;color:var(--muted)}
+details.ther[open]{display:flex;flex-direction:column;gap:10px}
+/* printable chart */
+.paper{background:#fff;color:#111;border-radius:10px;padding:22px 16px;box-shadow:0 2px 10px rgba(0,0,0,.12);font-family:Lato,Arial,sans-serif}
+.paper h1{font:800 26px/1.1 "Baloo 2",sans-serif;margin:0 0 8px;text-align:center;color:#111}
+.paper p{margin:0 0 4px;text-align:center;font-size:16px}
+.paper table{width:100%;border-collapse:collapse;margin-top:14px;table-layout:fixed}
+.paper th,.paper td{border:2px solid #333;text-align:center;padding:6px 2px;font-size:13px}
+.paper td{height:64px;font-size:15px;line-height:1.3;color:#999}
+.paper .foot{margin-top:12px;font-size:13px}
+.paper .big{font-size:22px;letter-spacing:6px;color:#999}
+@media print{
+  @page{margin:12mm}
+  body{background:#fff}
+  .wrap > *{display:none!important}
+  .wrap > #printView{display:block!important}
+  #printView > *:not(.paper){display:none!important}
+  .paper{box-shadow:none;padding:0}
+  .paper h1{font-size:36px}.paper p{font-size:20px}.paper th{font-size:18px}.paper td{height:110px;font-size:24px}.paper .foot{font-size:16px}
+}
+:root{--hc:#1F8A6B}
+.hbtn{border:2px solid var(--line);background:var(--surface);color:var(--hc);border-radius:999px;padding:5px 11px 5px 6px;font:700 13.5px Lato,sans-serif;cursor:pointer;display:flex;align-items:center;gap:6px}
+.hbtn i{font-style:normal;width:20px;height:20px;border-radius:50%;background:var(--hc);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:13px}
+.hsheet-bg{position:fixed;inset:0;z-index:50;background:rgba(10,15,30,.45);display:flex;align-items:flex-end;justify-content:center}
+.hsheet{background:var(--bg);color:var(--ink);width:100%;max-width:560px;max-height:88vh;overflow-y:auto;border-radius:26px 26px 0 0;padding:18px 18px calc(24px + env(safe-area-inset-bottom,0px))}
+.hsheet-head{display:flex;justify-content:space-between;align-items:center;gap:10px;position:sticky;top:-18px;background:var(--bg);padding:6px 0 10px}
+.hsheet-head h2{font:800 24px/1.1 "Baloo 2",Outfit,sans-serif;margin:0}
+.hsheet-head button{border:0;background:var(--soft);color:var(--ink);width:38px;height:38px;border-radius:50%;font-size:18px;cursor:pointer;flex:none}
+.hsec{background:var(--surface);border:2px solid var(--line);border-radius:20px;padding:14px 16px;margin-bottom:12px;font-size:16px;line-height:1.5}
+.hsec h3{margin:0 0 6px;font:700 19px/1.15 "Baloo 2",Outfit,sans-serif;color:var(--hc)}
+.hsec p{margin:0}
+.hsec ol{margin:0;padding-left:20px;display:grid;gap:5px}
+.hsec.tip{background:var(--soft);border-color:transparent}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion: reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><div style="display:flex;align-items:center;gap:10px"><img class="alogo" src="https://www.jotform.com/uploads/enmanuelf59/form_files/Captura%20de%20pantalla%202026-04-22%20160244.69fbcf54529891.59675446.jpg" alt="Aliado Community Health"><button class="hbtn" id="helpBtn" aria-haspopup="dialog"><i aria-hidden="true">?</i><span id="helpLbl">Ayuda</span></button></div>
+    <div class="lang"><button data-lang="en" aria-pressed="true">EN</button><button data-lang="es" aria-pressed="false">ES</button></div></div>
+
+  <!-- Setup -->
+  <section id="setup" hidden style="display:flex;flex-direction:column;gap:16px">
+    <h1 data-t="title"></h1>
+    <p class="lead" data-t="setupLead"></p>
+    <div><label class="label" for="kid" data-t="kidQ"></label><input class="field" id="kid" maxlength="25" autocomplete="off"></div>
+    <div><label class="label" for="behav" data-t="behavQ"></label><input class="field" id="behav" maxlength="60" autocomplete="off">
+      <div class="chips" id="ideas" style="margin-top:8px"></div></div>
+    <div><p class="label" data-t="rewardQ"></p><div class="pick" id="rewards"></div>
+      <label class="label" for="custom" data-t="customQ" style="display:block;margin-top:12px"></label><input class="field" id="custom" maxlength="40" autocomplete="off"></div>
+    <div><p class="label" data-t="nQ"></p><div class="chips" id="nStars"></div></div>
+    <p class="hint" id="setupHint"></p>
+    <button class="primary" id="save" data-t="save"></button>
+    <button class="ghost" id="cancelEdit" hidden data-t="cancel"></button>
+    <p class="privacy" data-t="privacy"></p>
+  </section>
+
+  <!-- Chart -->
+  <section id="chart" hidden style="display:flex;flex-direction:column;gap:14px">
+    <div class="board">
+      <p class="who" id="who"></p>
+      <p class="goal" id="goal"></p>
+      <div class="tokens" id="tokens"></div>
+      <div class="rw" id="rw"></div>
+      <div class="win" id="win" hidden><b id="winT"></b><span data-t="winP"></span></div>
+      <button class="add" id="add" data-t="add"></button>
+      <button class="primary" id="newRound" hidden data-t="newRound"></button>
+    </div>
+    <div class="week">
+      <div class="wkhead"><button id="prevWk" aria-label="Previous week">‹</button><h2 id="wkTitle"></h2><button id="nextWk" aria-label="Next week">›</button></div>
+      <div class="days" id="days"></div>
+      <p class="wkhint" data-t="wkHint"></p>
+      <div class="dayact" id="dayAct" hidden><b id="dayLbl"></b><div class="row"><button class="ghost" id="dayAdd" data-t="dayAdd"></button><button class="ghost" id="dayDel" data-t="dayDel"></button></div><p class="hint" id="dayHint" style="min-height:0"></p></div>
+      <div class="stat"><div><b id="sWeek">0</b><span data-t="sWeek"></span></div><div><b id="sRounds">0</b><span data-t="sRounds"></span></div><div><b id="sDays">0</b><span data-t="sDays"></span></div></div>
+    </div>
+    <div class="row">
+      <button class="ghost" id="undo" data-t="undo"></button>
+      <button class="ghost" id="resultsBtn" data-t="resultsBtn"></button>
+      <button class="ghost" id="printBtn" data-t="print"></button>
+      <button class="ghost" id="edit" data-t="edit"></button>
+    </div>
+    <p class="privacy" data-t="privacy"></p>
+  </section>
+
+  <!-- Printable -->
+  <section id="results" hidden style="display:flex;flex-direction:column;gap:14px">
+    <p class="eyebrow" id="rEyebrow"></p>
+    <div class="rhero"><div class="rbig" id="rEmoji" aria-hidden="true"></div><h1 id="rTitle"></h1><p class="lead" id="rRange"></p><p id="rMsg"></p></div>
+    <div class="rstats" id="rStats"></div>
+    <div class="week"><div class="days" id="rDays"></div></div>
+    <p class="rcompare" id="rCompare"></p>
+    <details class="ther"><summary data-t="forTher"></summary><div class="summary" id="summary"></div><button class="primary" id="copy" data-t="copy"></button><p class="note" id="copied"></p></details>
+    <button class="primary" id="rBack" data-t="back"></button>
+  </section>
+  <section id="printView" hidden style="display:flex;flex-direction:column;gap:12px">
+    <h2 data-t="printT"></h2>
+    <p class="lead" data-t="printP"></p>
+    <div class="paper" id="printArea"></div>
+    <button class="primary" id="doPrint" data-t="doPrint"></button>
+    <button class="ghost" id="saveImg" data-t="saveImg"></button>
+    <p class="note" id="printNote"></p>
+    <button class="ghost" id="printBack" data-t="back"></button>
+  </section>
+</div>
+<script>
+const UI={
+ en:{title:"Star chart at home",whyT:"What is this for?",whyP:"Children learn a new behavior faster when we notice it and reward it, not only when we correct them for misbehaving. This chart helps you:",whyL:["Catch the good moments and praise them","Give your child one clear, positive goal","Show your therapist how the week went at home"],howLink:"How to use it well",setupLead:"Set it up together with your child. Every time they do the behavior, they earn a star. When the stars are complete, they get their reward.",
+  kidQ:"Child's name (optional)",kidPh:"E.g. Sofia",behavQ:"Which behavior are we working on?",behavPh:"E.g. Follow directions the first time",
+  rewardQ:"What will they earn?",customQ:"Or write something special they want",customPh:"E.g. Pizza night with the family",nQ:"How many stars to earn it?",save:"Start the chart",saveEdit:"Save changes",cancel:"Cancel",needSetup:"Write the behavior and pick or write a reward.",
+  privacy:"Everything stays saved only on this phone. Nothing is sent anywhere.",
+  add:"⭐ Add a star",newRound:"Start a new round",winP:"Give the reward today and tell them why they earned it.",won:r=>`Reward earned: ${r}!`,
+  weekT:"This week",weekOf:d=>`Week of ${d}`,wkHint:"Forgot a star? Tap the day to add it.",dayAdd:"+ Add a star",dayDel:"− Remove one",fullFirst:"The stars are complete. Start a new round first.",sWeek:"stars this week",sRounds:"rewards earned",sDays:"days with stars",
+  resultsBtn:"📊 Week results",rNow:"So far this week",rPast:"Week results",rAuto:"Last week is over! 🎉",
+  tiers:[[5,"🏆","Amazing week!","Your child earned stars on most days. Celebrate it together!"],[3,"🌟","Great effort!","Good progress. Try to notice the behavior a little more each day."],[1,"👍","Good start!","Every star counts. Let's aim for one more day next week."],[0,"🌱","A new week, a new chance","Start small: look for one good moment each day and give the star."]],
+  tStars:"stars",tDays:"days with stars",tRewards:"rewards earned",tBest:"best day",
+  cmpUp:n=>`⬆️ ${n} more star${n===1?"":"s"} than the week before. Great improvement!`,cmpDown:n=>`${n} fewer star${n===1?"":"s"} than the week before. That's okay, keep going!`,cmpSame:"Same number of stars as the week before.",cmpSoFar:n=>`Last week: ${n} star${n===1?"":"s"}. The week isn't over yet, keep going!`,
+  forTher:"For your therapist (summary to copy)",daysLong:["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+  printT:"Paper chart",printP:"For families who prefer paper: print it or save it as an image and stick it on the fridge.",doPrint:"🖨️ Print",saveImg:"💾 Save as image",back:"← Back to my chart",printFail:"Printing isn't available here. Use \"Save as image\" or take a screenshot.",imgSaved:"Image ready.",undo:"Undo last star",share:"Show my therapist",print:"Print chart",edit:"Change goal",
+  copy:"Copy summary",copied:"Summary copied.",confirmEdit:"Change the goal? This week's stars will stay saved.",
+  ideas:["Follow directions the first time","Use kind words","Get ready for school on time","Do homework","Go to bed on time","Keep hands to self"],
+  pTitle:"My star chart",pBehav:"My goal",pReward:"I earn",pFoot:n=>`Color a star each time you do it. ${n} stars = reward!`,days:["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
+  who:n=>n?`${n}'s star chart`:"Star chart"},
+ es:{title:"Tabla de estrellas en casa",whyT:"¿Para qué sirve?",whyP:"Los niños aprenden una conducta nueva más rápido cuando la notamos y la premiamos, no solo cuando los corregimos por portarse mal. Esta tabla le ayuda a:",whyL:["Fijarse en los buenos momentos y elogiarlos","Darle a su hijo una meta clara y positiva","Mostrarle a su terapeuta cómo fue la semana en casa"],howLink:"Cómo usarla bien",setupLead:"Configúrenla junto con su hijo o hija. Cada vez que haga la conducta, gana una estrella. Al completar las estrellas, recibe su recompensa.",
+  kidQ:"Nombre del niño (opcional)",kidPh:"Ej: Sofía",behavQ:"¿Qué conducta vamos a trabajar?",behavPh:"Ej: Hacer caso a la primera",
+  rewardQ:"¿Qué va a ganar?",customQ:"O escriba algo especial que quiera ganar",customPh:"Ej: Noche de pizza en familia",nQ:"¿Cuántas estrellas para ganarlo?",save:"Empezar la tabla",saveEdit:"Guardar cambios",cancel:"Cancelar",needSetup:"Escriba la conducta y elija o escriba una recompensa.",
+  privacy:"Todo se guarda solo en este celular. No se envía a ningún lugar.",
+  add:"⭐ Dar una estrella",newRound:"Empezar otra ronda",winP:"Entréguele la recompensa hoy y dígale por qué se la ganó.",won:r=>`¡Recompensa ganada: ${r}!`,
+  weekT:"Esta semana",weekOf:d=>`Semana del ${d}`,wkHint:"¿Se le olvidó una estrella? Toque el día para agregarla.",dayAdd:"+ Dar una estrella",dayDel:"− Quitar una",fullFirst:"Las estrellas ya están completas. Primero empiece otra ronda.",sWeek:"estrellas esta semana",sRounds:"recompensas ganadas",sDays:"días con estrellas",
+  resultsBtn:"📊 Resultados de la semana",rNow:"Hasta ahora esta semana",rPast:"Resultados de la semana",rAuto:"¡Terminó la semana pasada! 🎉",
+  tiers:[[5,"🏆","¡Semana increíble!","Su hijo ganó estrellas casi todos los días. ¡Celébrenlo juntos!"],[3,"🌟","¡Buen esfuerzo!","Buen progreso. Intente notar la conducta un poquito más cada día."],[1,"👍","¡Buen comienzo!","Cada estrella cuenta. La próxima semana busquemos un día más."],[0,"🌱","Nueva semana, nueva oportunidad","Empiece poco a poco: busque un buen momento cada día y dé la estrella."]],
+  tStars:"estrellas",tDays:"días con estrellas",tRewards:"recompensas ganadas",tBest:"mejor día",
+  cmpUp:n=>`⬆️ ${n} estrella${n===1?"":"s"} más que la semana anterior. ¡Gran avance!`,cmpDown:n=>`${n} estrella${n===1?"":"s"} menos que la semana anterior. Está bien, ¡a seguir!`,cmpSame:"Las mismas estrellas que la semana anterior.",cmpSoFar:n=>`La semana pasada: ${n} estrella${n===1?"":"s"}. La semana no ha terminado, ¡a seguir!`,
+  forTher:"Para su terapeuta (resumen para copiar)",daysLong:["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado","Domingo"],
+  printT:"Tabla en papel",printP:"Para familias que prefieren papel: imprímala o guárdela como imagen y péguela en la nevera.",doPrint:"🖨️ Imprimir",saveImg:"💾 Guardar como imagen",back:"← Volver a mi tabla",printFail:"Aquí no se puede imprimir. Use \"Guardar como imagen\" o tome una captura de pantalla.",imgSaved:"Imagen lista.",undo:"Quitar última estrella",share:"Mostrar al terapeuta",print:"Imprimir tabla",edit:"Cambiar meta",
+  copy:"Copiar resumen",copied:"Resumen copiado.",confirmEdit:"¿Cambiar la meta? Las estrellas de esta semana se quedan guardadas.",
+  ideas:["Hacer caso a la primera","Usar palabras amables","Prepararse a tiempo para la escuela","Hacer la tarea","Acostarse a tiempo","Mantener las manos quietas"],
+  pTitle:"Mi tabla de estrellas",pBehav:"Mi meta",pReward:"Me gano",pFoot:n=>`Colorea una estrella cada vez que lo hagas. ¡${n} estrellas = recompensa!`,days:["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"],
+  who:n=>n?`Tabla de estrellas de ${n}`:"Tabla de estrellas"}};
+const REWARDS=[["📱",{en:"Tablet time",es:"Tiempo de tablet"}],["⚽",{en:"Play outside",es:"Jugar afuera"}],["📺",{en:"TV show",es:"Un programa de TV"}],["🎲",{en:"Game with a parent",es:"Juego con papá o mamá"}],
+ ["🍦",{en:"Special treat",es:"Un antojito"}],["🌙",{en:"Stay up 15 min",es:"Dormir 15 min más tarde"}],["🎨",{en:"Art time",es:"Tiempo de arte"}],["🎁",{en:"Small surprise",es:"Una sorpresita"}]];
+const KEY="aliado-home-star-chart";
+let lang="en", st=load(), draft={reward:null,n:5}, editing=false, wkOff=0, selDay=null;
+const $=id=>document.getElementById(id);
+
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||null}catch(e){return null}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
+const dayKey=d=>{const x=new Date(d);return x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0")+"-"+String(x.getDate()).padStart(2,"0")};
+function weekDays(off=0){const t=new Date();t.setHours(12,0,0,0);const dow=(t.getDay()+6)%7;const mon=new Date(t);mon.setDate(t.getDate()-dow+off*7);
+ return [...Array(7)].map((_,i)=>{const d=new Date(mon);d.setDate(mon.getDate()+i);return dayKey(d)});}
+const rewardName=()=>st.rewardCustom||REWARDS[st.reward][1][lang];
+const rewardEmoji=()=>st.rewardCustom?"🎁":REWARDS[st.reward][0];
+
+function paint(){
+ document.documentElement.lang=lang;document.title=UI[lang].title;
+ document.querySelectorAll("[data-t]").forEach(el=>{const v=UI[lang][el.dataset.t];if(typeof v==="string")el.textContent=v;});
+ document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.lang===lang));
+ $("kid").placeholder=UI[lang].kidPh;$("custom").placeholder=UI[lang].customPh;$("behav").placeholder=UI[lang].behavPh;
+ $("ideas").innerHTML="";UI[lang].ideas.forEach(t=>{const b=document.createElement("button");b.className="chip";b.textContent=t;b.onclick=()=>{$("behav").value=t;};$("ideas").appendChild(b);});
+ $("rewards").innerHTML="";REWARDS.forEach(([e,l],i)=>{const b=document.createElement("button");b.setAttribute("aria-pressed",draft.reward===i);b.innerHTML=`<span aria-hidden="true">${e}</span>${l[lang]}`;b.onclick=()=>{draft.reward=i;$("custom").value="";paint();};$("rewards").appendChild(b);});
+ $("nStars").innerHTML="";[3,5,7,10].forEach(n=>{const b=document.createElement("button");b.className="chip";b.setAttribute("aria-pressed",draft.n===n);b.textContent=n+" ⭐";b.onclick=()=>{draft.n=n;paint();};$("nStars").appendChild(b);});
+ $("save").textContent=editing?UI[lang].saveEdit:UI[lang].save;$("cancelEdit").hidden=!editing;
+ const ready=!!(st&&st.behav)&&!editing;$("setup").hidden=ready;$("chart").hidden=!ready;
+ if(ready) renderChart();
+ if(ready&&!$("results").hidden){$("chart").hidden=true;renderResults();}
+ if(ready&&!$("printView").hidden){$("chart").hidden=true;}
+}
+document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{lang=b.dataset.lang;if(st){st.lang=lang;save();}paint();});
+
+$("custom").addEventListener("input",()=>{if($("custom").value.trim()&&draft.reward!==null){draft.reward=null;paint();}});
+$("save").onclick=()=>{const behav=$("behav").value.trim(),custom=$("custom").value.trim();
+ if(!behav||(draft.reward===null&&!custom)){$("setupHint").textContent=UI[lang].needSetup;return;}
+ $("setupHint").textContent="";
+ const prev=st||{};
+ const keep=prev.behav===behav&&prev.n===draft.n&&!(prev.cur>=prev.n);
+ editing=false;
+ st={kid:$("kid").value.trim(),behav,reward:custom?null:draft.reward,rewardCustom:custom,n:draft.n,cur:keep?prev.cur:0,rounds:prev.rounds||0,log:prev.log||[],lang};
+ save();paint();window.scrollTo(0,0);};
+
+function roundDone(t){st.rounds++;(st.roundLog=st.roundLog||[]).push(t);}
+function roundUndo(){st.rounds=Math.max(0,st.rounds-1);if(st.roundLog&&st.roundLog.length)st.roundLog.pop();}
+function renderChart(){
+ const u=UI[lang];
+ $("who").textContent=u.who(st.kid);$("goal").textContent=st.behav;
+ $("tokens").innerHTML="";for(let i=0;i<st.n;i++){const d=document.createElement("div");d.className="tk"+(i<st.cur?" on":"");d.textContent=i<st.cur?"⭐":"";$("tokens").appendChild(d);}
+ $("rw").innerHTML=`<span aria-hidden="true">${rewardEmoji()}</span>${rewardName()}`;
+ const full=st.cur>=st.n;$("win").hidden=!full;$("newRound").hidden=!full;$("add").hidden=full;$("winT").textContent=u.won(rewardName());
+ const wk=weekDays(wkOff),today=dayKey(Date.now());const counts=wk.map(k=>st.log.filter(t=>dayKey(t)===k).length);const mx=Math.max(3,...counts);
+ const fmt=k=>{const [y,m,d]=k.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString(lang==="es"?"es":"en-US",{month:"short",day:"numeric"});};
+ $("wkTitle").textContent=wkOff===0?u.weekT:u.weekOf(fmt(wk[0]));$("nextWk").disabled=wkOff>=0;$("prevWk").disabled=wkOff<=-8;
+ $("days").innerHTML="";wk.forEach((k,i)=>{const b=document.createElement("button");b.className="day"+(k===today?" today":"");b.disabled=k>today;b.setAttribute("aria-pressed",k===selDay);
+  b.innerHTML=`<div class="bar"><i style="height:${counts[i]/mx*100}%"></i></div><b>${counts[i]}</b><small>${u.days[i]}</small>`;
+  b.onclick=()=>{selDay=selDay===k?null:k;$("dayHint").textContent="";renderChart();};$("days").appendChild(b);});
+ $("dayAct").hidden=!selDay||!wk.includes(selDay);if(selDay){const [y,m,d]=selDay.split("-").map(Number);$("dayLbl").textContent=new Date(y,m-1,d).toLocaleDateString(lang==="es"?"es":"en-US",{weekday:"long",month:"long",day:"numeric"});$("dayDel").disabled=!st.log.some(t=>dayKey(t)===selDay);}
+ $("sWeek").textContent=counts.reduce((a,b)=>a+b,0);$("sRounds").textContent=st.rounds;$("sDays").textContent=counts.filter(c=>c>0).length;
+}
+$("add").onclick=()=>{if(st.cur>=st.n)return;{const t=Date.now();st.cur++;st.log.push(t);if(st.cur===st.n)roundDone(t);}save();renderChart();};
+$("prevWk").onclick=()=>{wkOff--;selDay=null;renderChart();};
+$("nextWk").onclick=()=>{if(wkOff<0){wkOff++;selDay=null;renderChart();}};
+$("dayAdd").onclick=()=>{if(!selDay)return;if(st.cur>=st.n){$("dayHint").textContent=UI[lang].fullFirst;return;}
+ const [y,m,d]=selDay.split("-").map(Number);const t=selDay===dayKey(Date.now())?Date.now():new Date(y,m-1,d,12).getTime();
+ st.cur++;st.log.push(t);if(st.cur===st.n)roundDone(t);save();renderChart();};
+$("dayDel").onclick=()=>{if(!selDay)return;let idx=-1;for(let i=st.log.length-1;i>=0;i--){if(dayKey(st.log[i])===selDay){idx=i;break;}}if(idx<0)return;
+ st.log.splice(idx,1);if(st.cur>0){if(st.cur===st.n)roundUndo();st.cur--;}save();renderChart();};
+$("newRound").onclick=()=>{st.cur=0;save();renderChart();};
+$("undo").onclick=()=>{if(!st.log.length||st.cur===0)return;if(st.cur===st.n)roundUndo();st.cur--;st.log.pop();save();renderChart();};
+$("edit").onclick=()=>{editing=true;$("kid").value=st.kid;$("behav").value=st.behav;$("custom").value=st.rewardCustom||"";draft={reward:st.rewardCustom?null:st.reward,n:st.n};$("setupHint").textContent="";paint();window.scrollTo(0,0);};
+$("cancelEdit").onclick=()=>{editing=false;paint();window.scrollTo(0,0);};
+function weekStats(off){const wk=weekDays(off);const counts=wk.map(k=>st.log.filter(t=>dayKey(t)===k).length);
+ const total=counts.reduce((x,y)=>x+y,0);const rewards=(st.roundLog||[]).filter(t=>wk.includes(dayKey(t))).length;
+ const best=total?counts.indexOf(Math.max(...counts)):-1;return {wk,counts,total,days:counts.filter(c=>c>0).length,rewards,best};}
+let rOff=0,rAuto=false;
+function renderResults(){const u=UI[lang],w=weekStats(rOff),prev=weekStats(rOff-1);
+ const tier=u.tiers.find(t=>w.days>=t[0]);
+ $("rEyebrow").textContent=rAuto?u.rAuto:(rOff===0?u.rNow:u.rPast);
+ $("rEmoji").textContent=tier[1];$("rTitle").textContent=tier[2];$("rMsg").textContent=tier[3];
+ const f=k=>{const [y,m,d]=k.split("-").map(Number);return new Date(y,m-1,d).toLocaleDateString(lang==="es"?"es":"en-US",{month:"short",day:"numeric"});};
+ $("rRange").textContent=`${st.behav} · ${f(w.wk[0])} – ${f(w.wk[6])}`;
+ $("rStats").innerHTML=[[w.total,u.tStars],[w.days+"/7",u.tDays],[w.rewards,u.tRewards],[w.best>=0?u.daysLong[w.best]:"—",u.tBest]].map(([v,l])=>`<div class="rtile"><b>${v}</b><span>${l}</span></div>`).join("");
+ const mx=Math.max(3,...w.counts);$("rDays").innerHTML=w.wk.map((k,i)=>`<div class="day"><div class="bar"><i style="height:${w.counts[i]/mx*100}%"></i></div><b>${w.counts[i]}</b><small>${u.days[i]}</small></div>`).join("");
+ const hasPrev=st.log.some(t=>dayKey(t)<w.wk[0]);const d=w.total-prev.total;
+ $("rCompare").textContent=!hasPrev?"":rOff===0?u.cmpSoFar(prev.total):d>0?u.cmpUp(d):d<0?u.cmpDown(-d):u.cmpSame;
+ $("summary").textContent=summary(rOff);}
+function showResults(off,auto){rOff=off;rAuto=!!auto;$("copied").textContent="";renderResults();$("results").hidden=false;$("chart").hidden=true;$("printView").hidden=true;window.scrollTo(0,0);}
+$("resultsBtn").onclick=()=>showResults(wkOff);
+$("rBack").onclick=()=>{$("results").hidden=true;$("chart").hidden=false;window.scrollTo(0,0);};
+
+/* Summary always in English, for the clinician's note */
+function summary(off=0){const w=weekStats(off);const names=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+ return `Caregiver implemented a home token economy targeting "${st.behav}" (reward: ${st.rewardCustom||REWARDS[st.reward][1].en.toLowerCase()} after ${st.n} stars). For the week of ${w.wk[0]}, the youth earned ${w.total} star(s) on ${w.days} of 7 days (${w.wk.map((k,i)=>names[i]+": "+w.counts[i]).join(", ")}) and earned the reward ${w.rewards} time(s). Clinician reviewed home implementation with the caregiver.`;}
+$("copy").onclick=async()=>{const t=$("summary").textContent;try{await navigator.clipboard.writeText(t);}catch(e){const a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();document.execCommand("copy");a.remove();}$("copied").textContent=UI[lang].copied;};
+
+function buildPaper(){const u=UI[lang];
+ $("printArea").innerHTML=`<img src="https://www.jotform.com/uploads/enmanuelf59/form_files/Captura%20de%20pantalla%202026-04-22%20160244.69fbcf54529891.59675446.jpg" alt="Aliado Community Health" style="display:block;height:56px;margin:0 auto 10px">
+ <h1>${st.kid?st.kid+" — ":""}${u.pTitle}</h1><p><b>${u.pBehav}:</b> ${st.behav}</p><p><b>${u.pReward}:</b> ${rewardEmoji()} ${rewardName()}</p>
+ <table><tr>${u.days.map(d=>`<th>${d}</th>`).join("")}</tr><tr>${u.days.map(()=>`<td>☆<br>☆<br>☆</td>`).join("")}</tr></table>
+ <p class="foot">${u.pFoot(st.n)}</p><p class="big">${Array(st.n).fill("☆").join(" ")}</p>`;}
+function showPrint(on){$("printView").hidden=!on;$("chart").hidden=on;$("printNote").textContent="";window.scrollTo(0,0);}
+$("printBtn").onclick=()=>{buildPaper();showPrint(true);};
+$("printBack").onclick=()=>showPrint(false);
+$("doPrint").onclick=()=>{try{window.print();}catch(e){$("printNote").textContent=UI[lang].printFail;}};
+$("saveImg").onclick=async()=>{const u=UI[lang];const W=1100,H=1260,c=document.createElement("canvas");c.width=W;c.height=H;const g=c.getContext("2d");
+ g.fillStyle="#fff";g.fillRect(0,0,W,H);g.fillStyle="#111";g.textAlign="center";
+ const wrap=(t,y,size,weight)=>{g.font=`${weight} ${size}px Lato, Arial, sans-serif`;const words=t.split(" ");let line="",yy=y;for(const w of words){const test=line?line+" "+w:w;if(g.measureText(test).width>W-120&&line){g.fillText(line,W/2,yy);line=w;yy+=size*1.25;}else line=test;}g.fillText(line,W/2,yy);return yy+size*1.25;};
+ let y=wrap((st.kid?st.kid+" — ":"")+u.pTitle,110,64,"800");
+ y=wrap(u.pBehav+": "+st.behav,y+20,38,"700");
+ y=wrap(u.pReward+": "+rewardEmoji()+" "+rewardName(),y+6,38,"700");
+ const top=y+40,cw=(W-100)/7,hh=80,bh=420;g.lineWidth=4;g.strokeStyle="#333";
+ for(let i=0;i<7;i++){const x=50+i*cw;g.strokeRect(x,top,cw,hh);g.strokeRect(x,top+hh,cw,bh);g.font="700 34px Lato, Arial, sans-serif";g.fillStyle="#111";g.fillText(u.days[i],x+cw/2,top+52);
+  g.font="64px Arial";g.fillStyle="#bbb";for(let k=0;k<3;k++)g.fillText("☆",x+cw/2,top+hh+120+k*120);}
+ g.fillStyle="#333";y=wrap(u.pFoot(st.n),top+hh+bh+80,32,"400");g.font="56px Arial";g.fillStyle="#bbb";g.fillText(Array(st.n).fill("☆").join(" "),W/2,y+40);
+ g.fillStyle="#555";g.font="400 28px Lato, Arial, sans-serif";g.fillText("Aliado Community Health",W/2,H-60);
+ c.toBlob(async blob=>{const file=new File([blob],"star-chart.png",{type:"image/png"});
+  try{if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:u.pTitle});$("printNote").textContent=u.imgSaved;return;}}catch(e){}
+  try{const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="star-chart.png";document.body.appendChild(a);a.click();a.remove();$("printNote").textContent=u.imgSaved;}catch(e){$("printNote").textContent=u.printFail;}
+ },"image/png");};
+
+if(st&&st.lang)lang=st.lang;
+if(st&&!st.roundLog)st.roundLog=[];
+if(st){draft={reward:st.rewardCustom?null:st.reward,n:st.n};}
+paint();
+if(st&&st.behav){const lw=weekDays(-1)[0];if(st.resultsShown!==lw&&weekStats(-1).total>0){st.resultsShown=lw;save();showResults(-1,true);}}
+</script>
+<div class="hsheet-bg" id="hBg" hidden><div class="hsheet" role="dialog" aria-modal="true" aria-labelledby="hT2"><div class="hsheet-head"><h2 id="hT2"></h2><button id="hX" aria-label="Cerrar">✕</button></div><div id="hB2"></div></div></div>
+<script>
+(function(){
+const H={"en": {"title": "How does the star chart work?", "goal": "Children learn a new behavior faster when we notice it and reward it, not only when we correct them for misbehaving. This chart helps you catch the good moments and praise them, gives your child one clear and positive goal, and shows your therapist how the week went at home. Each time they do it, they earn a star; when the stars are complete, they get the reward they chose. Your therapist will review the week with you at the next session.", "how": ["Choose <b>one</b> behavior together, written in positive words: “Follow directions the first time”, not “Don't fight”.", "Let your child pick the reward. It keeps them motivated.", "Give the star <b>right after</b> the behavior and tell them why: “You earned a star for picking up your toys right away.”", "When the stars are complete, give the reward the same day.", "At your next session, tap <b>Show my therapist</b> to review the week together."], "tips": ["Forgot to give a star? Tap that day in “This week” and add it. You can also go back to last week with the ‹ arrow.", "Never take away stars as a punishment. If you tapped by mistake, use “Undo last star”.", "Start with fewer stars so your child wins quickly. Once they get the idea, you can ask for more.", "Everything is saved only on this phone. If you prefer paper, use “Print chart” and stick it on the fridge."]}, "es": {"title": "¿Cómo funciona la tabla de estrellas?", "goal": "Los niños aprenden una conducta nueva más rápido cuando la notamos y la premiamos, no solo cuando los corregimos por portarse mal. Esta tabla le ayuda a fijarse en los buenos momentos y elogiarlos, le da a su hijo una meta clara y positiva, y le muestra a su terapeuta cómo fue la semana en casa. Cada vez que la hace, gana una estrella; al completar las estrellas, recibe la recompensa que eligió. Su terapeuta revisará la semana con usted en la siguiente sesión.", "how": ["Elijan <b>una sola</b> conducta juntos, escrita en positivo: “Hacer caso a la primera”, no “No pelear”.", "Deje que el niño escoja la recompensa. Así se mantiene motivado.", "Dé la estrella <b>justo después</b> de la conducta y dígale por qué: “Ganaste una estrella por recoger tus juguetes enseguida.”", "Cuando complete las estrellas, entréguele la recompensa ese mismo día.", "En la próxima sesión, toque <b>Mostrar al terapeuta</b> para revisar la semana juntos."], "tips": ["¿Se le olvidó dar una estrella? Toque ese día en “Esta semana” y agréguela. También puede volver a la semana pasada con la flecha ‹.", "Nunca quite estrellas como castigo. Si tocó por error, use “Quitar última estrella”.", "Empiece con pocas estrellas para que el niño gane rápido. Cuando entienda el sistema, puede pedir más.", "Todo se guarda solo en este celular. Si prefiere papel, use “Imprimir tabla” y péguela en la nevera."]}};
+const L={es:{btn:"Ayuda",goal:"Para qué sirve",how:"Cómo usarlo",tip:"Consejo",close:"Cerrar"},en:{btn:"Help",goal:"What it's for",how:"How to use it",tip:"Tip",close:"Close"}};
+const g=id=>document.getElementById(id), lg=()=>document.documentElement.lang==="en"?"en":"es";
+function render(){const l=lg(),d=H[l],u=L[l];g("helpLbl").textContent=u.btn;g("hT2").textContent=d.title;g("hX").setAttribute("aria-label",u.close);
+ let h=`<div class="hsec"><h3>${u.goal}</h3><p>${d.goal}</p></div><div class="hsec"><h3>${u.how}</h3><ol>${d.how.map(x=>`<li>${x}</li>`).join("")}</ol></div>`;
+ d.tips.forEach(t=>h+=`<div class="hsec tip"><p>💡 ${t}</p></div>`);g("hB2").innerHTML=h;}
+g("helpBtn").onclick=()=>{render();g("hBg").hidden=false;g("hBg").firstElementChild.scrollTop=0;g("hX").focus();};
+g("hX").onclick=()=>{g("hBg").hidden=true;g("helpBtn").focus();};
+g("hBg").onclick=e=>{if(e.target.id==="hBg")g("hX").click();};
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!g("hBg").hidden)g("hX").click();});
+new MutationObserver(render).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});
+render();
+})();
+</script>
+</body>
+</html>
