@@ -47,10 +47,69 @@
   body.hw .header-tagline { color: #ff9a3c; }
   body.hw .header-greeting { color: #9cff57; text-shadow: 0 0 6px rgba(156, 255, 87, 0.55), 0 0 14px rgba(156, 255, 87, 0.25); }
   body.hw .header-quote { color: #d9c7f0; }
+
+  /* ---------- Shared festive panel ---------- */
+  body.fx .panel { margin: 4px auto 0; max-width: 640px; height: 296px; border-radius: 18px; overflow: hidden; transition: background .6s ease; }
+  body.fx .stage { padding-top: 26px; }
+  body.fx .logo { width: 150px; }
+  body.fx .logo img { width: 150px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 6px #fff, 0 8px 26px rgba(0,0,0,.18); }
+  body.fx .header { padding: 16px 16px 10px; }
+  .fxd { display: none; position: absolute; z-index: 1; pointer-events: none; line-height: 1; }
+  body.fx .fxd { display: block; }
+  .ribbon { display: none; }
+  .confetti { position: absolute; inset: 0; z-index: 1; pointer-events: none; display: none; }
+  body.fx .confetti { display: block; }
+  /* confetti is kept to the edges so it never covers the text */
+  .confetti i { position: absolute; width: 7px; height: 3px; border-radius: 1px; opacity: .9; animation: drift 5s ease-in-out infinite; }
+  @keyframes drift { 0%,100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(7px) rotate(40deg); } }
+  @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+  .bob { animation: bob 3.4s ease-in-out infinite; }
+  .bob2 { animation: bob 4.2s ease-in-out infinite; }
+
+  /* ---------- Birthday countdown (3, 2, 1 days) ---------- */
+  body.bdsoon .panel { background: radial-gradient(circle at 50% 30%, #fff8f0 0%, #ffe9ef 55%, #ffd6e2 100%); }
+  body.bdsoon .header-tagline { color: #d63d79; }
+  body.bdsoon .header-greeting { color: #6a1b52; }
+  body.bdsoon .header-quote { color: #a0607e; }
+
+  /* ---------- Birthday ---------- */
+  body.bday .panel { background: linear-gradient(135deg, #FF7AA8 0%, #FFB347 55%, #FFD86B 100%); }
+  body.bday .header-tagline { color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,.2); }
+  body.bday .header-greeting { color: #fff; font-size: 1.25rem; text-shadow: 0 2px 6px rgba(150,40,80,.35); }
+  body.bday .header-quote { color: #fff6e8; }
+  body.bday .ribbon { display: block; position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; background: rgba(255,255,255,.92); color: #c2366f; font-weight: 800; font-size: .72rem; text-align: center; padding: 7px 8px; letter-spacing: .02em; }
+
+  /* ---------- 6 months ---------- */
+  body.six .panel { background: linear-gradient(160deg, #1A3A8F 0%, #2F6FD6 55%, #4FB3E8 100%); }
+  body.six .header-tagline { color: #bfe8ff; }
+  body.six .header-greeting { color: #fff; font-size: 1.2rem; }
+  body.six .header-quote { color: #dcefff; }
+
+  /* ---------- Anniversary ---------- */
+  body.anniv .panel { background: radial-gradient(circle at 50% 35%, #1f3a8f 0%, #0f1e5c 55%, #070f3a 100%); }
+  body.anniv .logo img { box-shadow: 0 0 0 6px #fff, 0 0 0 9px #d4af37, 0 0 26px 8px rgba(243,201,90,.35); }
+  body.anniv .header-tagline { color: #f3d27a; }
+  body.anniv .header-greeting { color: #ffe9a8; font-size: 1.2rem; }
+  body.anniv .header-quote { color: #c9d2f2; }
+
+  /* ---------- Holidays (everyone) ---------- */
+  body.tg .panel { background: linear-gradient(160deg, #4a170c 0%, #7e2f14 50%, #b8551a 100%); }
+  body.tg .header-tagline { color: #ffd18a; } body.tg .header-greeting { color: #fff4dc; } body.tg .header-quote { color: #f3d2b0; }
+  body.xm .panel { background: radial-gradient(circle at 50% 45%, #1f7a55 0%, #0f4a33 60%, #08301f 100%); }
+  body.xm .header-tagline { color: #f3d27a; } body.xm .header-greeting { color: #fff; } body.xm .header-quote { color: #cfe8da; }
+  body.ny .panel { background: radial-gradient(circle at 50% 40%, #3b1f6e 0%, #1b1650 55%, #0a1551 100%); }
+  body.ny .header-tagline { color: #f3d27a; } body.ny .header-greeting { color: #fff; } body.ny .header-quote { color: #d8cff2; }
+  body.j4 .panel { background: linear-gradient(180deg, #060e3a 0%, #0a1551 55%, #1a3a8f 100%); }
+  body.j4 .header-tagline { color: #ff8a96; } body.j4 .header-greeting { color: #fff; } body.j4 .header-quote { color: #dde6ff; }
+  body.ld .panel { background: linear-gradient(180deg, #1a3a8f 0%, #2f6fd6 55%, #f0a93b 100%); }
+  body.ld .header-tagline { color: #fff3c4; } body.ld .header-greeting { color: #fff; } body.ld .header-quote { color: #fff3dc; }
 </style>
 </head>
 <body>
 <div class="panel">
+  <div class="confetti" id="confetti"></div>
+  <div class="fxd" id="fx1"></div><div class="fxd" id="fx2"></div><div class="fxd" id="fx3"></div><div class="fxd" id="fx4"></div><div class="fxd" id="fx5"></div>
+  <div class="ribbon" id="ribbon">&#x1F381; The whole Aliado team is celebrating you today!</div>
   <div class="deco moon"></div>
   <div class="deco bat1">&#x1F987;</div>
   <div class="deco bat2">&#x1F987;</div>
@@ -111,6 +170,105 @@
   }
   document.getElementById("greeting").textContent = greeting + (firstName ? ", " + firstName : "") + " " + emoji;
   document.getElementById("quote").textContent = list[Math.floor(Math.random() * list.length)];
+
+  /* ===== Festive modes: holidays (everyone) + personal celebrations ===== */
+  var CHECK_URL = "https://default5c737bedc35d48c39a6d89e766c7c7.03.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/08/workflows/abe0e00d36e742069195576170f5c2ca/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=O-YDXs3NOBd1CfArq7wK0sCnebpbAw6O1fN8Sop-Kog";
+  var today = new Date(); today.setHours(0,0,0,0);
+  var Y = today.getFullYear();
+  function d(m, dd) { return new Date(Y, m - 1, dd); }
+  function nthDow(month, dow, n) { var x = new Date(Y, month - 1, 1); var off = (dow - x.getDay() + 7) % 7; return new Date(Y, month - 1, 1 + off + 7 * (n - 1)); }
+  function between(a, b) { return today >= a && today <= b; }
+  function addD(x, n) { var y = new Date(x); y.setDate(y.getDate() + n); return y; }
+  var tgDay = nthDow(11, 4, 4), ldDay = nthDow(9, 1, 1);
+  var holiday = force && /^(tg|xm|ny|j4|ld)$/.test(force) ? force :
+    between(addD(tgDay, -3), tgDay) ? "tg" :
+    between(d(12, 18), d(12, 26)) ? "xm" :
+    (between(d(12, 30), d(12, 31)) || between(d(1, 1), d(1, 2))) ? "ny" :
+    between(d(7, 1), d(7, 5)) ? "j4" :
+    between(addD(ldDay, -3), ldDay) ? "ld" : "";
+
+  var fxEls = ["fx1","fx2","fx3","fx4","fx5"].map(function (id) { return document.getElementById(id); });
+  function deco(items) {
+    fxEls.forEach(function (el, i) {
+      var it = items[i];
+      if (!it) { el.style.display = "none"; return; }
+      el.style.display = ""; el.innerHTML = it[0]; el.style.cssText = "font-size:" + it[1] + "px;" + it[2];
+      el.className = "fxd " + (it[3] || "");
+    });
+  }
+  function confetti(colors) {
+    var box = document.getElementById("confetti"), html = "";
+    var spots = [[4,8],[10,22],[3,40],[12,58],[6,74],[2,90],[92,10],[86,24],[95,42],[88,60],[94,76],[97,90],[22,6],[34,3],[66,4],[78,7],[18,94],[80,95]];
+    spots.forEach(function (s, i) {
+      html += '<i style="left:' + s[0] + '%;top:' + s[1] + '%;background:' + colors[i % colors.length] + ';transform:rotate(' + (i * 37 % 180) + 'deg);animation-delay:' + (i % 5) * 0.6 + 's"></i>';
+    });
+    box.innerHTML = html;
+  }
+  function setText(tag, greet, quote) {
+    document.getElementById("tagline").textContent = tag;
+    if (greet) document.getElementById("greeting").textContent = greet;
+    if (quote) document.getElementById("quote").textContent = quote;
+  }
+  var name = firstName || "friend";
+  function applyHoliday(h) {
+    document.body.className = "fx " + h;
+    var g = greeting + (firstName ? ", " + firstName : "");
+    if (h === "tg") { deco([["&#x1F342;",26,"left:16px;top:20px","bob"],["&#x1F341;",22,"right:20px;top:26px","bob2"],["&#x1F983;",30,"left:26px;top:104px","bob2"],["&#x1F967;",24,"right:28px;top:108px","bob"],["&#x1F342;",16,"right:70px;top:12px",""]]); confetti(["#f2c14e","#e8a33d","#d2691e","#ffd98a"]); setText("🦃 Happy Thanksgiving from Aliado", g + " 🍂", "This year, we are especially grateful for you."); }
+    if (h === "xm") { deco([["&#x1F384;",30,"left:14px;top:22px","bob"],["&#x2B50;",20,"right:22px;top:20px","bob2"],["&#x1F381;",26,"left:26px;top:104px","bob2"],["&#x2744;&#xFE0F;",20,"right:28px;top:108px","bob"],["&#x2744;&#xFE0F;",14,"right:70px;top:14px",""]]); confetti(["#ffffff","#f3d27a","#ff4d5e","#5ee3c1"]); setText("🎄 Merry Christmas from Aliado", g + " 🎄", "Wishing you peace, joy and time with the ones you love."); }
+    if (h === "ny") { deco([["&#x1F386;",28,"left:14px;top:20px","bob"],["&#x1F387;",24,"right:18px;top:22px","bob2"],["&#x1F942;",26,"left:26px;top:104px","bob2"],["&#x2728;",22,"right:28px;top:108px","bob"],["&#x2728;",14,"right:72px;top:12px",""]]); confetti(["#f3c95a","#ff7aa8","#5ee3c1","#ffffff"]); setText("🎆 Happy New Year from Aliado", g + " 🥂", "New year, new chapters — and we're glad to write ours with you."); }
+    if (h === "j4") { deco([["&#x1F386;",28,"left:14px;top:20px","bob"],["&#x1F1FA;&#x1F1F8;",26,"right:18px;top:22px","bob2"],["&#x2B50;",22,"left:26px;top:104px","bob2"],["&#x1F387;",24,"right:28px;top:108px","bob"],["&#x2B50;",14,"right:72px;top:12px",""]]); confetti(["#ff4d5e","#ffffff","#5ea8ff"]); setText("🇺🇸 Happy 4th of July from Aliado", g + " 🎆", "Celebrate, recharge and enjoy every moment."); }
+    if (h === "ld") { deco([["&#x1F31E;",30,"left:14px;top:18px","bob"],["&#x1F499;",22,"right:20px;top:24px","bob2"],["&#x1F91D;",26,"left:26px;top:104px","bob2"],["&#x2728;",20,"right:28px;top:108px","bob"],["",0,"",""]]); confetti(["#fff3c4","#ffffff","#f0a93b"]); setText("💙 Happy Labor Day from Aliado", g + " 🌞", "Thank you for the work you do — it changes lives."); }
+  }
+  function applyPersonal(r) {
+    var m = r && r.mode;
+    if (!m || m === "none") return false;
+    if (m === "bday_soon") {
+      document.body.className = "fx bdsoon";
+      deco([["&#x1F388;",30,"left:12px;top:18px","bob"],["&#x1F388;",24,"right:18px;top:26px","bob2"],["&#x1F381;",24,"left:26px;top:104px","bob2"],["&#x1F389;",22,"right:28px;top:108px","bob"],["",0,"",""]]);
+      confetti(["#ff7aa8","#ffb347","#ffd86b","#7ac7ff","#5ee3c1"]);
+      var n = r.days;
+      setText("🎈 " + n + (n === 1 ? " DAY" : " DAYS") + " TO GO", greeting + ", " + name + " " + emoji,
+        n === 1 ? "Your birthday is tomorrow — get ready to celebrate!" : "Your birthday is in " + n + " days — get ready to celebrate!");
+    }
+    if (m === "bday") {
+      document.body.className = "fx bday";
+      deco([["&#x1F388;",34,"left:10px;top:14px","bob"],["&#x1F388;",28,"right:14px;top:20px","bob2"],["&#x1F382;",30,"left:26px;top:104px","bob2"],["&#x1F389;",26,"right:28px;top:108px","bob"],["&#x1F388;",20,"right:64px;top:8px","bob"]]);
+      confetti(["#ffffff","#ffd86b","#5ee3c1","#7ac7ff","#c2366f"]);
+      setText("🎂 It's your birthday!", "Happy Birthday, " + name + "! 🎉", "Thank you for being someone's hero — today, you are ours.");
+    }
+    if (m === "six_months") {
+      document.body.className = "fx six";
+      deco([["&#x1F331;",28,"left:14px;top:20px","bob"],["&#x2728;",22,"right:20px;top:24px","bob2"],["&#x1F91D;",26,"left:26px;top:104px","bob2"],["&#x2728;",18,"right:28px;top:108px","bob"],["",0,"",""]]);
+      confetti(["#ffffff","#bfe6ff","#7fe0a8"]);
+      setText("🌱 6 MONTHS WITH ALIADO", "Thank you, " + name + "! 🤝", "Small steps, consistently taken, change lives.");
+    }
+    if (m === "anniversary") {
+      var yrs = r.years || 1;
+      document.body.className = "fx anniv";
+      deco([["&#x1F3C6;",28,"left:14px;top:20px","bob"],["&#x2B50;",22,"right:20px;top:24px","bob2"],["&#x1F38A;",26,"left:26px;top:104px","bob2"],["&#x2728;",20,"right:28px;top:108px","bob"],["&#x2B50;",14,"right:70px;top:12px",""]]);
+      confetti(["#f3c95a","#ffffff","#c9962a"]);
+      setText("🏆 " + yrs + (yrs === 1 ? " YEAR" : " YEARS") + " WITH ALIADO", "Congratulations, " + name + "! 🏆",
+        (yrs === 1 ? "One year" : yrs + " years") + " of making a difference. Thank you for being part of our story.");
+    }
+    return true;
+  }
+  if (!isHw && holiday) applyHoliday(holiday);
+
+  /* Personal celebrations override holidays. Test with #theme=bday / bdsoon / six / anniv */
+  var forced = { bday: { mode: "bday" }, bdsoon: { mode: "bday_soon", days: 3 }, six: { mode: "six_months" }, anniv: { mode: "anniversary", years: 1 } }[force];
+  if (forced) { applyPersonal(forced); }
+  else if (full && !isHw) {
+    var key = "aliado_cel_" + full.toLowerCase() + "_" + today.toDateString();
+    var cached = null;
+    try { cached = JSON.parse(localStorage.getItem(key) || "null"); } catch (e) {}
+    if (cached) { applyPersonal(cached); }
+    else if (CHECK_URL.indexOf("http") === 0) {
+      fetch(CHECK_URL + "&c=" + encodeURIComponent(full)).then(function (r) { return r.json(); }).then(function (r) {
+        try { localStorage.setItem(key, JSON.stringify(r)); } catch (e) {}
+        applyPersonal(r);
+      }).catch(function () {});
+    }
+  }
 })();
 </script>
 </body>
