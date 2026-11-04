@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Start of Services – Aliado Community Health</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f3f5fb;font-family:Inter,Arial,sans-serif;color:#0a1551}
+.wrap{max-width:520px;margin:0 auto;min-height:100vh;background:#f3f5fb}
+.top{background:#1a3a8f;padding:22px 20px 18px}
+.top .k{font-size:11px;font-weight:800;letter-spacing:.12em;color:#c9d6f2}
+.top .p{font-size:13px;color:#c9d6f2;margin-top:4px}
+.hero{padding:26px 20px 10px;text-align:center}
+.icon{width:68px;height:68px;border-radius:50%;background:#e3f6ea;color:#1d6b3f;font-size:32px;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.icon.party{background:#fff3e3}
+h1{font-size:22px;margin:0 0 8px;font-weight:800}
+.sub{font-size:14px;color:#5a6482;line-height:1.5;margin:0}
+.box{margin:16px 20px 0;padding:14px 16px;border-radius:14px;background:#fff;border:1px solid #dde4f3}
+.lbl{font-size:11px;font-weight:800;letter-spacing:.08em;color:#6b7591;margin-bottom:8px}
+.done{display:flex;align-items:center;gap:10px;font-size:14px;color:#1d6b3f;font-weight:700;margin-top:6px}
+.done span{width:22px;height:22px;border-radius:50%;background:#e3f6ea;display:flex;align-items:center;justify-content:center;font-size:13px}
+.next{padding:20px 20px 30px}
+.next .lbl{color:#1a3a8f}
+a.card{display:flex;align-items:center;gap:14px;padding:16px;border-radius:16px;background:#fff;border:1.5px solid #dde4f3;box-shadow:0 4px 14px rgba(10,21,81,.06);text-decoration:none;margin-top:12px}
+a.card:active{transform:scale(.99)}
+.ci{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex:0 0 auto}
+.ct{flex:1}
+.ct b{display:block;font-size:16px;color:#0a1551}
+.ct small{display:block;font-size:12.5px;color:#5a6482;margin-top:3px}
+.arrow{font-size:24px;color:#1a3a8f;font-weight:800}
+.foot{text-align:center;font-size:12px;color:#8a93ad;padding:10px 20px 30px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><div class="k">START OF SERVICES</div><div class="p" id="prov"></div></div>
+  <div class="hero">
+    <div class="icon" id="icon">✓</div>
+    <h1 id="title">Submitted</h1>
+    <p class="sub" id="sub"></p>
+  </div>
+  <div class="box" id="doneBox"><div class="lbl">COMPLETED</div><div id="doneList"></div></div>
+  <div class="next" id="nextBox"><div class="lbl" id="nextLbl">NEXT DOCUMENTS</div><div id="nextList"></div></div>
+  <div class="foot">Aliado Community Health</div>
+</div>
+<script>
+(function(){
+  var qs = new URLSearchParams(location.search);
+  var doc = (qs.get('doc') || '').toLowerCase();
+  var prov = (qs.get('p') || '').replace(/\s+/g,' ').trim();
+  if (/^\{.*\}$/.test(prov)) prov = '';
+  var LICENSED = ['sakima gonzalez','yolanda gonzalez','jennifer loaiza','jennifer loaiza-elejalde','denissie santana','garieka godfrey','esther chucaralao'];
+  var licensed = prov && LICENSED.indexOf(prov.toLowerCase()) >= 0;
+  var parts = prov.split(' '); var first = parts.shift() || ''; var last = parts.join(' ');
+  var enc = encodeURIComponent;
+  var DOCS = {
+    inhome: { name:'In-Home Services Agreement', sub:'English · Español · Português', icon:'🏠', bg:'#e9f7f2',
+      url: 'https://form.jotform.com/261068561492057' + (prov ? '?name13[first]='+enc(first)+'&name13[last]='+enc(last)+'&providerName[first]='+enc(first)+'&providerName[last]='+enc(last) : '') },
+    roi: { name:'Release of Information (ROI)', sub:'NJ Release of Information', icon:'📄', bg:'#eaf2ff',
+      url: 'https://form.jotform.com/261094020544044?behavioralhealth='+enc('Aliado Community Health')+'&addresscitystatezip24='+enc('116 Terrace Ave, Lodi, NJ 07644')+'&phone25[full]='+enc('(201) 620-6440') + (prov ? '&printname64='+enc(prov) : '') },
+    ack: { name:'Clinical Supervision Acknowledgment', sub:"Required for Master's level providers", icon:'✍️', bg:'#efe9ff',
+      url: 'https://form.jotform.com/261864383399069' + (prov ? '?q7_textbox5='+enc(prov) : '') }
+  };
+  var order = licensed ? ['inhome','roi'] : ['inhome','roi','ack'];
+  var KEY = 'aliado_sos_' + (prov || 'anon').toLowerCase();
+  var WINDOW = 6 * 60 * 60 * 1000;
+  var state = {};
+  try { state = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch(e) { state = {}; }
+  var now = Date.now();
+  if (!state.t || now - state.t > WINDOW) state = { t: now, done: [] };
+  if (DOCS[doc] && state.done.indexOf(doc) < 0) state.done.push(doc);
+  state.t = now;
+  try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e) {}
+
+  var done = order.filter(function(d){ return state.done.indexOf(d) >= 0; });
+  var pending = order.filter(function(d){ return state.done.indexOf(d) < 0; });
+
+  document.getElementById('prov').textContent = prov ? 'Provider: ' + prov : '';
+  var t = document.getElementById('title'), s = document.getElementById('sub'), ic = document.getElementById('icon');
+  if (!pending.length) {
+    ic.textContent = '🎉'; ic.className = 'icon party';
+    t.textContent = 'All documents completed!';
+    s.textContent = 'All start-of-services documents for this family are submitted. Great job!';
+    document.getElementById('nextBox').style.display = 'none';
+  } else {
+    t.textContent = DOCS[doc] ? DOCS[doc].name.replace(' (ROI)','') + ' submitted' : 'Start of services';
+    s.textContent = pending.length === 1 ? 'Almost done — one document left.' : 'Thank you! Continue with the remaining start-of-services documents.';
+    document.getElementById('nextLbl').textContent = pending.length === 1 ? 'LAST DOCUMENT' : 'NEXT DOCUMENTS';
+    var nl = document.getElementById('nextList');
+    pending.forEach(function(d){
+      var D = DOCS[d], a = document.createElement('a');
+      a.className = 'card'; a.href = D.url;
+      a.innerHTML = '<div class="ci" style="background:'+D.bg+'">'+D.icon+'</div><div class="ct"><b></b><small></small></div><div class="arrow">›</div>';
+      a.querySelector('b').textContent = D.name; a.querySelector('small').textContent = D.sub;
+      nl.appendChild(a);
+    });
+  }
+  var dl = document.getElementById('doneList');
+  if (!done.length) document.getElementById('doneBox').style.display = 'none';
+  done.forEach(function(d){
+    var row = document.createElement('div'); row.className = 'done';
+    row.innerHTML = '<span>✓</span>'; row.appendChild(document.createTextNode(DOCS[d].name)); dl.appendChild(row);
+  });
+})();
+</script>
+</body>
+</html>
