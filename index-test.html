@@ -46,7 +46,7 @@ var FIX = '<script>setTimeout(function(){try{var e=function(i){return document.g
 if (h.indexOf("</body>") >= 0) { h = h.replace("</body>", FIX + "</body>"); } else { h = h + FIX; }
 var FIX2 = '<script>(function(){function f(){document.querySelectorAll(".enc-youth").forEach(function(d){var tx=d.textContent.trim();if(/\\(CFT\\)$/.test(tx)){d.textContent=tx.replace(/\\s*\\(CFT\\)$/,"");var s=document.createElement("span");s.textContent="CFT";s.style.cssText="display:inline-block;margin-left:6px;padding:1px 8px;border-radius:999px;background:#ede7ff;color:#5b3fb3;font-size:11px;font-weight:700";d.appendChild(s);}});}[150,500,1200,2500,4000].forEach(function(ms){setTimeout(f,ms);});})();<\/script>';
 if (h.indexOf("</body>") >= 0) { h = h.replace("</body>", FIX2 + "</body>"); } else { h = h + FIX2; }
-if (n) { var PN = '<script>window.PNCFG=' + JSON.stringify({ c: c, n: n }).replace(/</g, "\\u003c") + ';<\/script><script src="https://enmanuelf-ai.github.io/billing/bh-notes.js?v=1"><\/script>'; if (h.indexOf("</body>") >= 0) { h = h.replace("</body>", PN + "</body>"); } else { h = h + PN; } }
+if (n) { var PN = '<script>window.PNCFG=' + JSON.stringify({ c: c, n: n, since: p.get("since") || "" }).replace(/</g, "\\u003c") + ';<\/script><script src="https://enmanuelf-ai.github.io/billing/bh-notes.js?v=1"><\/script>'; if (h.indexOf("</body>") >= 0) { h = h.replace("</body>", PN + "</body>"); } else { h = h + PN; } }
 try { history.replaceState(null, "", location.pathname); } catch (x) {}
 document.open(); document.write(h); document.close();
 })
