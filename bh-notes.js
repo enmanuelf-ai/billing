@@ -4,6 +4,8 @@
   if (!CFG.c || !CFG.n) return;
   var NOTE_URL = "https://default5c737bedc35d48c39a6d89e766c7c7.03.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/07/workflows/872baf79ecaf4558b9eba2d61cc183d4/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0";
   var OVERDUE_HRS = 72;
+  var START = new Date(2026, 10, 9); /* only encounters from this date on are tracked */
+  if (CFG.since && /^\d{4}-\d{2}-\d{2}$/.test(CFG.since)) { var sp = CFG.since.split("-"); START = new Date(+sp[0], +sp[1] - 1, +sp[2]); }
 
   function norm(s) { return String(s == null ? "" : s).trim().replace(/\s+/g, " ").toLowerCase(); }
   function keyOf(e) { return norm(CFG.c) + "|" + norm(e.youth) + "|" + String(e.date).trim() + "|" + norm(e.start); }
@@ -60,6 +62,8 @@
       var main = e.row.querySelector(".enc-main");
       var old = e.row.querySelector(".pn-chip"); if (old) old.remove();
       var oa = e.row.querySelector(".pn-acts"); if (oa) oa.remove();
+      var day = endDate({ date: e.date, start: "12:00 AM" });
+      if (day && day < START) return;
       var chip = document.createElement("span"); chip.className = "pn-chip";
       if (MARKS[e.key]) {
         var at = String(MARKS[e.key]).slice(5, 10).replace("-", "/");
