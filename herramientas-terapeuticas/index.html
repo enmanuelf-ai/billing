@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
@@ -67,6 +68,25 @@ h1{font:800 clamp(34px,9vw,48px)/1 "Baloo 2",system-ui,sans-serif;margin:22px 0 
 .soon ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:6px 14px}
 .soon li{font-size:14.5px;display:flex;gap:8px;align-items:baseline;color:var(--muted)}
 .soon li span{flex:none}
+.need,.tool,.back,.lang button,.chip,.qx{transition:transform .12s,background-color .15s,border-color .15s,box-shadow .15s,filter .15s}
+.need:not(.off):hover{filter:brightness(1.05);box-shadow:0 6px 16px rgba(22,34,74,.18);transform:translateY(-2px)}
+.tool:hover{border-color:var(--navy);box-shadow:0 4px 14px rgba(22,34,74,.12);transform:translateY(-1px)}
+.back:hover{text-decoration:underline}
+.lang button:hover{color:var(--navy)}
+.qbg{position:fixed;inset:0;z-index:50;background:rgba(10,15,30,.45);display:flex;align-items:flex-end;justify-content:center}
+.qsheet{background:var(--bg);width:100%;max-width:560px;max-height:90vh;overflow-y:auto;border-radius:26px 26px 0 0;padding:18px 18px calc(24px + env(safe-area-inset-bottom,0px))}
+.qhead{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.qhead h2{font:800 24px/1.1 "Baloo 2",system-ui,sans-serif;margin:0}
+.qx{border:0;background:var(--soft);color:var(--ink);width:38px;height:38px;border-radius:50%;font-size:18px;cursor:pointer}
+.qx:hover{background:var(--line)}
+.qsheet > p{color:var(--muted);margin:8px 0 0}
+.qlangs{display:flex;gap:8px;justify-content:center;margin:12px 0 4px}
+.chip{border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:7px 14px;font:700 14px Lato,sans-serif;cursor:pointer}
+.chip:hover{border-color:var(--navy)}
+.chip[aria-pressed="true"]{background:#1A3A8F;border-color:#1A3A8F;color:#fff}
+.qbox{background:#fff;border-radius:22px;padding:18px;display:flex;justify-content:center;margin:8px auto 0;width:fit-content;border:2px solid var(--line)}
+.qbox img,.qbox canvas{width:240px!important;height:240px!important}
+.qsteps{margin:12px 0 0;padding-left:20px;display:grid;gap:5px}
 [hidden]{display:none!important}
 @media (prefers-reduced-motion: reduce){*{transition:none!important}}
 </style>
@@ -98,6 +118,10 @@ h1{font:800 clamp(34px,9vw,48px)/1 "Baloo 2",system-ui,sans-serif;margin:22px 0 
   </section>
 </div>
 
+<div class="qbg" id="qBg" hidden><div class="qsheet" role="dialog" aria-modal="true" aria-labelledby="qT">
+  <div class="qhead"><h2 id="qT"></h2><button class="qx" id="qX" aria-label="Close">✕</button></div>
+  <p id="qP"></p><div class="qlangs" id="qLangs"></div><div class="qbox" id="qBox"></div><ol class="qsteps" id="qSteps"></ol>
+</div></div>
 <script>
 const LINKS = {
   emotions: "juego-emociones.html",
@@ -113,11 +137,11 @@ const UI = {
   en:{title:"Therapeutic tools", q:"What do you need right now?", tools:n=>n===1?"1 tool":`${n} tools`, soonTile:"Coming soon",
       back:"← All needs", ages:"Ages", soonT:"Coming soon", soonP:"Tools we're preparing. They'll appear above when ready.",
       showing:"Showing tools for", showAll:"Show all", roles:{iic:"IIC clinicians",ba:"BA",pc:"Parent Coaching"},
-      none:"No tools for your role in this area yet."},
+      none:"No tools for your role in this area yet.",qT:"Star chart for home",qP:"The parent scans this code with their phone camera and the star chart opens, ready to use at home during the week.",qSteps:["Ask the parent to open their phone camera and point it at the code.","Have them tap the link that appears on the screen.","Set up the chart together with the child before the session ends."]},
   es:{title:"Herramientas terapéuticas", q:"¿Qué necesitas ahora mismo?", tools:n=>n===1?"1 herramienta":`${n} herramientas`, soonTile:"Próximamente",
       back:"← Todas las necesidades", ages:"Edades", soonT:"Próximamente", soonP:"Herramientas que estamos preparando. Aparecerán arriba cuando estén listas.",
       showing:"Mostrando herramientas para", showAll:"Ver todas", roles:{iic:"Clínicos IIC",ba:"BA",pc:"Parent Coaching"},
-      none:"Todavía no hay herramientas para tu rol en esta área."}
+      none:"Todavía no hay herramientas para tu rol en esta área.",qT:"Tabla de estrellas para casa",qP:"El padre escanea este código con la cámara de su celular y se le abre la tabla de estrellas para usar en casa durante la semana.",qSteps:["Pídale al padre que abra la cámara de su celular y apunte al código.","Que toque el enlace que aparece en la pantalla.","Configuren la tabla juntos con el niño antes de terminar la sesión."]}
 };
 
 const NEEDS = [
@@ -142,7 +166,7 @@ const TOOLS = [
   {e:"⭐",link:"ba",      needs:["behave","parent"],roles:["ba","pc"],age:"5–12",
    en:["Behavior kit","Tokens, First / Then board and ABC log."],                  es:["Kit de conducta","Fichas, Primero / Después y registro ABC."]},
   {e:"🏠",link:"home",    needs:["parent","behave"],roles:["ba","pc"],age:"3–12",
-   en:["Star chart at home","A weekly star chart parents use at home between sessions."], es:["Tabla de estrellas en casa","Tabla semanal que los padres usan en casa entre sesiones."]},
+   en:["Star chart at home","Show the parent a QR code to open their weekly star chart."], es:["Tabla de estrellas en casa","Muéstrele al padre un código QR para abrir su tabla semanal."]},
   {e:"👨‍👧",link:"special",needs:["parent"],       roles:["pc"],       age:"2–8",
    en:["Special time","5 minutes of child-led play, with parent coaching."],       es:["Tiempo especial","5 minutos de juego dirigido por el niño, con coaching al padre."]}
 ];
@@ -196,11 +220,20 @@ function renderView(){
   $("back").textContent = u.back;
   $("vHead").innerHTML = `<div class="ico" style="--c:${n.c}" aria-hidden="true">${n.e}</div><div><h2>${n[lang][0]}</h2><p>${n[lang][1]}</p></div>`;
   const list = toolsFor(open);
-  $("vTools").innerHTML = list.length ? list.map(t=>`<a class="tool" href="${LINKS[t.link]}">
+  $("vTools").innerHTML = list.length ? list.map(t=>`<a class="tool" href="${t.link==="home"?"#":LINKS[t.link]+"?v="+VER}"${t.link==="home"?' data-qr="1"':""}>
       <span class="e" aria-hidden="true">${t.e}</span>
       <div><h3>${t[lang][0]}</h3><p>${t[lang][1]}</p><span class="age">${u.ages} ${t.age}</span></div>
       <span class="go" aria-hidden="true">›</span></a>`).join("") : `<p class="empty">${u.none}</p>`;
+  $("vTools").querySelectorAll("[data-qr]").forEach(a=>a.onclick=e=>{e.preventDefault();openQR();});
 }
+const VER="3";
+let qLang="en";
+function renderQR(){const u=UI[lang];$("qT").textContent=u.qT;$("qP").textContent=u.qP;$("qSteps").innerHTML=u.qSteps.map(x=>`<li>${x}</li>`).join("");
+ $("qLangs").innerHTML="";[["en","English"],["es","Español"]].forEach(([k,l])=>{const b=document.createElement("button");b.className="chip";b.textContent=l;b.setAttribute("aria-pressed",qLang===k);b.onclick=()=>{qLang=k;renderQR();};$("qLangs").appendChild(b);});
+ $("qBox").innerHTML="";try{new QRCode($("qBox"),{text:"https://enmanuelf-ai.github.io/billing/herramientas-terapeuticas/tabla-casa.html?lang="+qLang,width:240,height:240,correctLevel:QRCode.CorrectLevel.M});$("qBox").removeAttribute("title");}catch(e){$("qBox").textContent="QR not available";}}
+function openQR(){qLang=lang;renderQR();$("qBg").hidden=false;$("qX").focus();}
+$("qX").onclick=()=>{$("qBg").hidden=true;};
+$("qBg").onclick=e=>{if(e.target.id==="qBg")$("qBg").hidden=true;};
 
 function show(v){ $("home").hidden = v!=="home"; $("view").hidden = v!=="view"; window.scrollTo(0,0); }
 $("back").onclick = ()=>{ open=null; show("home"); };
@@ -209,7 +242,7 @@ function paint(){
   document.documentElement.lang = lang; document.title = UI[lang].title;
   document.querySelectorAll("[data-t]").forEach(el=>el.textContent = UI[lang][el.dataset.t]);
   document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.lang===lang));
-  renderHome(); if(open) renderView();
+  renderHome(); if(open) renderView(); if(!$("qBg").hidden) renderQR();
 }
 document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{ lang=b.dataset.lang; paint(); });
 window.addEventListener("hashchange", ()=>{ const h=location.hash.slice(1); role=["iic","ba","pc"].includes(h)?h:"all"; open=null; show("home"); paint(); });
