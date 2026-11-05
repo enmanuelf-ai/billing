@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<title>Onboarding Profile Received – Aliado</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 80px 16px 32px; color: #1f2a37; overflow-x: hidden;
+    background: radial-gradient(circle at 12% 18%, #2d5a8a 0%, transparent 45%), radial-gradient(circle at 88% 86%, #4f8a4b55 0%, transparent 42%), linear-gradient(160deg, #142a47 0%, #1f3a5f 55%, #2a4f7a 100%); }
+  .card { position: relative; background: #fff; border-radius: 26px; width: 100%; max-width: 520px; padding: 70px 34px 30px; text-align: center; box-shadow: 0 30px 60px rgba(5,15,40,.38); animation: rise .6s cubic-bezier(.2,.9,.3,1.2) both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(24px) scale(.97); } to { opacity: 1; transform: none; } }
+  .logo { position: absolute; top: -52px; left: 50%; transform: translateX(-50%); width: 104px; height: 104px; border-radius: 50%; background: #fff; box-shadow: 0 8px 24px rgba(5,15,40,.28); border: 4px solid #fff; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+  .logo img { width: 112%; height: 112%; object-fit: contain; }
+  .check { width: 80px; height: 80px; margin: 0 auto 16px; }
+  .check circle { fill: #ecf6eb; stroke: #4f8a4b; stroke-width: 4; stroke-dasharray: 252; stroke-dashoffset: 252; animation: draw .7s .35s ease-out forwards; }
+  .check path { fill: none; stroke: #4f8a4b; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 60; stroke-dashoffset: 60; animation: draw .45s 1s ease-out forwards; }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  .eyebrow { font-size: .72rem; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; color: #4f8a4b; }
+  h1 { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.9rem; line-height: 1.2; color: #1f3a5f; margin: 8px 0 10px; }
+  .sub { font-size: .98rem; line-height: 1.6; color: #4a5568; }
+  .stamp { display: inline-flex; align-items: center; gap: 6px; margin-top: 16px; background: #eef4fa; color: #1f3a5f; font-size: .78rem; font-weight: 700; padding: 7px 14px; border-radius: 999px; }
+  .next { margin-top: 26px; text-align: left; background: #f6f9f7; border: 1px solid #e3ebe5; border-radius: 18px; padding: 20px 20px 6px; }
+  .next h2 { font-size: .72rem; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; color: #4f8a4b; margin-bottom: 14px; }
+  .step { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 16px; }
+  .num { width: 32px; height: 32px; border-radius: 50%; background: #1f3a5f; color: #fff; font-weight: 800; font-size: .9rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .step b { display: block; font-size: .95rem; color: #1f3a5f; margin-bottom: 2px; }
+  .step span { font-size: .85rem; color: #5b6676; line-height: 1.5; }
+  .safe { margin-top: 18px; display: flex; align-items: center; gap: 12px; text-align: left; background: #ecf6eb; border: 1px solid #cfe6cd; border-radius: 14px; padding: 14px 16px; }
+  .safe-icon { width: 34px; height: 34px; border-radius: 50%; background: #4f8a4b; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; flex-shrink: 0; }
+  .safe b { display: block; font-size: .9rem; color: #2f5f2c; }
+  .safe span { font-size: .8rem; color: #4a5568; }
+  .contact { margin-top: 20px; font-size: .88rem; color: #4a5568; line-height: 1.6; }
+  .contact a { color: #1f3a5f; font-weight: 700; text-decoration: none; }
+  .quote { margin-top: 20px; font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.05rem; color: #4f8a4b; }
+  .brand { margin-top: 14px; font-size: .66rem; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; color: #a0aab8; }
+  .confetti { position: fixed; top: -14px; width: 8px; height: 14px; border-radius: 2px; opacity: .9; animation: fall linear forwards; pointer-events: none; }
+  @keyframes fall { to { transform: translateY(110vh) rotate(540deg); opacity: 0; } }
+  @media (max-width: 480px) { .card { padding: 64px 22px 26px; } h1 { font-size: 1.6rem; } }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo"><img src="https://www.jotform.com/uploads/enmanuelf59/form_files/Aliado%20Logo-6a91d3dfb81cc5.97863208.png" alt="Aliado Community Health"></div>
+    <svg class="check" viewBox="0 0 90 90"><circle cx="45" cy="45" r="40"/><path d="M28 46 l12 12 l22 -24"/></svg>
+    <div class="eyebrow">Onboarding profile received</div>
+    <h1 id="title">Thank you &mdash; welcome to the team!</h1>
+    <div class="sub">We received your information and documents. You&rsquo;re one step closer to working with our families.</div>
+    <div class="stamp" id="stamp"></div>
+
+    <div class="next">
+      <h2>What happens next</h2>
+      <div class="step"><div class="num">1</div><div><b>We review your documents</b><span>Our team checks everything within 1&ndash;2 business days.</span></div></div>
+      <div class="step"><div class="num">2</div><div><b>We set you up</b><span>We create your profile in our systems so you&rsquo;re ready to receive cases.</span></div></div>
+      <div class="step"><div class="num">3</div><div><b>Orientation details</b><span>You&rsquo;ll receive an email with your orientation information.</span></div></div>
+    </div>
+
+    <div class="safe">
+      <div class="safe-icon">&#10003;</div>
+      <div><b>It&rsquo;s safe to close this page</b><span>If we need anything else, we&rsquo;ll reach out by email.</span></div>
+    </div>
+
+    <div class="contact">Questions? Email <a href="mailto:info@aliadocommunityhealth.com">info@aliadocommunityhealth.com</a><br>or call <a href="tel:+12016206440">(201) 620-6440</a></div>
+    <div class="quote">Together, we make a difference.</div>
+    <div class="brand">Aliado Community Health</div>
+  </div>
+<script>
+  var p = new URLSearchParams(location.search);
+  var name = (p.get('name') || '').trim();
+  if (name && !/^\{.*\}$/.test(name)) {
+    name = name.charAt(0).toUpperCase() + name.slice(1);
+    document.getElementById('title').textContent = 'Thank you, ' + name + '!';
+  }
+  try { history.replaceState(null, '', location.pathname); } catch (e) {}
+  var now = new Date();
+  document.getElementById('stamp').textContent = '\uD83D\uDCC5 Submitted ' + now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) + ' \u00B7 ' + now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  var colors = ['#1f3a5f', '#4f8a4b', '#9fd39a', '#fbb733', '#5b8fc7', '#ffffff'];
+  for (var i = 0; i < 46; i++) { var c = document.createElement('div'); c.className = 'confetti'; c.style.left = Math.random() * 100 + 'vw'; c.style.background = colors[i % colors.length]; c.style.animationDuration = (2.2 + Math.random() * 1.8) + 's'; c.style.animationDelay = (Math.random() * 0.6) + 's'; document.body.appendChild(c); }
+</script>
+</body>
+</html>
