@@ -86,6 +86,9 @@ h1{font:800 clamp(34px,9vw,48px)/1 "Baloo 2",system-ui,sans-serif;margin:22px 0 
 .chip[aria-pressed="true"]{background:#1A3A8F;border-color:#1A3A8F;color:#fff}
 .qbox{background:#fff;border-radius:22px;padding:18px;display:flex;justify-content:center;margin:8px auto 0;width:fit-content;border:2px solid var(--line)}
 .qbox img,.qbox canvas{width:240px!important;height:240px!important}
+.sharebtn{display:block;margin:14px auto 0;border:0;background:#1A3A8F;color:#fff;border-radius:999px;padding:13px 22px;font:700 16px Lato,sans-serif;cursor:pointer;transition:filter .15s,transform .12s}
+.sharebtn:hover{filter:brightness(1.15);transform:translateY(-1px)}
+.sharenote{text-align:center;color:var(--muted);font-size:14px;margin:6px 0 0;min-height:18px}
 .qsteps{margin:12px 0 0;padding-left:20px;display:grid;gap:5px}
 [hidden]{display:none!important}
 @media (prefers-reduced-motion: reduce){*{transition:none!important}}
@@ -120,7 +123,7 @@ h1{font:800 clamp(34px,9vw,48px)/1 "Baloo 2",system-ui,sans-serif;margin:22px 0 
 
 <div class="qbg" id="qBg" hidden><div class="qsheet" role="dialog" aria-modal="true" aria-labelledby="qT">
   <div class="qhead"><h2 id="qT"></h2><button class="qx" id="qX" aria-label="Close">✕</button></div>
-  <p id="qP"></p><div class="qlangs" id="qLangs"></div><div class="qbox" id="qBox"></div><ol class="qsteps" id="qSteps"></ol>
+  <p id="qP"></p><div class="qlangs" id="qLangs"></div><div class="qbox" id="qBox"></div><button class="sharebtn" id="qShare"></button><p class="sharenote" id="qNote"></p><ol class="qsteps" id="qSteps"></ol>
 </div></div>
 <script>
 const LINKS = {
@@ -137,11 +140,11 @@ const UI = {
   en:{title:"Therapeutic tools", q:"What do you need right now?", tools:n=>n===1?"1 tool":`${n} tools`, soonTile:"Coming soon",
       back:"← All needs", ages:"Ages", soonT:"Coming soon", soonP:"Tools we're preparing. They'll appear above when ready.",
       showing:"Showing tools for", showAll:"Show all", roles:{iic:"IIC clinicians",ba:"BA",pc:"Parent Coaching"},
-      none:"No tools for your role in this area yet.",qT:"Star chart for home",qP:"The parent scans this code with their phone camera and the star chart opens, ready to use at home during the week.",qSteps:["Ask the parent to open their phone camera and point it at the code.","Have them tap the link that appears on the screen.","Set up the chart together with the child before the session ends."]},
+      none:"No tools for your role in this area yet.",qT:"Star chart for home",share:"📤 Send the link to the parent",copied:"Link copied. Paste it in a text or WhatsApp to the parent.",qP:"The parent scans this code with their phone camera and the star chart opens, ready to use at home during the week.",qSteps:["Ask the parent to open their phone camera and point it at the code.","Have them tap the link that appears on the screen.","Set up the chart together with the child before the session ends."]},
   es:{title:"Herramientas terapéuticas", q:"¿Qué necesitas ahora mismo?", tools:n=>n===1?"1 herramienta":`${n} herramientas`, soonTile:"Próximamente",
       back:"← Todas las necesidades", ages:"Edades", soonT:"Próximamente", soonP:"Herramientas que estamos preparando. Aparecerán arriba cuando estén listas.",
       showing:"Mostrando herramientas para", showAll:"Ver todas", roles:{iic:"Clínicos IIC",ba:"BA",pc:"Parent Coaching"},
-      none:"Todavía no hay herramientas para tu rol en esta área.",qT:"Tabla de estrellas para casa",qP:"El padre escanea este código con la cámara de su celular y se le abre la tabla de estrellas para usar en casa durante la semana.",qSteps:["Pídale al padre que abra la cámara de su celular y apunte al código.","Que toque el enlace que aparece en la pantalla.","Configuren la tabla juntos con el niño antes de terminar la sesión."]}
+      none:"Todavía no hay herramientas para tu rol en esta área.",qT:"Tabla de estrellas para casa",share:"📤 Enviar el enlace al padre",copied:"Enlace copiado. Péguelo en un mensaje de texto o WhatsApp al padre.",qP:"El padre escanea este código con la cámara de su celular y se le abre la tabla de estrellas para usar en casa durante la semana.",qSteps:["Pídale al padre que abra la cámara de su celular y apunte al código.","Que toque el enlace que aparece en la pantalla.","Configuren la tabla juntos con el niño antes de terminar la sesión."]}
 };
 
 const NEEDS = [
@@ -226,11 +229,15 @@ function renderView(){
       <span class="go" aria-hidden="true">›</span></a>`).join("") : `<p class="empty">${u.none}</p>`;
   $("vTools").querySelectorAll("[data-qr]").forEach(a=>a.onclick=e=>{e.preventDefault();openQR();});
 }
-const VER="3";
+const VER="4";
 let qLang="en";
-function renderQR(){const u=UI[lang];$("qT").textContent=u.qT;$("qP").textContent=u.qP;$("qSteps").innerHTML=u.qSteps.map(x=>`<li>${x}</li>`).join("");
+function renderQR(){const u=UI[lang];$("qT").textContent=u.qT;$("qShare").textContent=u.share;$("qNote").textContent="";$("qP").textContent=u.qP;$("qSteps").innerHTML=u.qSteps.map(x=>`<li>${x}</li>`).join("");
  $("qLangs").innerHTML="";[["en","English"],["es","Español"]].forEach(([k,l])=>{const b=document.createElement("button");b.className="chip";b.textContent=l;b.setAttribute("aria-pressed",qLang===k);b.onclick=()=>{qLang=k;renderQR();};$("qLangs").appendChild(b);});
  $("qBox").innerHTML="";try{new QRCode($("qBox"),{text:"https://enmanuelf-ai.github.io/billing/herramientas-terapeuticas/tabla-casa.html?lang="+qLang,width:240,height:240,correctLevel:QRCode.CorrectLevel.M});$("qBox").removeAttribute("title");}catch(e){$("qBox").textContent="QR not available";}}
+$("qShare").onclick=async()=>{const url="https://enmanuelf-ai.github.io/billing/herramientas-terapeuticas/tabla-casa.html?lang="+qLang;const text=(qLang==="es"?"¡Hola! Aquí tiene su tabla de estrellas para usar en casa con su hijo esta semana. Su terapeuta la revisará con usted en la próxima sesión: ":"Hi! Here is your star chart to use at home with your child this week. Your therapist will review it with you at the next session: ")+url;
+ try{if(navigator.share){await navigator.share({text});return;}}catch(e){if(e&&e.name==="AbortError")return;}
+ try{await navigator.clipboard.writeText(text);}catch(e){const a=document.createElement("textarea");a.value=text;document.body.appendChild(a);a.select();document.execCommand("copy");a.remove();}
+ $("qNote").textContent=UI[lang].copied;};
 function openQR(){qLang=lang;renderQR();$("qBg").hidden=false;$("qX").focus();}
 $("qX").onclick=()=>{$("qBg").hidden=true;};
 $("qBg").onclick=e=>{if(e.target.id==="qBg")$("qBg").hidden=true;};

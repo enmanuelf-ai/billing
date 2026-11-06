@@ -41,6 +41,11 @@ h2{font:800 24px/1.1 "Baloo 2",sans-serif;margin:0}
 .row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
 .hint{color:#C9483B;font-weight:700;margin:0;min-height:20px;text-align:center}
 
+.kids{display:flex;gap:8px;flex-wrap:wrap}
+.kidtab{border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 14px;font:700 15px Lato,sans-serif;cursor:pointer;transition:border-color .15s,background-color .15s}
+.kidtab:hover{border-color:var(--accent)}
+.kidtab[aria-pressed="true"]{background:#1F8A6B;border-color:#1F8A6B;color:#fff}
+.kidtab.add{border-style:dashed;color:var(--accent)}
 .board{background:var(--surface);border:2px solid var(--line);border-radius:28px;padding:20px 16px;display:flex;flex-direction:column;gap:14px;align-items:center;text-align:center}
 .who{font:700 15px Lato,sans-serif;color:var(--muted);margin:0}
 .goal{font:800 24px/1.15 "Baloo 2",sans-serif;margin:0}
@@ -155,6 +160,7 @@ details.ther[open]{display:flex;flex-direction:column;gap:10px}
 
   <!-- Chart -->
   <section id="chart" hidden style="display:flex;flex-direction:column;gap:14px">
+    <div class="kids" id="kids"></div>
     <div class="board">
       <p class="who" id="who"></p>
       <p class="goal" id="goal"></p>
@@ -204,7 +210,7 @@ details.ther[open]{display:flex;flex-direction:column;gap:10px}
 const UI={
  en:{title:"Star chart at home",whyT:"What is this for?",whyP:"Children learn a new behavior faster when we notice it and reward it, not only when we correct them for misbehaving. This chart helps you:",whyL:["Catch the good moments and praise them","Give your child one clear, positive goal","Show your therapist how the week went at home"],howLink:"How to use it well",setupLead:"Set it up together with your child. Every time they do the behavior, they earn a star. When the stars are complete, they get their reward.",
   kidQ:"Child's name (optional)",kidPh:"E.g. Sofia",behavQ:"Which behavior are we working on?",behavPh:"E.g. Follow directions the first time",
-  rewardQ:"What will they earn?",customQ:"Or write something special they want",customPh:"E.g. Pizza night with the family",nQ:"How many stars to earn it?",save:"Start the chart",saveEdit:"Save changes",cancel:"Cancel",needSetup:"Write the behavior and pick or write a reward.",
+  rewardQ:"What will they earn?",customQ:"Or write something special they want",customPh:"E.g. Pizza night with the family",nQ:"How many stars to earn it?",save:"Start the chart",addKid:"+ Add child",childN:n=>`Child ${n}`,saveEdit:"Save changes",cancel:"Cancel",needSetup:"Write the behavior and pick or write a reward.",
   privacy:"Everything stays saved only on this phone. Nothing is sent anywhere.",
   add:"⭐ Add a star",newRound:"Start a new round",winP:"Give the reward today and tell them why they earned it.",won:r=>`Reward earned: ${r}!`,
   weekT:"This week",weekOf:d=>`Week of ${d}`,wkHint:"Forgot a star? Tap the day to add it.",dayAdd:"+ Add a star",dayDel:"− Remove one",fullFirst:"The stars are complete. Start a new round first.",sWeek:"stars this week",sRounds:"rewards earned",sDays:"days with stars",
@@ -220,7 +226,7 @@ const UI={
   who:n=>n?`${n}'s star chart`:"Star chart"},
  es:{title:"Tabla de estrellas en casa",whyT:"¿Para qué sirve?",whyP:"Los niños aprenden una conducta nueva más rápido cuando la notamos y la premiamos, no solo cuando los corregimos por portarse mal. Esta tabla le ayuda a:",whyL:["Fijarse en los buenos momentos y elogiarlos","Darle a su hijo una meta clara y positiva","Mostrarle a su terapeuta cómo fue la semana en casa"],howLink:"Cómo usarla bien",setupLead:"Configúrenla junto con su hijo o hija. Cada vez que haga la conducta, gana una estrella. Al completar las estrellas, recibe su recompensa.",
   kidQ:"Nombre del niño (opcional)",kidPh:"Ej: Sofía",behavQ:"¿Qué conducta vamos a trabajar?",behavPh:"Ej: Hacer caso a la primera",
-  rewardQ:"¿Qué va a ganar?",customQ:"O escriba algo especial que quiera ganar",customPh:"Ej: Noche de pizza en familia",nQ:"¿Cuántas estrellas para ganarlo?",save:"Empezar la tabla",saveEdit:"Guardar cambios",cancel:"Cancelar",needSetup:"Escriba la conducta y elija o escriba una recompensa.",
+  rewardQ:"¿Qué va a ganar?",customQ:"O escriba algo especial que quiera ganar",customPh:"Ej: Noche de pizza en familia",nQ:"¿Cuántas estrellas para ganarlo?",save:"Empezar la tabla",addKid:"+ Agregar niño",childN:n=>`Niño ${n}`,saveEdit:"Guardar cambios",cancel:"Cancelar",needSetup:"Escriba la conducta y elija o escriba una recompensa.",
   privacy:"Todo se guarda solo en este celular. No se envía a ningún lugar.",
   add:"⭐ Dar una estrella",newRound:"Empezar otra ronda",winP:"Entréguele la recompensa hoy y dígale por qué se la ganó.",won:r=>`¡Recompensa ganada: ${r}!`,
   weekT:"Esta semana",weekOf:d=>`Semana del ${d}`,wkHint:"¿Se le olvidó una estrella? Toque el día para agregarla.",dayAdd:"+ Dar una estrella",dayDel:"− Quitar una",fullFirst:"Las estrellas ya están completas. Primero empiece otra ronda.",sWeek:"estrellas esta semana",sRounds:"recompensas ganadas",sDays:"días con estrellas",
@@ -237,11 +243,15 @@ const UI={
 const REWARDS=[["📱",{en:"Tablet time",es:"Tiempo de tablet"}],["⚽",{en:"Play outside",es:"Jugar afuera"}],["📺",{en:"TV show",es:"Un programa de TV"}],["🎲",{en:"Game with a parent",es:"Juego con papá o mamá"}],
  ["🍦",{en:"Special treat",es:"Un antojito"}],["🌙",{en:"Stay up 15 min",es:"Dormir 15 min más tarde"}],["🎨",{en:"Art time",es:"Tiempo de arte"}],["🎁",{en:"Small surprise",es:"Una sorpresita"}]];
 const KEY="aliado-home-star-chart";
-let lang="en", st=load(), draft={reward:null,n:5}, editing=false, wkOff=0, selDay=null;
+let lang="en", store=load(), st=store.kids[store.active]||null, draft={reward:null,n:5}, editing=false, adding=false, wkOff=0, selDay=null;
 const $=id=>document.getElementById(id);
 
-function load(){try{return JSON.parse(localStorage.getItem(KEY))||null}catch(e){return null}}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
+function load(){let d=null;try{d=JSON.parse(localStorage.getItem(KEY));}catch(e){}
+ if(!d)return {v:2,kids:[],active:0};
+ if(!d.kids){return {v:2,kids:d.behav?[d]:[],active:0};}
+ if(d.active>=d.kids.length)d.active=0;return d;}
+function save(){if(st&&st.behav){if(adding){store.kids.push(st);store.active=store.kids.length-1;adding=false;}else store.kids[store.active]=st;}
+ try{localStorage.setItem(KEY,JSON.stringify(store))}catch(e){}}
 const dayKey=d=>{const x=new Date(d);return x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0")+"-"+String(x.getDate()).padStart(2,"0")};
 function weekDays(off=0){const t=new Date();t.setHours(12,0,0,0);const dow=(t.getDay()+6)%7;const mon=new Date(t);mon.setDate(t.getDate()-dow+off*7);
  return [...Array(7)].map((_,i)=>{const d=new Date(mon);d.setDate(mon.getDate()+i);return dayKey(d)});}
@@ -256,8 +266,8 @@ function paint(){
  $("ideas").innerHTML="";UI[lang].ideas.forEach(t=>{const b=document.createElement("button");b.className="chip";b.textContent=t;b.onclick=()=>{$("behav").value=t;};$("ideas").appendChild(b);});
  $("rewards").innerHTML="";REWARDS.forEach(([e,l],i)=>{const b=document.createElement("button");b.setAttribute("aria-pressed",draft.reward===i);b.innerHTML=`<span aria-hidden="true">${e}</span>${l[lang]}`;b.onclick=()=>{draft.reward=i;$("custom").value="";paint();};$("rewards").appendChild(b);});
  $("nStars").innerHTML="";[3,5,7,10].forEach(n=>{const b=document.createElement("button");b.className="chip";b.setAttribute("aria-pressed",draft.n===n);b.textContent=n+" ⭐";b.onclick=()=>{draft.n=n;paint();};$("nStars").appendChild(b);});
- $("save").textContent=editing?UI[lang].saveEdit:UI[lang].save;$("cancelEdit").hidden=!editing;
- const ready=!!(st&&st.behav)&&!editing;$("setup").hidden=ready;$("chart").hidden=!ready;
+ $("save").textContent=editing?UI[lang].saveEdit:UI[lang].save;$("cancelEdit").hidden=!(editing||adding);
+ const ready=!!(st&&st.behav)&&!editing&&!adding;$("setup").hidden=ready;$("chart").hidden=!ready;
  if(ready) renderChart();
  if(ready&&!$("results").hidden){$("chart").hidden=true;renderResults();}
  if(ready&&!$("printView").hidden){$("chart").hidden=true;}
@@ -268,15 +278,20 @@ $("custom").addEventListener("input",()=>{if($("custom").value.trim()&&draft.rew
 $("save").onclick=()=>{const behav=$("behav").value.trim(),custom=$("custom").value.trim();
  if(!behav||(draft.reward===null&&!custom)){$("setupHint").textContent=UI[lang].needSetup;return;}
  $("setupHint").textContent="";
- const prev=st||{};
+ const prev=adding?{}:(st||{});
  const keep=prev.behav===behav&&prev.n===draft.n&&!(prev.cur>=prev.n);
  editing=false;
- st={kid:$("kid").value.trim(),behav,reward:custom?null:draft.reward,rewardCustom:custom,n:draft.n,cur:keep?prev.cur:0,rounds:prev.rounds||0,log:prev.log||[],lang};
+ st={kid:$("kid").value.trim(),behav,reward:custom?null:draft.reward,rewardCustom:custom,n:draft.n,cur:keep?prev.cur:0,rounds:prev.rounds||0,log:prev.log||[],roundLog:prev.roundLog||[],resultsShown:prev.resultsShown,lang};
  save();paint();window.scrollTo(0,0);};
 
 function roundDone(t){st.rounds++;(st.roundLog=st.roundLog||[]).push(t);}
 function roundUndo(){st.rounds=Math.max(0,st.rounds-1);if(st.roundLog&&st.roundLog.length)st.roundLog.pop();}
-function renderChart(){
+function renderKids(){const u=UI[lang];$("kids").innerHTML="";
+ store.kids.forEach((k,i)=>{const b=document.createElement("button");b.className="kidtab";b.setAttribute("aria-pressed",i===store.active);b.textContent=k.kid||u.childN(i+1);
+  b.onclick=()=>{if(i===store.active)return;store.active=i;st=store.kids[i];wkOff=0;selDay=null;draft={reward:st.rewardCustom?null:st.reward,n:st.n};try{localStorage.setItem(KEY,JSON.stringify(store))}catch(e){}paint();window.scrollTo(0,0);};$("kids").appendChild(b);});
+ const a=document.createElement("button");a.className="kidtab add";a.textContent=u.addKid;
+ a.onclick=()=>{adding=true;editing=false;$("kid").value="";$("behav").value="";$("custom").value="";draft={reward:null,n:5};$("setupHint").textContent="";paint();window.scrollTo(0,0);};$("kids").appendChild(a);}
+function renderChart(){renderKids();
  const u=UI[lang];
  $("who").textContent=u.who(st.kid);$("goal").textContent=st.behav;
  $("tokens").innerHTML="";for(let i=0;i<st.n;i++){const d=document.createElement("div");d.className="tk"+(i<st.cur?" on":"");d.textContent=i<st.cur?"⭐":"";$("tokens").appendChild(d);}
@@ -302,7 +317,7 @@ $("dayDel").onclick=()=>{if(!selDay)return;let idx=-1;for(let i=st.log.length-1;
 $("newRound").onclick=()=>{st.cur=0;save();renderChart();};
 $("undo").onclick=()=>{if(!st.log.length||st.cur===0)return;if(st.cur===st.n)roundUndo();st.cur--;st.log.pop();save();renderChart();};
 $("edit").onclick=()=>{editing=true;$("kid").value=st.kid;$("behav").value=st.behav;$("custom").value=st.rewardCustom||"";draft={reward:st.rewardCustom?null:st.reward,n:st.n};$("setupHint").textContent="";paint();window.scrollTo(0,0);};
-$("cancelEdit").onclick=()=>{editing=false;paint();window.scrollTo(0,0);};
+$("cancelEdit").onclick=()=>{editing=false;adding=false;paint();window.scrollTo(0,0);};
 function weekStats(off){const wk=weekDays(off);const counts=wk.map(k=>st.log.filter(t=>dayKey(t)===k).length);
  const total=counts.reduce((x,y)=>x+y,0);const rewards=(st.roundLog||[]).filter(t=>wk.includes(dayKey(t))).length;
  const best=total?counts.indexOf(Math.max(...counts)):-1;return {wk,counts,total,days:counts.filter(c=>c>0).length,rewards,best};}
@@ -354,7 +369,7 @@ $("saveImg").onclick=async()=>{const u=UI[lang];const W=1100,H=1260,c=document.c
 
 {const ql=new URLSearchParams(location.search).get('lang');if(ql==='es'||ql==='en')lang=ql;}
 if(st&&st.lang)lang=st.lang;
-if(st&&!st.roundLog)st.roundLog=[];
+store.kids.forEach(k=>{if(!k.roundLog)k.roundLog=[];});
 if(st){draft={reward:st.rewardCustom?null:st.reward,n:st.n};}
 paint();
 if(st&&st.behav){const lw=weekDays(-1)[0];if(st.resultsShown!==lw&&weekStats(-1).total>0){st.resultsShown=lw;save();showResults(-1,true);}}
@@ -362,7 +377,7 @@ if(st&&st.behav){const lw=weekDays(-1)[0];if(st.resultsShown!==lw&&weekStats(-1)
 <div class="hsheet-bg" id="hBg" hidden><div class="hsheet" role="dialog" aria-modal="true" aria-labelledby="hT2"><div class="hsheet-head"><h2 id="hT2"></h2><button id="hX" aria-label="Cerrar">✕</button></div><div id="hB2"></div></div></div>
 <script>
 (function(){
-const H={"en": {"title": "How does the star chart work?", "goal": "Children learn a new behavior faster when we notice it and reward it, not only when we correct them for misbehaving. This chart helps you catch the good moments and praise them, gives your child one clear and positive goal, and shows your therapist how the week went at home. Each time they do it, they earn a star; when the stars are complete, they get the reward they chose. Your therapist will review the week with you at the next session.", "how": ["Choose <b>one</b> behavior together, written in positive words: “Follow directions the first time”, not “Don't fight”.", "Let your child pick the reward. It keeps them motivated.", "Give the star <b>right after</b> the behavior and tell them why: “You earned a star for picking up your toys right away.”", "When the stars are complete, give the reward the same day.", "At your next session, tap <b>Show my therapist</b> to review the week together."], "tips": ["Forgot to give a star? Tap that day in “This week” and add it. You can also go back to last week with the ‹ arrow.", "Never take away stars as a punishment. If you tapped by mistake, use “Undo last star”.", "Start with fewer stars so your child wins quickly. Once they get the idea, you can ask for more.", "Everything is saved only on this phone. If you prefer paper, use “Print chart” and stick it on the fridge."]}, "es": {"title": "¿Cómo funciona la tabla de estrellas?", "goal": "Los niños aprenden una conducta nueva más rápido cuando la notamos y la premiamos, no solo cuando los corregimos por portarse mal. Esta tabla le ayuda a fijarse en los buenos momentos y elogiarlos, le da a su hijo una meta clara y positiva, y le muestra a su terapeuta cómo fue la semana en casa. Cada vez que la hace, gana una estrella; al completar las estrellas, recibe la recompensa que eligió. Su terapeuta revisará la semana con usted en la siguiente sesión.", "how": ["Elijan <b>una sola</b> conducta juntos, escrita en positivo: “Hacer caso a la primera”, no “No pelear”.", "Deje que el niño escoja la recompensa. Así se mantiene motivado.", "Dé la estrella <b>justo después</b> de la conducta y dígale por qué: “Ganaste una estrella por recoger tus juguetes enseguida.”", "Cuando complete las estrellas, entréguele la recompensa ese mismo día.", "En la próxima sesión, toque <b>Mostrar al terapeuta</b> para revisar la semana juntos."], "tips": ["¿Se le olvidó dar una estrella? Toque ese día en “Esta semana” y agréguela. También puede volver a la semana pasada con la flecha ‹.", "Nunca quite estrellas como castigo. Si tocó por error, use “Quitar última estrella”.", "Empiece con pocas estrellas para que el niño gane rápido. Cuando entienda el sistema, puede pedir más.", "Todo se guarda solo en este celular. Si prefiere papel, use “Imprimir tabla” y péguela en la nevera."]}};
+const H={"en": {"title": "How does the star chart work?", "goal": "Children learn a new behavior faster when we notice it and reward it, not only when we correct them for misbehaving. This chart helps you catch the good moments and praise them, gives your child one clear and positive goal, and shows your therapist how the week went at home. Each time they do it, they earn a star; when the stars are complete, they get the reward they chose. Your therapist will review the week with you at the next session.", "how": ["Choose <b>one</b> behavior together, written in positive words: “Follow directions the first time”, not “Don't fight”.", "Let your child pick the reward. It keeps them motivated.", "Give the star <b>right after</b> the behavior and tell them why: “You earned a star for picking up your toys right away.”", "When the stars are complete, give the reward the same day.", "At your next session, tap <b>Show my therapist</b> to review the week together."], "tips": ["Use <b>one phone</b> for the chart. If mom and dad each open it on their own phone, the stars are not shared between phones.", "More than one child at home? Tap “+ Add child” at the top to make a separate chart for each one.", "Forgot to give a star? Tap that day in “This week” and add it. You can also go back to last week with the ‹ arrow.", "Never take away stars as a punishment. If you tapped by mistake, use “Undo last star”.", "Start with fewer stars so your child wins quickly. Once they get the idea, you can ask for more.", "Everything is saved only on this phone. If you prefer paper, use “Print chart” and stick it on the fridge."]}, "es": {"title": "¿Cómo funciona la tabla de estrellas?", "goal": "Los niños aprenden una conducta nueva más rápido cuando la notamos y la premiamos, no solo cuando los corregimos por portarse mal. Esta tabla le ayuda a fijarse en los buenos momentos y elogiarlos, le da a su hijo una meta clara y positiva, y le muestra a su terapeuta cómo fue la semana en casa. Cada vez que la hace, gana una estrella; al completar las estrellas, recibe la recompensa que eligió. Su terapeuta revisará la semana con usted en la siguiente sesión.", "how": ["Elijan <b>una sola</b> conducta juntos, escrita en positivo: “Hacer caso a la primera”, no “No pelear”.", "Deje que el niño escoja la recompensa. Así se mantiene motivado.", "Dé la estrella <b>justo después</b> de la conducta y dígale por qué: “Ganaste una estrella por recoger tus juguetes enseguida.”", "Cuando complete las estrellas, entréguele la recompensa ese mismo día.", "En la próxima sesión, toque <b>Mostrar al terapeuta</b> para revisar la semana juntos."], "tips": ["Usen <b>un solo celular</b> para la tabla. Si mamá y papá la abren cada uno en su teléfono, las estrellas no se comparten entre los dos.", "¿Más de un niño en casa? Toque “+ Agregar niño” arriba para hacer una tabla separada para cada uno.", "¿Se le olvidó dar una estrella? Toque ese día en “Esta semana” y agréguela. También puede volver a la semana pasada con la flecha ‹.", "Nunca quite estrellas como castigo. Si tocó por error, use “Quitar última estrella”.", "Empiece con pocas estrellas para que el niño gane rápido. Cuando entienda el sistema, puede pedir más.", "Todo se guarda solo en este celular. Si prefiere papel, use “Imprimir tabla” y péguela en la nevera."]}};
 const L={es:{btn:"Ayuda",goal:"Para qué sirve",how:"Cómo usarlo",tip:"Consejo",close:"Cerrar"},en:{btn:"Help",goal:"What it's for",how:"How to use it",tip:"Tip",close:"Close"}};
 const g=id=>document.getElementById(id), lg=()=>document.documentElement.lang==="en"?"en":"es";
 function render(){const l=lg(),d=H[l],u=L[l];g("helpLbl").textContent=u.btn;g("hT2").textContent=d.title;g("hX").setAttribute("aria-label",u.close);
