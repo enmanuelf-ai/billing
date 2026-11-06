@@ -46,7 +46,7 @@ h2{font:800 24px/1.1 "Baloo 2",sans-serif;margin:0}
 .kidtab{border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 14px;font:700 15px Lato,sans-serif;cursor:pointer;transition:border-color .15s,background-color .15s}
 .kidtab:hover{border-color:var(--accent)}
 .kidtab[aria-pressed="true"]{background:#1F8A6B;border-color:#1F8A6B;color:#fff}
-.kidtab.add{border-style:dashed;color:var(--accent)}
+.kidtab.kidnew{border-style:dashed;color:var(--accent)}
 .board{background:var(--surface);border:2px solid var(--line);border-radius:28px;padding:20px 16px;display:flex;flex-direction:column;gap:14px;align-items:center;text-align:center}
 .who{font:700 15px Lato,sans-serif;color:var(--muted);margin:0}
 .goal{font:800 24px/1.15 "Baloo 2",sans-serif;margin:0}
@@ -103,6 +103,7 @@ h2{font:800 24px/1.1 "Baloo 2",sans-serif;margin:0}
 details.ther{background:var(--surface);border:2px solid var(--line);border-radius:18px;padding:12px 14px}
 details.ther summary{cursor:pointer;font-weight:700;color:var(--muted)}
 details.ther[open]{display:flex;flex-direction:column;gap:10px}
+details.ther .primary{width:100%;box-sizing:border-box}
 /* printable chart */
 .paper{background:#fff;color:#111;border-radius:10px;padding:22px 16px;box-shadow:0 2px 10px rgba(0,0,0,.12);font-family:Lato,Arial,sans-serif}
 .paper h1{font:800 26px/1.1 "Baloo 2",sans-serif;margin:0 0 8px;text-align:center;color:#111}
@@ -315,7 +316,7 @@ function roundUndo(){st.rounds=Math.max(0,st.rounds-1);if(st.roundLog&&st.roundL
 function renderKids(){const u=UI[lang];$("kids").innerHTML="";
  store.kids.forEach((k,i)=>{const b=document.createElement("button");b.className="kidtab";b.setAttribute("aria-pressed",i===store.active);b.textContent=k.kid||u.childN(i+1);
   b.onclick=()=>{if(i===store.active)return;store.active=i;st=store.kids[i];wkOff=0;selDay=null;draft={reward:st.rewardCustom?null:st.reward,n:st.n};try{localStorage.setItem(KEY,JSON.stringify(store))}catch(e){}paint();window.scrollTo(0,0);};$("kids").appendChild(b);});
- const a=document.createElement("button");a.className="kidtab add";a.textContent=u.addKid;
+ const a=document.createElement("button");a.className="kidtab kidnew";a.textContent=u.addKid;
  a.onclick=()=>{adding=true;editing=false;$("kid").value="";$("behav").value="";$("custom").value="";draft={reward:null,n:5};$("setupHint").textContent="";paint();window.scrollTo(0,0);};$("kids").appendChild(a);}
 function renderChart(){renderKids();
  const u=UI[lang];
