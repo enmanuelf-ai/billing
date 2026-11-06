@@ -169,7 +169,7 @@ const TOOLS = [
   {e:"⭐",link:"ba",      needs:["behave","parent"],roles:["ba","pc"],age:"5–12",
    en:["Behavior kit","Tokens, First / Then board and ABC log."],                  es:["Kit de conducta","Fichas, Primero / Después y registro ABC."]},
   {e:"🏠",link:"home",    needs:["parent","behave"],roles:["ba","pc"],age:"3–12",
-   en:["Star chart at home","Show the parent a QR code to open their weekly star chart."], es:["Tabla de estrellas en casa","Muéstrele al padre un código QR para abrir su tabla semanal."]},
+   en:["Star chart at home","Open the weekly chart, show it to the family and share it with them."], es:["Tabla de estrellas en casa","Abra la tabla semanal, muéstresela a la familia y compártala con ellos."]},
   {e:"👨‍👧",link:"special",needs:["parent"],       roles:["pc"],       age:"2–8",
    en:["Special time","5 minutes of child-led play, with parent coaching."],       es:["Tiempo especial","5 minutos de juego dirigido por el niño, con coaching al padre."]}
 ];
@@ -223,13 +223,13 @@ function renderView(){
   $("back").textContent = u.back;
   $("vHead").innerHTML = `<div class="ico" style="--c:${n.c}" aria-hidden="true">${n.e}</div><div><h2>${n[lang][0]}</h2><p>${n[lang][1]}</p></div>`;
   const list = toolsFor(open);
-  $("vTools").innerHTML = list.length ? list.map(t=>`<a class="tool" href="${t.link==="home"?"#":LINKS[t.link]+"?v="+VER}"${t.link==="home"?' data-qr="1"':""}>
+  $("vTools").innerHTML = list.length ? list.map(t=>`<a class="tool" href="${LINKS[t.link]+"?v="+VER+(t.link==="home"?"&t=1":"")}">
       <span class="e" aria-hidden="true">${t.e}</span>
       <div><h3>${t[lang][0]}</h3><p>${t[lang][1]}</p><span class="age">${u.ages} ${t.age}</span></div>
       <span class="go" aria-hidden="true">›</span></a>`).join("") : `<p class="empty">${u.none}</p>`;
   $("vTools").querySelectorAll("[data-qr]").forEach(a=>a.onclick=e=>{e.preventDefault();openQR();});
 }
-const VER="4";
+const VER="5";
 let qLang="en";
 function renderQR(){const u=UI[lang];$("qT").textContent=u.qT;$("qShare").textContent=u.share;$("qNote").textContent="";$("qP").textContent=u.qP;$("qSteps").innerHTML=u.qSteps.map(x=>`<li>${x}</li>`).join("");
  $("qLangs").innerHTML="";[["en","English"],["es","Español"]].forEach(([k,l])=>{const b=document.createElement("button");b.className="chip";b.textContent=l;b.setAttribute("aria-pressed",qLang===k);b.onclick=()=>{qLang=k;renderQR();};$("qLangs").appendChild(b);});
