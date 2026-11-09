@@ -90,6 +90,21 @@ h1{font:800 clamp(34px,9vw,48px)/1 "Baloo 2",system-ui,sans-serif;margin:22px 0 
 .sharebtn:hover{filter:brightness(1.15);transform:translateY(-1px)}
 .sharenote{text-align:center;color:var(--muted);font-size:14px;margin:6px 0 0;min-height:18px}
 .qsteps{margin:12px 0 0;padding-left:20px;display:grid;gap:5px}
+.fb{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:40;width:calc(100% - 28px);max-width:460px;background:var(--surface);border:2px solid var(--line);border-radius:22px;box-shadow:0 12px 32px rgba(22,34,74,.22);padding:16px 16px 14px;animation:fbin .35s ease-out}
+@keyframes fbin{from{transform:translate(-50%,30px);opacity:0}to{transform:translate(-50%,0);opacity:1}}
+.fb h4{margin:0 0 4px;font:800 19px/1.2 "Baloo 2",system-ui,sans-serif;color:var(--ink)}
+.fb p{margin:0 0 10px;font-size:14.5px;color:var(--muted)}
+.fb .q{font-weight:700;color:var(--ink);font-size:16px;margin:0 0 10px}
+.fbbtns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fbbtns button{border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:14px;padding:11px;font:800 16px Lato,sans-serif;cursor:pointer;transition:border-color .15s,background-color .15s,transform .12s}
+.fbbtns button:hover{border-color:var(--navy);transform:translateY(-1px)}
+.fbbtns button[aria-pressed="true"]{background:#1A3A8F;border-color:#1A3A8F;color:#fff}
+.fb textarea{width:100%;margin-top:10px;border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:12px;padding:9px 11px;font:400 15px Lato,sans-serif;resize:none;height:62px;box-sizing:border-box}
+.fbsend{margin-top:8px;width:100%;border:0;background:#1A3A8F;color:#fff;border-radius:999px;padding:12px;font:800 16px Lato,sans-serif;cursor:pointer;transition:filter .15s}
+.fbsend:hover{filter:brightness(1.15)}
+.fblater{display:block;margin:8px auto 0;border:0;background:none;color:var(--muted);font:700 14px Lato,sans-serif;cursor:pointer;text-decoration:underline}
+.fbthanks{text-align:center;padding:6px 0}
+.fbthanks b{display:block;font:800 22px "Baloo 2",system-ui,sans-serif;color:var(--ink)}
 [hidden]{display:none!important}
 @media (prefers-reduced-motion: reduce){*{transition:none!important}}
 </style>
@@ -125,6 +140,13 @@ h1{font:800 clamp(34px,9vw,48px)/1 "Baloo 2",system-ui,sans-serif;margin:22px 0 
   <div class="qhead"><h2 id="qT"></h2><button class="qx" id="qX" aria-label="Close">✕</button></div>
   <p id="qP"></p><div class="qlangs" id="qLangs"></div><div class="qbox" id="qBox"></div><button class="sharebtn" id="qShare"></button><p class="sharenote" id="qNote"></p><ol class="qsteps" id="qSteps"></ol>
 </div></div>
+<div class="fb" id="fb" hidden role="dialog" aria-labelledby="fbT">
+  <div id="fbAsk"><h4 id="fbT"></h4><p id="fbP"></p><div class="q" id="fbQ"></div>
+    <div class="fbbtns"><button id="fbYes"></button><button id="fbNo"></button></div>
+    <div id="fbMore" hidden><textarea id="fbTxt" maxlength="500"></textarea><button class="fbsend" id="fbSend"></button></div>
+    <button class="fblater" id="fbLater"></button></div>
+  <div class="fbthanks" id="fbThanks" hidden><b id="fbTy"></b><span id="fbTy2"></span></div>
+</div>
 <script>
 const LINKS = {
   emotions: "juego-emociones.html",
@@ -140,11 +162,11 @@ const UI = {
   en:{title:"Therapeutic tools", q:"What do you need right now?", tools:n=>n===1?"1 tool":`${n} tools`, soonTile:"Coming soon",
       back:"← All needs", ages:"Ages", soonT:"Coming soon", soonP:"Tools we're preparing. They'll appear above when ready.",
       showing:"Showing tools for", showAll:"Show all", roles:{iic:"IIC clinicians",ba:"BA",pc:"Parent Coaching"},
-      none:"No tools for your role in this area yet.",qT:"Star chart for home",share:"📤 Send the link to the parent",copied:"Link copied. Paste it in a text or WhatsApp to the parent.",qP:"The parent scans this code with their phone camera and the star chart opens, ready to use at home during the week.",qSteps:["Ask the parent to open their phone camera and point it at the code.","Have them tap the link that appears on the screen.","Set up the chart together with the child before the session ends."]},
+      none:"No tools for your role in this area yet.",fbT:"Quick question 🙂",fbP:"We're building these tools for you and want to know if we should keep developing them.",fbQ:"Do you find Therapeutic Tools helpful?",fbYes:"👍 Yes",fbNo:"👎 No",fbPh:"Anything you'd like us to add or change? (optional)",fbSend:"Send",fbLater:"Not now",fbTy:"Thank you!",fbTy2:"Your answer helps us decide what to build next.",qT:"Star chart for home",share:"📤 Send the link to the parent",copied:"Link copied. Paste it in a text or WhatsApp to the parent.",qP:"The parent scans this code with their phone camera and the star chart opens, ready to use at home during the week.",qSteps:["Ask the parent to open their phone camera and point it at the code.","Have them tap the link that appears on the screen.","Set up the chart together with the child before the session ends."]},
   es:{title:"Herramientas terapéuticas", q:"¿Qué necesitas ahora mismo?", tools:n=>n===1?"1 herramienta":`${n} herramientas`, soonTile:"Próximamente",
       back:"← Todas las necesidades", ages:"Edades", soonT:"Próximamente", soonP:"Herramientas que estamos preparando. Aparecerán arriba cuando estén listas.",
       showing:"Mostrando herramientas para", showAll:"Ver todas", roles:{iic:"Clínicos IIC",ba:"BA",pc:"Parent Coaching"},
-      none:"Todavía no hay herramientas para tu rol en esta área.",qT:"Tabla de estrellas para casa",share:"📤 Enviar el enlace al padre",copied:"Enlace copiado. Péguelo en un mensaje de texto o WhatsApp al padre.",qP:"El padre escanea este código con la cámara de su celular y se le abre la tabla de estrellas para usar en casa durante la semana.",qSteps:["Pídale al padre que abra la cámara de su celular y apunte al código.","Que toque el enlace que aparece en la pantalla.","Configuren la tabla juntos con el niño antes de terminar la sesión."]}
+      none:"Todavía no hay herramientas para tu rol en esta área.",fbT:"Una pregunta rápida 🙂",fbP:"Estamos creando estas herramientas para ustedes y queremos saber si debemos seguir desarrollándolas.",fbQ:"¿Te parecen útiles las Therapeutic Tools?",fbYes:"👍 Sí",fbNo:"👎 No",fbPh:"¿Algo que te gustaría que agreguemos o cambiemos? (opcional)",fbSend:"Enviar",fbLater:"Ahora no",fbTy:"¡Gracias!",fbTy2:"Tu respuesta nos ayuda a decidir qué construir.",qT:"Tabla de estrellas para casa",share:"📤 Enviar el enlace al padre",copied:"Enlace copiado. Péguelo en un mensaje de texto o WhatsApp al padre.",qP:"El padre escanea este código con la cámara de su celular y se le abre la tabla de estrellas para usar en casa durante la semana.",qSteps:["Pídale al padre que abra la cámara de su celular y apunte al código.","Que toque el enlace que aparece en la pantalla.","Configuren la tabla juntos con el niño antes de terminar la sesión."]}
 };
 
 const NEEDS = [
@@ -223,13 +245,13 @@ function renderView(){
   $("back").textContent = u.back;
   $("vHead").innerHTML = `<div class="ico" style="--c:${n.c}" aria-hidden="true">${n.e}</div><div><h2>${n[lang][0]}</h2><p>${n[lang][1]}</p></div>`;
   const list = toolsFor(open);
-  $("vTools").innerHTML = list.length ? list.map(t=>`<a class="tool" href="${LINKS[t.link]+"?v="+VER+(t.link==="home"?"&t=1":"")}">
+  $("vTools").innerHTML = list.length ? list.map(t=>`<a class="tool" href="${LINKS[t.link]+"?v="+VER+(["home","anger","body","special"].includes(t.link)?"&t=1":"")+(window.ttClin&&ttClin()?"&c="+encodeURIComponent(ttClin()):"")}">
       <span class="e" aria-hidden="true">${t.e}</span>
       <div><h3>${t[lang][0]}</h3><p>${t[lang][1]}</p><span class="age">${u.ages} ${t.age}</span></div>
       <span class="go" aria-hidden="true">›</span></a>`).join("") : `<p class="empty">${u.none}</p>`;
   $("vTools").querySelectorAll("[data-qr]").forEach(a=>a.onclick=e=>{e.preventDefault();openQR();});
 }
-const VER="5";
+const VER="6";
 let qLang="en";
 function renderQR(){const u=UI[lang];$("qT").textContent=u.qT;$("qShare").textContent=u.share;$("qNote").textContent="";$("qP").textContent=u.qP;$("qSteps").innerHTML=u.qSteps.map(x=>`<li>${x}</li>`).join("");
  $("qLangs").innerHTML="";[["en","English"],["es","Español"]].forEach(([k,l])=>{const b=document.createElement("button");b.className="chip";b.textContent=l;b.setAttribute("aria-pressed",qLang===k);b.onclick=()=>{qLang=k;renderQR();};$("qLangs").appendChild(b);});
@@ -249,11 +271,49 @@ function paint(){
   document.documentElement.lang = lang; document.title = UI[lang].title;
   document.querySelectorAll("[data-t]").forEach(el=>el.textContent = UI[lang][el.dataset.t]);
   document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.lang===lang));
-  renderHome(); if(open) renderView(); if(!$("qBg").hidden) renderQR();
+  renderHome(); if(open) renderView(); if(!$("qBg").hidden) renderQR(); if(!$("fb").hidden) fbPaint();
 }
 document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{ lang=b.dataset.lang; paint(); });
 window.addEventListener("hashchange", ()=>{ const h=location.hash.slice(1); role=["iic","ba","pc"].includes(h)?h:"all"; open=null; show("home"); paint(); });
+/* ---- feedback prompt ---- */
+const FB_FORM=""; /* Jotform form id */
+const FB_KEY="aliado-tt-feedback", FB_DELAY=180000;
+const clinician=new URLSearchParams(location.search).get("c")||"";
+let fbAns=null;
+function fbPaint(){const u=UI[lang];["fbT","fbP","fbQ","fbYes","fbNo","fbSend","fbLater","fbTy","fbTy2"].forEach(k=>$(k).textContent=u[k]);$("fbTxt").placeholder=u.fbPh;}
+function fbShow(){fbPaint();$("fb").hidden=false;try{localStorage.setItem(FB_KEY+"-n",(+localStorage.getItem(FB_KEY+"-n")||0)+1)}catch(e){}}
+function fbDone(){try{localStorage.setItem(FB_KEY,"done")}catch(e){}}
+function fbCheck(){let done=null,shown=0;try{done=localStorage.getItem(FB_KEY);shown=+localStorage.getItem(FB_KEY+"-n")||0}catch(e){}if(done==="done"||shown>=2||sessionStorage.getItem("fbLater"))return;
+ let t0=+sessionStorage.getItem("fbStart")||0;if(!t0){t0=Date.now();sessionStorage.setItem("fbStart",t0);}
+ if(Date.now()-t0>=FB_DELAY){if($("fb").hidden)fbShow();return;}setTimeout(fbCheck,Math.min(15000,FB_DELAY-(Date.now()-t0)+50));}
+function fbPick(v){fbAns=v;$("fbYes").setAttribute("aria-pressed",v==="Yes");$("fbNo").setAttribute("aria-pressed",v==="No");$("fbMore").hidden=false;}
+$("fbYes").onclick=()=>fbPick("Yes");$("fbNo").onclick=()=>fbPick("No");
+$("fbLater").onclick=()=>{sessionStorage.setItem("fbLater","1");$("fb").hidden=true;};
+$("fbSend").onclick=()=>{if(!fbAns)return;
+ if(window.ttLog)ttLog("feedback",{answer:fbAns,comment:$("fbTxt").value.trim()});
+ fbDone();$("fbAsk").hidden=true;$("fbThanks").hidden=false;setTimeout(()=>{$("fb").hidden=true;},3500);};
+const FB_FIELDS={helpful:"",comment:"",clinician:"",lang:""};
 paint();
+fbCheck();
+</script>
+<script>
+/* TT_LOG: anonymous usage log (no client data) */
+(function(){
+let FLOWP=null;const getFlow=()=>{if(window.TT_FLOW)return Promise.resolve(window.TT_FLOW);if(FLOWP)return FLOWP;
+ let c=null;try{c=sessionStorage.getItem("tt-flow")}catch(e){}if(c)return FLOWP=Promise.resolve(c);
+ return FLOWP=fetch("tt-flow.txt",{cache:"no-store"}).then(r=>r.ok?r.text():"").then(t=>{t=(t||"").trim();try{if(t)sessionStorage.setItem("tt-flow",t)}catch(e){}return t;}).catch(()=>"");};
+const P=new URLSearchParams(location.search);
+let C=P.get("c")||"";try{if(C)sessionStorage.setItem("tt-c",C);else C=sessionStorage.getItem("tt-c")||"";}catch(e){}
+const MODE=P.get("t")==="1"?"therapist":(P.has("lang")&&!P.has("c")?"family":(P.has("lang")?"family":"therapist"));
+window.ttClin=()=>C;
+window.ttLog=function(event,extra){
+ const body=Object.assign({event,tool:'Hub',clinician:C,mode:MODE,lang:document.documentElement.lang||"en",answer:"",comment:""},extra||{});
+ getFlow().then(FLOW=>{if(!FLOW||FLOW.indexOf("https://")!==0)return;try{fetch(FLOW,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body),keepalive:true}).catch(()=>{});}catch(e){}});};
+ttLog("open");
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("button");if(!b)return;
+ if(["tShare","shOpen"].includes(b.id))ttLog("share_open");
+ if(["qShare","shSend"].includes(b.id))ttLog("share_link");},true);
+})();
 </script>
 </body>
 </html>

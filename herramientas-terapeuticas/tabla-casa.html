@@ -403,11 +403,11 @@ let qLang="en";
 function renderShare(){const u=UI[lang];$("qT").textContent=u.qT;$("qP").textContent=u.qP;$("qShare").textContent=u.share;$("qNote").textContent="";
  $("qSteps").innerHTML=u.qSteps.map(x=>`<li>${x}</li>`).join("");
  $("qLangs").innerHTML="";[["en","English"],["es","Español"]].forEach(([k,l])=>{const b=document.createElement("button");b.className="chip";b.textContent=l;b.setAttribute("aria-pressed",qLang===k);b.onclick=()=>{qLang=k;renderShare();};$("qLangs").appendChild(b);});
- $("qBox").innerHTML="";try{new QRCode($("qBox"),{text:"https://enmanuelf-ai.github.io/billing/herramientas-terapeuticas/tabla-casa.html?lang="+qLang,width:220,height:220,correctLevel:QRCode.CorrectLevel.M});$("qBox").removeAttribute("title");}catch(e){$("qBox").textContent="QR not available";}}
+ $("qBox").innerHTML="";try{new QRCode($("qBox"),{text:"https://enmanuelf-ai.github.io/billing/herramientas-terapeuticas/tabla-casa.html?lang="+qLang+(window.ttClin&&ttClin()?"&c="+encodeURIComponent(ttClin()):""),width:220,height:220,correctLevel:QRCode.CorrectLevel.M});$("qBox").removeAttribute("title");}catch(e){$("qBox").textContent="QR not available";}}
 $("tShare").onclick=()=>{qLang=lang;renderShare();$("qBg").hidden=false;$("qX").focus();};
 $("qX").onclick=()=>{$("qBg").hidden=true;};
 $("qBg").onclick=e=>{if(e.target.id==="qBg")$("qBg").hidden=true;};
-$("qShare").onclick=async()=>{const url="https://enmanuelf-ai.github.io/billing/herramientas-terapeuticas/tabla-casa.html?lang="+qLang;const text=(qLang==="es"?"¡Hola! Aquí tiene su tabla de estrellas para usar en casa con su hijo esta semana. Su terapeuta la revisará con usted en la próxima sesión: ":"Hi! Here is your star chart to use at home with your child this week. Your therapist will review it with you at the next session: ")+url;
+$("qShare").onclick=async()=>{const url="https://enmanuelf-ai.github.io/billing/herramientas-terapeuticas/tabla-casa.html?lang="+qLang+(window.ttClin&&ttClin()?"&c="+encodeURIComponent(ttClin()):"");const text=(qLang==="es"?"¡Hola! Aquí tiene su tabla de estrellas para usar en casa con su hijo esta semana. Su terapeuta la revisará con usted en la próxima sesión: ":"Hi! Here is your star chart to use at home with your child this week. Your therapist will review it with you at the next session: ")+url;
  try{if(navigator.share){await navigator.share({text});return;}}catch(e){if(e&&e.name==="AbortError")return;}
  try{await navigator.clipboard.writeText(text);}catch(e){const a=document.createElement("textarea");a.value=text;document.body.appendChild(a);a.select();document.execCommand("copy");a.remove();}
  $("qNote").textContent=UI[lang].copied;};
@@ -429,6 +429,25 @@ g("hBg").onclick=e=>{if(e.target.id==="hBg")g("hX").click();};
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!g("hBg").hidden)g("hX").click();});
 new MutationObserver(render).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});
 render();
+})();
+</script>
+<script>
+/* TT_LOG: anonymous usage log (no client data) */
+(function(){
+let FLOWP=null;const getFlow=()=>{if(window.TT_FLOW)return Promise.resolve(window.TT_FLOW);if(FLOWP)return FLOWP;
+ let c=null;try{c=sessionStorage.getItem("tt-flow")}catch(e){}if(c)return FLOWP=Promise.resolve(c);
+ return FLOWP=fetch("tt-flow.txt",{cache:"no-store"}).then(r=>r.ok?r.text():"").then(t=>{t=(t||"").trim();try{if(t)sessionStorage.setItem("tt-flow",t)}catch(e){}return t;}).catch(()=>"");};
+const P=new URLSearchParams(location.search);
+let C=P.get("c")||"";try{if(C)sessionStorage.setItem("tt-c",C);else C=sessionStorage.getItem("tt-c")||"";}catch(e){}
+const MODE=P.get("t")==="1"?"therapist":(P.has("lang")&&!P.has("c")?"family":(P.has("lang")?"family":"therapist"));
+window.ttClin=()=>C;
+window.ttLog=function(event,extra){
+ const body=Object.assign({event,tool:'Star chart at home',clinician:C,mode:MODE,lang:document.documentElement.lang||"en",answer:"",comment:""},extra||{});
+ getFlow().then(FLOW=>{if(!FLOW||FLOW.indexOf("https://")!==0)return;try{fetch(FLOW,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body),keepalive:true}).catch(()=>{});}catch(e){}});};
+ttLog("open");
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("button");if(!b)return;
+ if(["tShare","shOpen"].includes(b.id))ttLog("share_open");
+ if(["qShare","shSend"].includes(b.id))ttLog("share_link");},true);
 })();
 </script>
 </body>
