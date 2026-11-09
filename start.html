@@ -60,10 +60,12 @@ a.card:active{transform:scale(.99)}
       url: 'https://form.jotform.com/261068561492057' + (prov ? '?name13[first]='+enc(first)+'&name13[last]='+enc(last)+'&providerName[first]='+enc(first)+'&providerName[last]='+enc(last) : '') },
     roi: { name:'Release of Information (ROI)', sub:'NJ Release of Information', icon:'📄', bg:'#eaf2ff',
       url: 'https://form.jotform.com/261094020544044?behavioralhealth='+enc('Aliado Community Health')+'&addresscitystatezip24='+enc('116 Terrace Ave, Lodi, NJ 07644')+'&phone25[full]='+enc('(201) 620-6440') + (prov ? '&printname64='+enc(prov) : '') },
-    ack: { name:'Clinical Supervision Acknowledgment', sub:"Required for Master's level providers", icon:'✍️', bg:'#efe9ff',
+     schedule: { name:'Session Schedule & Communication Agreement', sub:'English · Español', icon:'📅', bg:'#fff4dc',
+      url: 'https://form.jotform.com/263123008778054' + (prov ? '?clinicianName='+enc(prov) : '') },
+   ack: { name:'Clinical Supervision Acknowledgment', sub:"Required for Master's level providers", icon:'✍️', bg:'#efe9ff',
       url: 'https://form.jotform.com/261864383399069' + (prov ? '?q7_textbox5='+enc(prov) : '') }
   };
-  var order = licensed ? ['inhome','roi'] : ['inhome','roi','ack'];
+  var order = licensed ? ['inhome','roi','schedule'] : ['inhome','roi','schedule','ack'];
   var KEY = 'aliado_sos_' + (prov || 'anon').toLowerCase();
   var WINDOW = 6 * 60 * 60 * 1000;
   var state = {};
