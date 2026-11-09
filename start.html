@@ -65,7 +65,7 @@ a.card:active{transform:scale(.99)}
    ack: { name:'Clinical Supervision Acknowledgment', sub:"Required for Master's level providers", icon:'✍️', bg:'#efe9ff',
       url: 'https://form.jotform.com/261864383399069' + (prov ? '?q7_textbox5='+enc(prov) : '') }
   };
-  var order = licensed ? ['inhome','roi','schedule'] : ['inhome','roi','schedule','ack'];
+  var order = licensed ? ['inhome','roi'] : ['inhome','roi','ack'];
   var KEY = 'aliado_sos_' + (prov || 'anon').toLowerCase();
   var WINDOW = 6 * 60 * 60 * 1000;
   var state = {};
