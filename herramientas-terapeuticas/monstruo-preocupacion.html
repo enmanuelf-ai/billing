@@ -377,5 +377,24 @@ new MutationObserver(render).observe(document.documentElement,{attributes:true,a
 render();
 })();
 </script>
+<script>
+/* TT_LOG: anonymous usage log (no client data) */
+(function(){
+let FLOWP=null;const getFlow=()=>{if(window.TT_FLOW)return Promise.resolve(window.TT_FLOW);if(FLOWP)return FLOWP;
+ let c=null;try{c=sessionStorage.getItem("tt-flow")}catch(e){}if(c)return FLOWP=Promise.resolve(c);
+ return FLOWP=fetch("tt-flow.txt",{cache:"no-store"}).then(r=>r.ok?r.text():"").then(t=>{t=(t||"").trim();try{if(t)sessionStorage.setItem("tt-flow",t)}catch(e){}return t;}).catch(()=>"");};
+const P=new URLSearchParams(location.search);
+let C=P.get("c")||"";try{if(C)sessionStorage.setItem("tt-c",C);else C=sessionStorage.getItem("tt-c")||"";}catch(e){}
+const MODE=P.get("t")==="1"?"therapist":(P.has("lang")&&!P.has("c")?"family":(P.has("lang")?"family":"therapist"));
+window.ttClin=()=>C;
+window.ttLog=function(event,extra){
+ const body=Object.assign({event,tool:'Worry monster',clinician:C,mode:MODE,lang:document.documentElement.lang||"en",answer:"",comment:""},extra||{});
+ getFlow().then(FLOW=>{if(!FLOW||FLOW.indexOf("https://")!==0)return;try{fetch(FLOW,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body),keepalive:true}).catch(()=>{});}catch(e){}});};
+ttLog("open");
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("button");if(!b)return;
+ if(["tShare","shOpen"].includes(b.id))ttLog("share_open");
+ if(["qShare","shSend"].includes(b.id))ttLog("share_link");},true);
+})();
+</script>
 </body>
 </html>
