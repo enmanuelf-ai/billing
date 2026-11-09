@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<title>My PTO · Aliado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#28398f;--navy2:#1b2766;--ink:#1d2433;--mut:#6b7385;--bg:#eef1f7;--line:#e7eaf1;--soft:#e8edfb;
+--grn:#1e7a46;--grnbg:#e3f4ea;--amb:#a26a00;--ambbg:#fff4dc;--red:#b3261e;--redbg:#fde7e4;--teal:#0f766e;--tealbg:#e1f4f1;--light:#8ea2e8}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ink);font-family:'Open Sans','Segoe UI',Arial,sans-serif;-webkit-font-smoothing:antialiased}
+body{min-height:100vh}
+.wrap{max-width:560px;margin:0 auto;padding-bottom:40px}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+.hero{background:linear-gradient(135deg,#2f45a8,#1b2766);color:#fff;padding:26px 20px 70px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;right:-70px;top:-90px;width:240px;height:240px;border-radius:50%;background:rgba(255,255,255,.05)}
+.hero::after{content:"";position:absolute;right:30px;bottom:-60px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.04)}
+.hero>*{position:relative;z-index:1}
+.hi{color:#d6def6;font-size:14px}
+.name{font-size:24px;font-weight:700;margin-top:4px;padding-right:70px;line-height:1.25}
+.av{position:absolute;right:20px;top:24px;width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:17px}
+.chips{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.chip{background:rgba(255,255,255,.14);border-radius:999px;padding:6px 12px;font-size:12px;color:#e4e9fb}
+.tabs{display:flex;background:rgba(255,255,255,.14);border-radius:999px;padding:4px;margin-top:16px}
+.tab{flex:1;padding:9px 6px;border-radius:999px;font-size:13px;font-weight:600;color:#e4e9fb;transition:background .15s,color .15s}
+.tab:hover{background:rgba(255,255,255,.22)}
+.tab.on{background:#fff;color:var(--navy)}
+.tab.on.sick{color:var(--teal)}
+.body{padding:0 14px;margin-top:-52px;position:relative;z-index:2}
+.card{background:#fff;border-radius:22px;box-shadow:0 8px 24px rgba(27,39,102,.10);padding:20px;margin-bottom:14px}
+.kick{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+.big{font-size:44px;font-weight:800;line-height:1.1;margin-top:6px}
+.big small{font-size:16px;font-weight:600;color:var(--mut);margin-left:6px}
+.pill{display:inline-block;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600;margin-top:8px}
+.pill.g{background:var(--grnbg);color:var(--grn)}.pill.a{background:var(--ambbg);color:var(--amb)}.pill.t{background:var(--tealbg);color:var(--teal)}
+.bar{height:12px;border-radius:6px;background:#edf0f6;overflow:hidden;display:flex;margin-top:16px}
+.bar i{display:block;height:100%}
+.leg{display:flex;justify-content:space-between;font-size:12px;color:var(--mut);margin-top:10px;flex-wrap:wrap;gap:6px}
+.leg b{color:var(--ink)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:middle}
+.tiles{display:flex;gap:12px;margin-bottom:14px}
+.tile{flex:1;background:#fff;border-radius:18px;box-shadow:0 8px 24px rgba(27,39,102,.08);padding:14px;display:flex;gap:10px;align-items:center}
+.ic{width:36px;height:36px;border-radius:10px;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:17px;flex:none}
+.tile .v{font-weight:700;font-size:15px}.tile .l{font-size:11px;color:var(--mut)}
+.cta{display:block;width:100%;border-radius:18px;padding:17px;font-size:15px;font-weight:700;color:#fff;background:var(--navy);margin-bottom:14px;transition:filter .15s,transform .05s}
+.cta:hover{filter:brightness(1.12)}.cta:active{transform:scale(.99)}
+.cta.sick{background:var(--teal)}
+.cta[disabled]{opacity:.55;cursor:default;filter:none}
+.how h3{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);margin-bottom:12px}
+.row{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px;font-size:14.5px;line-height:1.4}
+.row .ic{width:32px;height:32px;font-size:15px}
+.row .ic.t{background:var(--tealbg)}
+.row span.s{color:var(--mut)}
+.req{display:flex;gap:12px;align-items:center;padding:12px;border-radius:14px;transition:background .15s}
+.req:hover{background:#f4f6fb}
+.req+.req{border-top:1px solid var(--line)}
+.badge{font-size:10px;font-weight:700;border-radius:8px;padding:4px 7px;letter-spacing:.04em}
+.badge.p{background:var(--soft);color:var(--navy)}.badge.s{background:var(--tealbg);color:var(--teal)}
+.st{margin-left:auto;font-size:12px;font-weight:700;border-radius:999px;padding:4px 10px;white-space:nowrap}
+.st.Approved{background:var(--grnbg);color:var(--grn)}.st.Pending{background:var(--ambbg);color:var(--amb)}.st.Denied,.st.Rejected,.st.Cancelled{background:var(--redbg);color:var(--red)}
+.req .d{font-weight:600;font-size:14px}.req .m{font-size:12px;color:var(--mut);margin-top:2px}
+.empty{text-align:center;color:var(--mut);font-size:14px;padding:18px 6px}
+/* request form */
+.fhead{background:linear-gradient(135deg,#2f45a8,#1b2766);color:#fff;padding:22px 20px 64px;display:flex;align-items:center;gap:14px}
+.fhead.sick{background:linear-gradient(135deg,#14968a,#0b5a54)}
+.back{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.16);font-size:20px;color:#fff;transition:background .15s;flex:none}
+.back:hover{background:rgba(255,255,255,.3)}
+.fhead h2{font-size:19px;font-weight:700}.fhead p{font-size:12px;color:#d6def6;margin-top:2px}
+.dates{display:flex;gap:12px}
+.fld{flex:1}
+.fld label{display:block;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mut);margin-bottom:6px}
+.fld input,.fld textarea{width:100%;border:1.5px solid #dfe3ec;border-radius:12px;padding:12px;font:inherit;font-size:15px;color:var(--ink);background:#fff;transition:border-color .15s}
+.fld input:hover,.fld textarea:hover{border-color:#b9c3dc}
+.fld input:focus,.fld textarea:focus{outline:none;border-color:var(--navy)}
+.sick .fld input:focus,.fld.sk textarea:focus{border-color:var(--teal)}
+.fld textarea{min-height:70px;resize:vertical}
+.days{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.dchip{font-size:12px;border-radius:999px;padding:5px 10px;background:var(--soft);color:var(--navy)}
+.dchip.h{background:#f1f2f5;color:var(--mut);text-decoration:line-through}
+.sum{display:flex;justify-content:space-between;align-items:center;font-size:14px;padding:10px 0}
+.sum+.sum{border-top:1px solid var(--line)}
+.sum b{font-size:15px}
+.bk{display:flex;justify-content:space-between;font-size:12px;color:var(--mut);margin-top:8px}
+.bk b{display:block;color:var(--ink);font-size:15px}
+.msg{border-radius:14px;padding:12px 14px;font-size:13.5px;margin-bottom:12px;line-height:1.4}
+.msg.e{background:var(--redbg);color:var(--red)}.msg.w{background:var(--ambbg);color:var(--amb)}
+.appr{display:flex;align-items:center;gap:10px;margin-top:12px;font-size:13px}
+.appr .av2{width:34px;height:34px;border-radius:50%;background:var(--soft);color:var(--navy);font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center}
+.appr small{display:block;color:var(--mut);font-size:11px}
+.foot{text-align:center;font-size:12px;color:var(--mut);margin-top:-4px}
+.state{padding:60px 24px;text-align:center;color:var(--mut);font-size:15px;line-height:1.5}
+.spin{width:34px;height:34px;border:3px solid #d9def0;border-top-color:var(--navy);border-radius:50%;animation:sp 0.9s linear infinite;margin:0 auto 14px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,40px);opacity:0;background:#fff;border-radius:16px;box-shadow:0 12px 34px rgba(27,39,102,.22);padding:14px 18px;display:flex;gap:12px;align-items:center;font-size:14px;font-weight:600;transition:all .25s;z-index:50;max-width:92%}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.toast .ti{width:30px;height:30px;border-radius:50%;background:var(--grnbg);color:var(--grn);display:flex;align-items:center;justify-content:center;flex:none}
+.toast.er .ti{background:var(--redbg);color:var(--red)}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"><div class="state"><div class="spin"></div>Loading your info…</div></div>
+<div class="toast" id="toast"><div class="ti" id="tIc">✓</div><div id="tMsg"></div></div>
+<script>
+(function(){
+var BASE_L="https://default5c737bedc35d48c39a6d89e766c7c7.03.environment.api.powerplatform.com/powerautomate/automations/direct/cu/29/workflows/7f4b4ed9138d4cb691b827ebb4413789/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0";
+var BASE_R="https://default5c737bedc35d48c39a6d89e766c7c7.03.environment.api.powerplatform.com/powerautomate/automations/direct/cu/22/workflows/0674777ab71b413da04d8b1c9f7e899d/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0";
+var H=new URLSearchParams((location.hash||"").replace(/^#/,""));
+var EMAIL=(H.get("e")||"").trim().toLowerCase(), KL=H.get("a")||"", KR=H.get("b")||"";
+var app=document.getElementById("app");
+var S={me:null,L:[],Hol:{},tab:"pto",view:"home",busy:false};
+var MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+var MONL=["January","February","March","April","May","June","July","August","September","October","November","December"];
+var WD=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function d0(d){return new Date(d.getFullYear(),d.getMonth(),d.getDate())}
+function today(){return d0(new Date())}
+function addD(d,n){var x=new Date(d);x.setDate(x.getDate()+n);return d0(x)}
+function diffD(a,b){return Math.round((d0(b)-d0(a))/86400000)}
+function pd(v){if(v==null||v==="")return null;var s=String(v).trim();if(/^\d+(\.\d+)?$/.test(s)){var n=Math.floor(parseFloat(s));if(n<=0)return null;var u=new Date(Date.UTC(1899,11,30)+n*86400000);return new Date(u.getUTCFullYear(),u.getUTCMonth(),u.getUTCDate())}
+ var m=s.match(/^(\d{4})-(\d{2})-(\d{2})/);if(m)return new Date(+m[1],+m[2]-1,+m[3]);var m2=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);if(m2)return new Date(+m2[3],+m2[1]-1,+m2[2]);var t=new Date(s);return isNaN(t)?null:d0(t)}
+function iso(d){return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2)}
+function fmt(d){return MON[d.getMonth()]+" "+d.getDate()+", "+d.getFullYear()}
+function fmtL(d){return MONL[d.getMonth()]+" "+d.getDate()+", "+d.getFullYear()}
+function fmtS(d){return WD[d.getDay()]+", "+MON[d.getMonth()]+" "+d.getDate()}
+function nf(x,p){p=p==null?2:p;var f=Math.pow(10,p);var r=Math.round((+x||0)*f)/f;return String(r)}
+function num(v){var n=parseFloat(String(v==null?"":v).replace(",","."));return isNaN(n)?0:n}
+function ini(n){var w=String(n||"").replace(/,.*$/,"").trim().split(/\s+/);return ((w[0]||"")[0]||"").toUpperCase()+((w.length>1?w[w.length-1]:"")[0]||"").toUpperCase()}
+function first(n){return String(n||"").trim().split(/\s+/)[0]||""}
+function wk(d){return (d.getDay()+6)%7}
+
+function load(){
+ if(!EMAIL||!KL){app.innerHTML='<div class="state">This link is not complete. Please open My PTO from your Aliado app.</div>';return}
+ fetch(BASE_L+"&sig="+encodeURIComponent(KL)+"&e="+encodeURIComponent(EMAIL),{referrerPolicy:"no-referrer"}).then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}).then(function(b){
+  var me=[];try{me=JSON.parse(b.me||"[]")}catch(e){}
+  var l=[];try{l=JSON.parse(b.l||"[]")}catch(e){}
+  var h=[];try{h=JSON.parse(b.h||"[]")}catch(e){}
+  var m=me[0];
+  S.me=m&&String(m.Clinician||"").trim()?{name:String(m.Clinician).trim(),start:pd(m.StartDate),appr:String(m.Approver||"").trim(),apprEmail:String(m.ApproverEmail||"").trim()}:null;
+  S.L=l.map(function(x){return {id:String(x.LedgerID||""),type:String(x.Type||"").toLowerCase(),status:String(x.Status||""),st:pd(x.StartDate),en:pd(x.EndDate),entry:pd(x.EntryDate),days:num(x.Days),hours:num(x.Hours),note:String(x.Note||""),by:String(x.DecidedBy||"")}});
+  S.Hol={};h.forEach(function(x){var d=pd(x.Date);if(d){var k=iso(d);S.Hol[k]={f:Math.min(1,x.Fraction==null||x.Fraction===""?1:num(x.Fraction)),n:String(x.Holiday||"")}}});
+  render();
+ }).catch(function(e){app.innerHTML='<div class="state">We couldn\'t load your info right now.<br>Please close this page and open it again.<br><br><small>'+esc(e.message)+'</small></div>'});
+}
+/* ---------- calculations ---------- */
+function sumL(f){return S.L.filter(f).reduce(function(a,x){return a+x.hours},0)}
+function pto(){var me=S.me,t=today();var mo=(t.getFullYear()*12+t.getMonth())-(me.start.getFullYear()*12+me.start.getMonth());
+ var earn=Math.round(112/12*Math.max(0,mo)*100)/100;
+ var used=sumL(function(x){return x.type==="request"&&x.status==="Approved"});
+ var exp=sumL(function(x){return x.type==="expire"});
+ var pend=sumL(function(x){return x.type==="request"&&x.status==="Pending"});
+ return {earn:earn,used:used,exp:exp,pend:pend,av:earn-used-exp,elig:addD(me.start,90)}}
+function sick(){var me=S.me,t=today(),ys=new Date(t.getFullYear(),0,1);var from=me.start>ys?me.start:ys;
+ var off=sumL(function(x){return (x.type==="request"||x.type==="sick")&&x.status==="Approved"&&x.st&&x.st>=ys&&x.st<=t});
+ var earn=Math.min(40,Math.round(Math.max(0,diffD(from,t)*40/7-off)/30*10)/10);
+ var used=sumL(function(x){return x.type==="sick"&&x.status==="Approved"&&x.st&&x.st>=ys});
+ var pend=sumL(function(x){return x.type==="sick"&&x.status==="Pending"});
+ return {earn:earn,used:used,pend:pend,av:earn-used,elig:addD(me.start,90)}}
+function dayList(a,b){var out=[];if(!a||!b||b<a||diffD(a,b)>60)return out;for(var i=0;i<=diffD(a,b);i++){var d=addD(a,i),hol=S.Hol[iso(d)];var f=hol?hol.f:0;out.push({d:d,h:8*(1-f),hol:hol?hol.n||"Holiday":""})}return out}
+function overlap(a,b,types){return S.L.some(function(x){return types.indexOf(x.type)>=0&&(x.status==="Pending"||x.status==="Approved")&&x.st&&x.en&&x.st<=b&&x.en>=a})}
+function weekGoal(a,days){var w0=addD(a,-wk(a)),w6=addD(w0,6),off=0;
+ for(var i=0;i<7;i++){var d=addD(w0,i),k=iso(d);if(S.Hol[k])off+=S.Hol[k].f}
+ days.forEach(function(x){if(x.h>0&&x.d>=w0&&x.d<=w6)off+=x.h/8});
+ S.L.forEach(function(x){if((x.type==="request"||x.type==="sick")&&x.status==="Approved"&&x.st&&x.en&&x.st<=w6&&x.en>=w0){var s=x.st>w0?x.st:w0,e=x.en<w6?x.en:w6;off+=diffD(s,e)+1}});
+ return Math.max(0,26-5.2*off)}
+/* ---------- render ---------- */
+function hero(){var me=S.me,h=new Date().getHours();
+ return '<div class="hero"><div class="hi">'+(h<12?"Good morning,":h<18?"Good afternoon,":"Good evening,")+'</div><div class="name">'+esc(me.name)+'</div><div class="av">'+esc(ini(me.name))+'</div>'+
+ '<div class="chips"><span class="chip">Started '+(me.start?fmt(me.start):"—")+'</span><span class="chip">Approver: '+esc(me.appr||"—")+'</span></div>'+
+ '<div class="tabs">'+tabB("pto","PTO")+tabB("sick","Sick days")+tabB("reqs","My requests")+'</div></div>'}
+function tabB(k,t){return '<button class="tab'+(S.tab===k?" on":"")+(k==="sick"?" sick":"")+'" data-tab="'+k+'">'+t+'</button>'}
+function rowH(ic,html,t){return '<div class="row"><div class="ic'+(t?" t":"")+'">'+ic+'</div><div>'+html+'</div></div>'}
+function render(){
+ if(!S.me){app.innerHTML='<div class="state">You are not set up for PTO. PTO is for full-time staff — if you think this is a mistake, please contact the office.</div>';return}
+ if(S.view==="req")return renderReq(false);
+ if(S.view==="sreq")return renderReq(true);
+ var h=hero()+'<div class="body">';
+ if(S.tab==="pto"){var p=pto(),t=today(),nx=new Date(t.getFullYear(),t.getMonth()+1,1);var tot=Math.max(p.earn-p.exp,0.0001);
+  h+='<div class="card"><div class="kick">Available balance</div><div class="big">'+nf(p.av-p.pend)+'<small>hours</small></div>'+
+  '<span class="pill g">≈ '+nf((p.av-p.pend)/8,1)+' days off</span>'+
+  (t<p.elig?'<div class="msg w" style="margin:12px 0 0">Your PTO is available from <b>'+fmtL(p.elig)+'</b> (90 days after your start date). You can already request dates from that day on.</div>':'')+
+  '<div class="bar"><i style="width:'+Math.min(100,p.used/tot*100)+'%;background:var(--navy)"></i><i style="width:'+Math.min(100,p.pend/tot*100)+'%;background:#f0b23a"></i><i style="width:'+Math.max(0,(p.av-p.pend)/tot*100)+'%;background:var(--light)"></i></div>'+
+  '<div class="leg"><span><i class="dot" style="background:var(--navy)"></i>Used <b>'+nf(p.used)+' h</b></span><span><i class="dot" style="background:#f0b23a"></i>Pending <b>'+nf(p.pend)+' h</b></span><span><i class="dot" style="background:var(--light)"></i>Available <b>'+nf(p.av-p.pend)+' h</b></span></div></div>'+
+  '<div class="tiles"><div class="tile"><div class="ic">📈</div><div><div class="v">'+nf(p.earn)+' h</div><div class="l">Earned so far</div></div></div><div class="tile"><div class="ic">＋</div><div><div class="v">+9.33 h</div><div class="l">'+MON[nx.getMonth()]+' '+nx.getDate()+'</div></div></div></div>'+
+  '<button class="cta" data-go="req">+&nbsp; Request time off</button>'+
+  '<div class="card how"><h3>How PTO works</h3>'+
+  rowH("👤","<b>For full-time staff.</b>")+
+  rowH("📅","<b>14 days per year</b> <span class='s'>(112 h · 9.33 h added each month)</span>.")+
+  rowH("⏱","You can use it from <b>day 90</b> of your start date.")+
+  rowH("☀️","<b>Full days (8 h)</b>, weekends included · company holidays don't count.")+
+  rowH("✉️","Sent to your supervisor — you get an email with the decision.")+
+  rowH("🎯","Each PTO day lowers that week's goals in <b>My Billing Hours</b> <span class='s'>(1 day = 5.2 h contact · 2 h paperwork · 0.8 h self-care)</span>.")+'</div>';
+ } else if(S.tab==="sick"){var s=sick(),t2=today();var stot=Math.max(s.earn,0.0001);
+  h+='<div class="card"><div class="kick">Sick time available</div><div class="big" style="color:var(--teal)">'+nf(Math.max(0,s.av-s.pend),1)+'<small>hours</small></div>'+
+  '<span class="pill t">'+nf(s.earn,1)+' h earned this year · max 40 h</span>'+
+  (t2<s.elig?'<div class="msg w" style="margin:12px 0 0">Your sick time is available from <b>'+fmtL(s.elig)+'</b>. In an emergency before that date, your supervisor can still approve it.</div>':'')+
+  '<div class="bar"><i style="width:'+Math.min(100,s.used/stot*100)+'%;background:var(--teal)"></i><i style="width:'+Math.min(100,s.pend/stot*100)+'%;background:#f0b23a"></i><i style="width:'+Math.max(0,(s.av-s.pend)/stot*100)+'%;background:#7fd1c7"></i></div>'+
+  '<div class="leg"><span><i class="dot" style="background:var(--teal)"></i>Used <b>'+nf(s.used,1)+' h</b></span><span><i class="dot" style="background:#f0b23a"></i>Pending <b>'+nf(s.pend,1)+' h</b></span><span><i class="dot" style="background:#7fd1c7"></i>Available <b>'+nf(Math.max(0,s.av-s.pend),1)+' h</b></span></div></div>'+
+  '<button class="cta sick" data-go="sreq">+&nbsp; Request sick time</button>'+
+  '<div class="card how"><h3>How sick time works</h3>'+
+  rowH("⏱","You earn <b>1 hour for every 30 hours</b> you work <span class='s'>(about 1.3 h per week)</span>.",1)+
+  rowH("📈","Up to <b>40 hours</b> per year.",1)+
+  rowH("📅","You can use it from <b>day 90</b> of your start date.",1)+
+  rowH("🩺","For your own health, a family member's care or a medical appointment.",1)+
+  rowH("☀️","Sick time is taken in <b>full days (8 h)</b>.",1)+
+  rowH("🎯","Each sick day lowers that week's goals in <b>My Billing Hours</b>, the same way as PTO <span class='s'>(1 day = 5.2 h contact · 2 h paperwork · 0.8 h self-care)</span>.",1)+
+  rowH("🔒","Sick time is <b>separate from your PTO</b>.",1)+'</div>';
+ } else {var L=S.L.filter(function(x){return x.type==="request"||x.type==="sick"}).sort(function(a,b){return (b.st||0)-(a.st||0)});
+  h+='<div class="card"><div class="kick" style="margin-bottom:8px">My requests</div>'+(L.length?L.map(function(x){var dt=x.st?(x.en&&diffD(x.st,x.en)>0?fmtS(x.st)+" – "+fmtS(x.en):fmtS(x.st)):"—";
+   return '<div class="req"><span class="badge '+(x.type==="sick"?"s":"p")+'">'+(x.type==="sick"?"SICK":"PTO")+'</span><div><div class="d">'+dt+'</div><div class="m">'+nf(x.days||x.hours/8,1)+' day'+((x.days||x.hours/8)===1?"":"s")+' · '+nf(x.hours,1)+' h'+(x.by&&x.status!=="Pending"?' · '+(x.status==="Approved"?"approved":"decided")+' by '+esc(x.by):'')+'</div></div><span class="st '+esc(x.status)+'">'+esc(x.status||"—")+'</span></div>'}).join(""):'<div class="empty">No requests yet.</div>')+'</div>';
+ }
+ app.innerHTML=h+'</div>';
+}
+var F={s:"",e:"",note:""};
+function renderReq(isS){var me=S.me;
+ var a=pd(F.s),b=pd(F.e),days=dayList(a,b),hr=days.reduce(function(x,y){return x+y.h},0),t=today(),err="",warn="";
+ if(!a||!b)err="Pick the first and last day.";
+ else if(b<a)err="The last day is before the first day.";
+ else if(!isS){var p=pto();
+  if(a<p.elig)err="Your PTO is available from "+fmtL(p.elig)+" (90 days after your start date). Please pick dates from that day on.";
+  else if(a<t)err="The first day can't be in the past.";
+  else if(diffD(a,b)>60)err="Please request at most 60 days at a time.";
+  else if(hr===0)err="There are no workdays in those dates.";
+  else if(hr>p.av-p.pend)err="Not enough balance: you have "+nf(p.av-p.pend)+" h available"+(p.pend>0?" ("+nf(p.pend)+" h already pending)":"")+".";
+  else if(overlap(a,b,["request","sick"]))err="These dates overlap another request.";
+ } else {var s=sick();
+  if(a<addD(t,-30))err="Sick days can be reported up to 30 days back.";
+  else if(diffD(a,b)>14)err="Please request at most 14 days at a time.";
+  else if(hr===0)err="There are no workdays in those dates.";
+  else if(overlap(a,b,["request","sick"]))err="These dates overlap another request.";
+  else if(s.used+s.pend+hr>40)err="Sick time is limited to 40 hours per year. You have "+nf(Math.max(0,40-s.used-s.pend),1)+" h left this year (incl. pending).";
+  else if(!F.note.trim())err="Write the reason.";
+  if(!err){var w=[];if(a<s.elig)w.push("Your sick time is available from "+fmt(s.elig)+". You can still send this request — your supervisor will decide.");if(hr>s.av-s.pend)w.push("This is more than your available sick time ("+nf(Math.max(0,s.av-s.pend),1)+" h). Your supervisor will decide.");warn=w.join("<br>")}
+ }
+ var g=a&&days.length?weekGoal(a,days):26, p2=isS?null:pto();
+ var h='<div class="fhead'+(isS?" sick":"")+'"><button class="back" data-go="home">‹</button><div><h2>'+(isS?"Request sick time":"Request time off")+'</h2><p>Full days only · 8 h per day</p></div></div>'+
+ '<div class="body'+(isS?" sick":"")+'" style="margin-top:-44px"><div class="card"><div class="dates"><div class="fld"><label>First day</label><input type="date" id="fS" value="'+esc(F.s)+'"></div><div class="fld"><label>Last day</label><input type="date" id="fE" value="'+esc(F.e)+'"></div></div>'+
+ (days.length?'<div class="days">'+days.map(function(x){return '<span class="dchip'+(x.h===0?" h":"")+'" title="'+esc(x.hol)+'">'+WD[x.d.getDay()]+" "+x.d.getDate()+(x.hol?" · "+esc(x.hol):"")+'</span>'}).join("")+'</div>':'')+'</div>'+
+ '<div class="card"><div class="sum"><span>Days requested</span><b>'+nf(hr/8,1)+' day'+(hr===8?"":"s")+' · '+nf(hr,1)+' h</b></div>'+
+ '<div style="padding:10px 0"><div class="kick">How your '+nf(hr,1)+' h count this week</div><div class="bar" style="margin-top:10px"><i style="width:65%;background:var(--navy)"></i><i style="width:25%;background:#5b7be0"></i><i style="width:10%;background:var(--light)"></i></div>'+
+ '<div class="bk"><span>Contact<b>'+nf(hr*.65)+' h</b></span><span>Paperwork<b>'+nf(hr*.25)+' h</b></span><span>Self-care<b>'+nf(hr*.1)+' h</b></span></div></div>'+
+ '<div class="sum"><span>Contact goal that week</span><b>26 h → '+nf(g,1)+' h</b></div>'+
+ (isS?'<div class="sum"><span>Sick time after approval</span><b style="color:var(--teal)">'+nf(Math.max(0,sick().av-sick().pend-hr),1)+' h</b></div>':'<div class="sum"><span>Balance after approval</span><b style="color:var(--grn)">'+nf(p2.av-p2.pend-hr)+' h</b></div>')+'</div>'+
+ '<div class="card"><div class="fld'+(isS?" sk":"")+'"><label>'+(isS?"Reason":"Note for your supervisor (optional)")+'</label><textarea id="fN" placeholder="'+(isS?"e.g. Fever, doctor appointment":"e.g. Family trip")+'">'+esc(F.note)+'</textarea></div>'+
+ '<div class="appr"><div class="av2">'+esc(ini(me.appr))+'</div><div><b>'+esc(me.appr||"Your supervisor")+'</b><small>Will get an email to approve</small></div></div></div>'+
+ (warn?'<div class="msg w">'+warn+'</div>':'')+(err&&(F.s||F.e||F.note)?'<div class="msg e">'+esc(err)+'</div>':'')+
+ '<button class="cta'+(isS?" sick":"")+'" id="send"'+(err||S.busy?" disabled":"")+'>'+(S.busy?"Sending…":(isS?"Send to my supervisor":"Send request"))+'</button>'+
+ '<div class="foot">Company holidays are not counted.</div></div>';
+ app.innerHTML=h;
+ var fs=document.getElementById("fS"),fe=document.getElementById("fE"),fn=document.getElementById("fN");
+ fs.onchange=function(){F.s=fs.value;if(!F.e||F.e<F.s)F.e=F.s;renderReq(isS)};
+ fe.onchange=function(){F.e=fe.value;renderReq(isS)};
+ fn.oninput=function(){F.note=fn.value};
+ fn.onchange=function(){renderReq(isS)};
+ var sb=document.getElementById("send");
+ sb.onclick=function(){F.note=fn.value;if(err||S.busy){renderReq(isS);return}send(isS,a,b,days,hr)};
+}
+function send(isS,a,b,days,hr){var me=S.me,dates=fmtS(a)+(b>a?" – "+fmtS(b):"");
+ var P;
+ if(!isS){var p=pto();P={name:me.name,initials:ini(me.name),started:me.start?fmt(me.start):"",start:iso(a),end:iso(b),days:nf(hr/8),hours:nf(hr),balNow:nf(p.av),balAfter:nf(p.av-p.pend-hr),contact:nf(hr*.65),paper:nf(hr*.25),self:nf(hr*.1),approver:me.appr,approverEmail:me.apprEmail,note:F.note.trim(),dates:dates,breakdown:"Contact "+nf(hr*.65)+" · Paperwork "+nf(hr*.25)+" · Self-care "+nf(hr*.1)+" h"}}
+ else {var s=sick();P={kind:"sick",name:me.name,first:first(me.name),initials:ini(me.name),started:me.start?fmt(me.start):"",start:iso(a),end:iso(b),days:nf(hr/8),hours:nf(hr),dates:dates,note:F.note.trim(),approver:me.appr,approverEmail:me.apprEmail,sickAvail:nf(s.av,1),sickEarned:nf(s.earn,1),sickUsed:nf(s.used,1),early:a<s.elig?fmt(s.elig):"",over:hr>s.av-s.pend?"requests "+nf(hr,1)+" h; available "+nf(Math.max(0,s.av-s.pend),1)+" h (incl. pending).":"",contact:nf(hr*.65),paper:nf(hr*.25),self:nf(hr*.1)}}
+ S.busy=true;renderReq(isS);
+ fetch(BASE_R+"&sig="+encodeURIComponent(KR)+"&p="+encodeURIComponent(JSON.stringify(P)),{referrerPolicy:"no-referrer"}).then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.text()}).then(function(){
+  S.busy=false;F={s:"",e:"",note:""};S.view="home";S.tab="reqs";
+  S.L.push({id:"",type:isS?"sick":"request",status:"Pending",st:a,en:b,entry:today(),days:hr/8,hours:hr,note:P.note,by:""});
+  render();toast((isS?"Sick time request sent to ":"Request sent to ")+(me.appr||"your supervisor"),"ok");setTimeout(loadQuiet,4000);
+ }).catch(function(){S.busy=false;renderReq(isS);toast("Could not send the request. Please try again.","er")});
+}
+function loadQuiet(){fetch(BASE_L+"&sig="+encodeURIComponent(KL)+"&e="+encodeURIComponent(EMAIL),{referrerPolicy:"no-referrer"}).then(function(r){return r.json()}).then(function(b){try{var l=JSON.parse(b.l||"[]");S.L=l.map(function(x){return {id:String(x.LedgerID||""),type:String(x.Type||"").toLowerCase(),status:String(x.Status||""),st:pd(x.StartDate),en:pd(x.EndDate),entry:pd(x.EntryDate),days:num(x.Days),hours:num(x.Hours),note:String(x.Note||""),by:String(x.DecidedBy||"")}});if(S.view==="home")render()}catch(e){}}).catch(function(){})}
+var tT;function toast(m,t){var el=document.getElementById("toast");document.getElementById("tMsg").textContent=m;document.getElementById("tIc").textContent=t==="er"?"!":"✓";el.className="toast on"+(t==="er"?" er":"");clearTimeout(tT);tT=setTimeout(function(){el.className="toast"+(t==="er"?" er":"")},3600)}
+app.addEventListener("click",function(ev){var b=ev.target.closest("[data-tab],[data-go]");if(!b)return;
+ if(b.dataset.tab){S.tab=b.dataset.tab;S.view="home";render()}
+ else if(b.dataset.go){var g=b.dataset.go;if(g==="home"){S.view="home";render()}else{F={s:"",e:"",note:""};S.view=g;render()}window.scrollTo(0,0)}});
+load();
+})();
+</script>
+</body>
+</html>
