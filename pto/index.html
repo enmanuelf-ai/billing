@@ -185,8 +185,8 @@ function render(){
   (t<p.elig?'<div class="msg w" style="margin:12px 0 0">Your PTO is available from <b>'+fmtL(p.elig)+'</b> (90 days after your start date). You can already request dates from that day on.</div>':'')+
   '<div class="bar"><i style="width:'+Math.min(100,p.used/tot*100)+'%;background:var(--navy)"></i><i style="width:'+Math.min(100,p.pend/tot*100)+'%;background:#f0b23a"></i><i style="width:'+Math.max(0,(p.av-p.pend)/tot*100)+'%;background:var(--light)"></i></div>'+
   '<div class="leg"><span><i class="dot" style="background:var(--navy)"></i>Used <b>'+nf(p.used)+' h</b></span><span><i class="dot" style="background:#f0b23a"></i>Pending <b>'+nf(p.pend)+' h</b></span><span><i class="dot" style="background:var(--light)"></i>Available <b>'+nf(p.av-p.pend)+' h</b></span></div></div>'+
-  '<div class="tiles"><div class="tile"><div class="ic">📈</div><div><div class="v">'+nf(p.earn)+' h</div><div class="l">Earned so far</div></div></div><div class="tile"><div class="ic">＋</div><div><div class="v">+9.33 h</div><div class="l">'+MON[nx.getMonth()]+' '+nx.getDate()+'</div></div></div></div>'+
   '<button class="cta" data-go="req">+&nbsp; Request time off</button>'+
+  '<div class="tiles"><div class="tile"><div class="ic">📈</div><div><div class="v">'+nf(p.earn)+' h</div><div class="l">Earned so far</div></div></div><div class="tile"><div class="ic">＋</div><div><div class="v">+9.33 h</div><div class="l">'+MON[nx.getMonth()]+' '+nx.getDate()+'</div></div></div></div>'+
   '<div class="card how"><h3>How PTO works</h3>'+
   rowH("👤","<b>For full-time staff.</b>")+
   rowH("📅","<b>14 days per year</b> <span class='s'>(112 h · 9.33 h added each month)</span>.")+
