@@ -109,7 +109,7 @@ button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
 var BASE_L="https://default5c737bedc35d48c39a6d89e766c7c7.03.environment.api.powerplatform.com/powerautomate/automations/direct/cu/29/workflows/7f4b4ed9138d4cb691b827ebb4413789/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0";
 var BASE_R="https://default5c737bedc35d48c39a6d89e766c7c7.03.environment.api.powerplatform.com/powerautomate/automations/direct/cu/22/workflows/0674777ab71b413da04d8b1c9f7e899d/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0";
 var H=new URLSearchParams((location.hash||"").replace(/^#/,""));
-var EMAIL=(H.get("e")||"").trim().toLowerCase(), KL=H.get("a")||"", KR=H.get("b")||"";
+var EMAIL=(H.get("e")||"").trim().toLowerCase(), KL=H.get("a")||"", KR=H.get("b")||"", TOK=(H.get("t")||"").trim(), WHO=TOK?"&t="+encodeURIComponent(TOK):"&e="+encodeURIComponent(EMAIL);
 var app=document.getElementById("app");
 var S={me:null,L:[],Hol:{},tab:"pto",view:"home",busy:false};
 var MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -133,8 +133,8 @@ function first(n){return String(n||"").trim().split(/\s+/)[0]||""}
 function wk(d){return (d.getDay()+6)%7}
 
 function load(){
- if(!EMAIL||!KL){app.innerHTML='<div class="state">This link is not complete. Please open My PTO from your Aliado app.</div>';return}
- fetch(BASE_L+"&sig="+encodeURIComponent(KL)+"&e="+encodeURIComponent(EMAIL),{referrerPolicy:"no-referrer"}).then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}).then(function(b){
+ if((!EMAIL&&!TOK)||!KL){app.innerHTML='<div class="state">This link is not complete. Please open My PTO from your Aliado app.</div>';return}
+ fetch(BASE_L+"&sig="+encodeURIComponent(KL)+WHO,{referrerPolicy:"no-referrer"}).then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}).then(function(b){
   var me=[];try{me=JSON.parse(b.me||"[]")}catch(e){}
   var l=[];try{l=JSON.parse(b.l||"[]")}catch(e){}
   var h=[];try{h=JSON.parse(b.h||"[]")}catch(e){}
@@ -263,13 +263,13 @@ function send(isS,a,b,days,hr){var me=S.me,dates=fmtS(a)+(b>a?" – "+fmtS(b):""
  if(!isS){var p=pto();P={name:me.name,initials:ini(me.name),started:me.start?fmt(me.start):"",start:iso(a),end:iso(b),days:nf(hr/8),hours:nf(hr),balNow:nf(p.av),balAfter:nf(p.av-p.pend-hr),contact:nf(hr*.65),paper:nf(hr*.25),self:nf(hr*.1),approver:me.appr,approverEmail:me.apprEmail,note:F.note.trim(),dates:dates,breakdown:"Contact "+nf(hr*.65)+" · Paperwork "+nf(hr*.25)+" · Self-care "+nf(hr*.1)+" h"}}
  else {var s=sick();P={kind:"sick",name:me.name,first:first(me.name),initials:ini(me.name),started:me.start?fmt(me.start):"",start:iso(a),end:iso(b),days:nf(hr/8),hours:nf(hr),dates:dates,note:F.note.trim(),approver:me.appr,approverEmail:me.apprEmail,sickAvail:nf(s.av,1),sickEarned:nf(s.earn,1),sickUsed:nf(s.used,1),early:a<s.elig?fmt(s.elig):"",over:hr>s.av-s.pend?"requests "+nf(hr,1)+" h; available "+nf(Math.max(0,s.av-s.pend),1)+" h (incl. pending).":"",contact:nf(hr*.65),paper:nf(hr*.25),self:nf(hr*.1)}}
  S.busy=true;renderReq(isS);
- fetch(BASE_R+"&sig="+encodeURIComponent(KR)+"&p="+encodeURIComponent(JSON.stringify(P)),{referrerPolicy:"no-referrer"}).then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.text()}).then(function(){
+ fetch(BASE_R+"&sig="+encodeURIComponent(KR)+WHO+"&p="+encodeURIComponent(JSON.stringify(P)),{referrerPolicy:"no-referrer"}).then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.text()}).then(function(){
   S.busy=false;F={s:"",e:"",note:""};S.view="home";S.tab="reqs";
   S.L.push({id:"",type:isS?"sick":"request",status:"Pending",st:a,en:b,entry:today(),days:hr/8,hours:hr,note:P.note,by:""});
   render();toast((isS?"Sick time request sent to ":"Request sent to ")+(me.appr||"your supervisor"),"ok");setTimeout(loadQuiet,4000);
  }).catch(function(){S.busy=false;renderReq(isS);toast("Could not send the request. Please try again.","er")});
 }
-function loadQuiet(){fetch(BASE_L+"&sig="+encodeURIComponent(KL)+"&e="+encodeURIComponent(EMAIL),{referrerPolicy:"no-referrer"}).then(function(r){return r.json()}).then(function(b){try{var l=JSON.parse(b.l||"[]");S.L=l.map(function(x){return {id:String(x.LedgerID||""),type:String(x.Type||"").toLowerCase(),status:String(x.Status||""),st:pd(x.StartDate),en:pd(x.EndDate),entry:pd(x.EntryDate),days:num(x.Days),hours:num(x.Hours),note:String(x.Note||""),by:String(x.DecidedBy||"")}});if(S.view==="home")render()}catch(e){}}).catch(function(){})}
+function loadQuiet(){fetch(BASE_L+"&sig="+encodeURIComponent(KL)+WHO,{referrerPolicy:"no-referrer"}).then(function(r){return r.json()}).then(function(b){try{var l=JSON.parse(b.l||"[]");S.L=l.map(function(x){return {id:String(x.LedgerID||""),type:String(x.Type||"").toLowerCase(),status:String(x.Status||""),st:pd(x.StartDate),en:pd(x.EndDate),entry:pd(x.EntryDate),days:num(x.Days),hours:num(x.Hours),note:String(x.Note||""),by:String(x.DecidedBy||"")}});if(S.view==="home")render()}catch(e){}}).catch(function(){})}
 var tT;function toast(m,t){var el=document.getElementById("toast");document.getElementById("tMsg").textContent=m;document.getElementById("tIc").textContent=t==="er"?"!":"✓";el.className="toast on"+(t==="er"?" er":"");clearTimeout(tT);tT=setTimeout(function(){el.className="toast"+(t==="er"?" er":"")},3600)}
 app.addEventListener("click",function(ev){var b=ev.target.closest("[data-tab],[data-go]");if(!b)return;
  if(b.dataset.tab){S.tab=b.dataset.tab;S.view="home";render()}
