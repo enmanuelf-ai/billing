@@ -277,7 +277,7 @@ document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{ lang=b.data
 window.addEventListener("hashchange", ()=>{ const h=location.hash.slice(1); role=["iic","ba","pc"].includes(h)?h:"all"; open=null; show("home"); paint(); });
 /* ---- feedback prompt ---- */
 const FB_FORM=""; /* Jotform form id */
-const FB_KEY="aliado-tt-feedback", FB_DELAY=180000;
+const FB_KEY="aliado-tt-feedback", FB_DELAY=120000;
 const clinician=new URLSearchParams(location.search).get("c")||"";
 let fbAns=null;
 function fbPaint(){const u=UI[lang];["fbT","fbP","fbQ","fbYes","fbNo","fbSend","fbLater","fbTy","fbTy2"].forEach(k=>$(k).textContent=u[k]);$("fbTxt").placeholder=u.fbPh;}
