@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="referrer" content="no-referrer">
+<title>Aliado · Encounter Form</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#eef3f8;font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#1e2a3a;padding:16px}
+.card{width:100%;max-width:380px;background:#fff;border-radius:16px;box-shadow:0 2px 12px rgba(30,60,100,.1);overflow:hidden;text-align:center}
+.top{padding:26px 20px 18px}
+.top img{width:130px;max-width:50%;height:auto}
+.band{background:#1f5fa8;color:#fff;padding:14px 20px;font-weight:700;font-size:18px}
+.line{height:4px;background:#6aab3f}
+.body{padding:22px 24px 26px}
+p{margin:0 0 16px;color:#5a6878;font-size:14.5px;line-height:1.5}
+input{width:100%;font-size:28px;letter-spacing:12px;text-align:center;padding:12px;border:2px solid #d5e0ec;border-radius:12px;outline:none}
+input:focus{border-color:#1f5fa8}
+button{margin-top:14px;width:100%;background:#6aab3f;color:#fff;border:0;border-radius:12px;font-size:16px;font-weight:700;padding:14px;cursor:pointer}
+button:disabled{opacity:.6}
+.err{color:#c0392b;font-size:14px;min-height:20px;margin-top:12px}
+.foot{font-size:12px;color:#8a96a5;padding:0 20px 18px}
+</style></head>
+<body>
+<div class="card">
+ <div class="top"><img src="https://www.jotform.com/uploads/enmanuelf59/form_files/Aliado%20Logo.6a445020d28805.86370275.png" alt="Aliado Community Health"></div>
+ <div class="band">Encounter Form</div><div class="line"></div>
+ <form class="body" id="f" autocomplete="off">
+  <p>Enter your passcode to open the Encounter Form for this case.</p>
+  <input id="p" type="password" inputmode="numeric" maxlength="12" aria-label="Passcode" autofocus>
+  <button id="b" type="submit">Open</button>
+  <div class="err" id="e"></div>
+ </form>
+ <div class="foot">Aliado Community Health · Confidential</div>
+</div>
+<script>
+// shared decrypt (browser + node webcrypto)
+async function aliadoDecrypt(frag, pass, subtle) {
+  const p = frag.replace(/^#/, '').split('.');
+  if (p[0] !== '1' || p.length !== 4) throw new Error('format');
+  const ub = s => { s = s.replace(/-/g, '+').replace(/_/g, '/'); while (s.length % 4) s += '='; const b = atob(s); const u = new Uint8Array(b.length); for (let i = 0; i < b.length; i++) u[i] = b.charCodeAt(i); return u; };
+  const salt = ub(p[1]), ct = ub(p[2]), tag = ub(p[3]);
+  const base = await subtle.importKey('raw', new TextEncoder().encode(pass), 'PBKDF2', false, ['deriveBits']);
+  const dk = new Uint8Array(await subtle.deriveBits({ name: 'PBKDF2', hash: 'SHA-256', salt, iterations: 60000 }, base, 512));
+  const hk = k => subtle.importKey('raw', k, { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+  const ke = await hk(dk.slice(0, 32)), km = await hk(dk.slice(32));
+  const tm = new Uint8Array(2 + salt.length + ct.length); tm.set([0x76, 0x31]); tm.set(salt, 2); tm.set(ct, 2 + salt.length);
+  const t2 = new Uint8Array(await subtle.sign('HMAC', km, tm)).slice(0, 16);
+  let d = 0; for (let i = 0; i < 16; i++) d |= t2[i] ^ (tag[i] || 0);
+  if (d || tag.length !== 16) throw new Error('pass');
+  const pt = new Uint8Array(ct.length);
+  for (let i = 0; i * 32 < ct.length; i++) {
+    const m = new Uint8Array(salt.length + 4); m.set(salt); m.set([(i >>> 24) & 255, (i >>> 16) & 255, (i >>> 8) & 255, i & 255], salt.length);
+    const ks = new Uint8Array(await subtle.sign('HMAC', ke, m));
+    for (let j = 0; j < 32 && i * 32 + j < ct.length; j++) pt[i * 32 + j] = ct[i * 32 + j] ^ ks[j];
+  }
+  return new TextDecoder().decode(pt);
+}
+
+(function(){
+ var h=location.hash,f=document.getElementById('f'),e=document.getElementById('e'),b=document.getElementById('b'),p=document.getElementById('p');
+ if(!h||h.length<10){e.textContent='This link is incomplete. Open it again from the email.';b.disabled=true;}
+ try{history.replaceState(null,'',location.pathname);}catch(x){}
+ var tries=0;
+ f.addEventListener('submit',function(ev){ev.preventDefault();if(!p.value)return;b.disabled=true;e.textContent='';b.textContent='Opening…';
+  aliadoDecrypt(h,p.value.trim(),crypto.subtle).then(function(u){if(!/^https:\/\/([a-z0-9-]+\.)?jotform\.com\//.test(u))throw new Error('x');location.replace(u);})
+  .catch(function(){tries++;b.disabled=false;b.textContent='Open';p.value='';p.focus();e.textContent=tries>2?'Incorrect passcode. Contact your supervisor if you need help.':'Incorrect passcode. Try again.';});
+ });
+})();
+</script>
+</body></html>
