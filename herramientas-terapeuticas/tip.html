@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tip of the week</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#fff}
+body{font-family:Poppins,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;padding:2px}
+.card{height:100%;display:flex;align-items:center;gap:clamp(8px,2.4vw,14px);
+ background:#FFF7FA;border:1.5px solid #F4C0D1;border-radius:12px;padding:5px clamp(9px,2.2vw,14px)}
+.bulb{flex:0 0 auto;width:clamp(30px,7vw,42px);height:clamp(30px,7vw,42px);border-radius:50%;
+ background:#FFECB4;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,3.9vw,22px);line-height:1}
+.txt{min-width:0;flex:1}
+.top{display:flex;align-items:center;gap:6px;margin-bottom:1px}
+.lbl{font-weight:700;font-size:clamp(9px,2.2vw,11px);letter-spacing:.4px;color:#993556}
+.new{font-weight:700;font-size:clamp(8px,2vw,10px);color:#26215C;background:#F5C33B;border-radius:999px;padding:0 7px}
+.q{font-weight:700;color:#4B1528;font-size:clamp(12px,3vw,15px);line-height:1.18;margin-bottom:1px}
+.b{color:#72243E;font-size:clamp(10.5px,2.5vw,12.5px);line-height:1.28}
+</style>
+</head>
+<body>
+<div class="card">
+ <div class="bulb" aria-hidden="true">💡</div>
+ <div class="txt">
+  <div class="top"><span class="lbl">TIP OF THE WEEK</span><span class="new">NEW</span></div>
+  <div class="q" id="q"></div>
+  <div class="b" id="b"></div>
+ </div>
+</div>
+<script>
+const TIPS=[
+ ["Anger thermometer","A child is about to explode during the visit?","Open the Anger thermometer and ask them to point to how big the feeling is. Naming it is the first step to calming it."],
+ ["Star chart at home","Parents say \u201cnothing works\u201d with behavior?","Set up a Star chart with the family and share it to the parent\u2019s phone. Small daily wins add up fast."],
+ ["Feelings game","A young child can\u2019t put feelings into words?","Start the session with the Feelings game. It\u2019s a quick warm-up that shows you how the child is doing today."],
+ ["Worry monster","Working with an anxious child?","Let them \u201cfeed\u201d their worries to the Worry monster. Saying a worry out loud makes it smaller and easier to work on."],
+ ["Special time","A parent feels disconnected from their child?","Coach them on Special time: 10 minutes a day of one-on-one play where the child leads."],
+ ["Body toolkit","A teen says \u201cI don\u2019t know\u201d to everything?","Use the Body toolkit to notice where stress shows up in the body. Teens often find the body easier to talk about than feelings."],
+ ["Behavior kit","Hard to get a child to follow the plan?","Pick one goal together in the Behavior kit and track it with the child. One clear goal works better than five."],
+ ["Share with the family","Want the work to continue between visits?","Tap \u201cShare with the family\u201d in any tool. The parent scans the QR code or gets the link by text."],
+ ["Anger thermometer","Practicing coping skills?","Ask the child what helps at each level of the thermometer. They build their own plan for when anger starts rising."],
+ ["Star chart at home","Want to see how the week went at home?","At the end of the week, the Star chart prepares a progress summary the parent can send you or show you at the next visit."],
+ ["Feelings game","Building trust with a new child?","Play the Feelings game together and share your own answers too. It turns a first session into a conversation."],
+ ["Tools + connection","Worried a phone gets in the way of the session?","Use the tools side by side with the child, not instead of talking. Hand them the phone and let them lead."]
+];
+/* Week 0 starts Monday Nov 9, 2026 (New Jersey time). Changes every Monday. */
+const START=Date.UTC(2026,10,9,5,0,0);
+const P=new URLSearchParams(location.search);
+let idx=Math.floor((Date.now()-START)/(7*864e5));
+if(P.has("w"))idx=parseInt(P.get("w"),10)||0;
+idx=((idx%TIPS.length)+TIPS.length)%TIPS.length;
+const T=TIPS[idx];
+document.getElementById("q").textContent=T[1];
+document.getElementById("b").textContent=T[2];
+/* Usage log: one "tip_view" per clinician per day per device (no client data) */
+(function(){
+ const C=P.get("c")||"";if(!C||P.has("w"))return;
+ const key="tt-tipview-"+new Date().toISOString().slice(0,10)+"-"+idx;
+ try{if(localStorage.getItem(key))return;localStorage.setItem(key,"1");}catch(e){}
+ fetch("tt-flow.txt",{cache:"no-store"}).then(r=>r.ok?r.text():"").then(F=>{F=(F||"").trim();if(F.indexOf("https://")!==0)return;
+  fetch(F,{method:"POST",headers:{"Content-Type":"application/json"},keepalive:true,
+   body:JSON.stringify({event:"tip_view",tool:"Tip "+(idx+1)+": "+T[0],clinician:C,mode:"therapist",lang:"en",answer:"",comment:""})}).catch(()=>{});
+ }).catch(()=>{});
+})();
+</script>
+</body>
+</html>
