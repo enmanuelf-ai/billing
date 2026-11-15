@@ -35,6 +35,11 @@ h1{font:800 clamp(34px,9vw,48px)/1 "Baloo 2",system-ui,sans-serif;margin:22px 0 
 .q{font:700 21px/1.2 "Baloo 2",system-ui,sans-serif;margin:0 0 14px;color:var(--muted)}
 .rolebar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:14px;color:var(--muted);margin:0 0 14px}
 .rolebar b{color:var(--ink)}
+.rf{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:0 0 14px}
+.rf span{font:700 13px Lato,sans-serif;color:var(--muted);margin-right:2px}
+.rf button{border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 13px;font:700 14px Lato,sans-serif;cursor:pointer;transition:background-color .15s,border-color .15s,color .15s}
+.rf button:hover{border-color:var(--navy);background:var(--soft)}
+.rf button[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
 .rolebar button{border:0;background:none;color:var(--navy);font:700 14px Lato,sans-serif;cursor:pointer;padding:0;text-decoration:underline}
 
 .needs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -53,6 +58,19 @@ h1{font:800 clamp(34px,9vw,48px)/1 "Baloo 2",system-ui,sans-serif;margin:22px 0 
 .need-head h2{font:800 28px/1.05 "Baloo 2",system-ui,sans-serif;margin:0}
 .need-head p{margin:2px 0 0;color:var(--muted);font-size:15px}
 .tools{display:grid;gap:10px;margin-top:16px}
+.search{position:relative;margin:0 0 14px}
+.search input{width:100%;font:700 16px Lato,sans-serif;color:var(--ink);background:var(--surface);border:2px solid var(--line);border-radius:999px;padding:13px 44px 13px 46px;outline:none;-webkit-appearance:none;appearance:none;transition:border-color .15s,box-shadow .15s}
+.search input::placeholder{color:var(--muted);font-weight:400}
+.search input:hover{border-color:#B9C4E4}
+.search input:focus{border-color:var(--navy);box-shadow:0 0 0 4px rgba(26,58,143,.12)}
+.search .mag{position:absolute;left:16px;top:50%;transform:translateY(-50%);width:20px;height:20px;color:var(--muted);pointer-events:none}
+.search .clr{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:32px;height:32px;border:0;border-radius:50%;background:var(--soft);color:var(--muted);font:700 15px Lato,sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.search .clr:hover{background:var(--line);color:var(--ink)}
+.search input::-webkit-search-cancel-button{display:none}
+.res-h{font:700 14px Lato,sans-serif;color:var(--muted);margin:0 0 -6px}
+.tool .in{display:inline-block;font-size:12.5px;font-weight:700;padding:3px 10px;border-radius:999px;margin-left:6px;color:#16224A;background:var(--c)}
+.soonres{margin-top:14px;font-size:14.5px;color:var(--muted)}
+.soonres b{color:var(--ink)}
 .tool{display:flex;gap:14px;align-items:center;text-decoration:none;color:var(--ink);background:var(--surface);border:2px solid var(--line);border-radius:20px;padding:14px 16px}
 .tool:active{transform:scale(.985)}
 .tool .e{font-size:32px;line-height:1;flex:none;width:40px;text-align:center}
@@ -123,7 +141,13 @@ h1{font:800 clamp(34px,9vw,48px)/1 "Baloo 2",system-ui,sans-serif;margin:22px 0 
   <section id="home">
     <h1 data-t="title"></h1>
     <p class="q" data-t="q"></p>
-    <p class="rolebar" id="rolebar" hidden></p>
+    <div class="search" role="search">
+      <svg class="mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+      <input type="search" id="q" autocomplete="off" enterkeyhint="search">
+      <button class="clr" id="qClr" type="button" hidden>✕</button>
+    </div>
+    <div class="rf" id="rf" role="group"></div>
+    <div class="tools" id="results" hidden></div>
     <div class="needs" id="needs"></div>
     <div class="soon" id="soon"></div>
   </section>
@@ -165,11 +189,11 @@ const UI = {
   en:{title:"Therapeutic tools", q:"What do you need right now?", tools:n=>n===1?"1 tool":`${n} tools`, soonTile:"Coming soon",
       back:"← All needs", ages:"Ages", soonT:"Coming soon", soonP:"Tools we're preparing. They'll appear above when ready.",
       showing:"Showing tools for", showAll:"Show all", roles:{iic:"IIC clinicians",ba:"BA",pc:"Parent Coaching"},
-      none:"No tools for your role in this area yet.",fbT:"Quick question 🙂",fbP:"We're building these tools for you and want to know if we should keep developing them.",fbQ:"Do you find Therapeutic Tools helpful?",fbYes:"👍 Yes",fbNo:"👎 No",fbPh:"Anything you'd like us to add or change? (optional)",fbSend:"Send",fbLater:"Not now",fbTy:"Thank you!",fbTy2:"Your answer helps us decide what to build next.",qT:"Star chart for home",share:"📤 Send the link to the parent",copied:"Link copied. Paste it in a text or WhatsApp to the parent.",qP:"The parent scans this code with their phone camera and the star chart opens, ready to use at home during the week.",qSteps:["Ask the parent to open their phone camera and point it at the code.","Have them tap the link that appears on the screen.","Set up the chart together with the child before the session ends."]},
+      none:"No tools for your role in this area yet.",search:"Search: fear, anger, play…",forLbl:"For:",allR:"All",clear:"Clear search",results:n=>n===1?"1 tool found":`${n} tools found`,noRes:"No tools match that search yet.",soonMatch:"Coming soon:",fbT:"Quick question 🙂",fbP:"We're building these tools for you and want to know if we should keep developing them.",fbQ:"Do you find Therapeutic Tools helpful?",fbYes:"👍 Yes",fbNo:"👎 No",fbPh:"Anything you'd like us to add or change? (optional)",fbSend:"Send",fbLater:"Not now",fbTy:"Thank you!",fbTy2:"Your answer helps us decide what to build next.",qT:"Star chart for home",share:"📤 Send the link to the parent",copied:"Link copied. Paste it in a text or WhatsApp to the parent.",qP:"The parent scans this code with their phone camera and the star chart opens, ready to use at home during the week.",qSteps:["Ask the parent to open their phone camera and point it at the code.","Have them tap the link that appears on the screen.","Set up the chart together with the child before the session ends."]},
   es:{title:"Herramientas terapéuticas", q:"¿Qué necesitas ahora mismo?", tools:n=>n===1?"1 herramienta":`${n} herramientas`, soonTile:"Próximamente",
       back:"← Todas las necesidades", ages:"Edades", soonT:"Próximamente", soonP:"Herramientas que estamos preparando. Aparecerán arriba cuando estén listas.",
       showing:"Mostrando herramientas para", showAll:"Ver todas", roles:{iic:"Clínicos IIC",ba:"BA",pc:"Parent Coaching"},
-      none:"Todavía no hay herramientas para tu rol en esta área.",fbT:"Una pregunta rápida 🙂",fbP:"Estamos creando estas herramientas para ustedes y queremos saber si debemos seguir desarrollándolas.",fbQ:"¿Te parecen útiles las Therapeutic Tools?",fbYes:"👍 Sí",fbNo:"👎 No",fbPh:"¿Algo que te gustaría que agreguemos o cambiemos? (opcional)",fbSend:"Enviar",fbLater:"Ahora no",fbTy:"¡Gracias!",fbTy2:"Tu respuesta nos ayuda a decidir qué construir.",qT:"Tabla de estrellas para casa",share:"📤 Enviar el enlace al padre",copied:"Enlace copiado. Péguelo en un mensaje de texto o WhatsApp al padre.",qP:"El padre escanea este código con la cámara de su celular y se le abre la tabla de estrellas para usar en casa durante la semana.",qSteps:["Pídale al padre que abra la cámara de su celular y apunte al código.","Que toque el enlace que aparece en la pantalla.","Configuren la tabla juntos con el niño antes de terminar la sesión."]}
+      none:"Todavía no hay herramientas para tu rol en esta área.",search:"Buscar: miedo, enojo, juego…",forLbl:"Para:",allR:"Todas",clear:"Borrar búsqueda",results:n=>n===1?"1 herramienta encontrada":`${n} herramientas encontradas`,noRes:"Todavía no hay herramientas con esa búsqueda.",soonMatch:"Próximamente:",fbT:"Una pregunta rápida 🙂",fbP:"Estamos creando estas herramientas para ustedes y queremos saber si debemos seguir desarrollándolas.",fbQ:"¿Te parecen útiles las Therapeutic Tools?",fbYes:"👍 Sí",fbNo:"👎 No",fbPh:"¿Algo que te gustaría que agreguemos o cambiemos? (opcional)",fbSend:"Enviar",fbLater:"Ahora no",fbTy:"¡Gracias!",fbTy2:"Tu respuesta nos ayuda a decidir qué construir.",qT:"Tabla de estrellas para casa",share:"📤 Enviar el enlace al padre",copied:"Enlace copiado. Péguelo en un mensaje de texto o WhatsApp al padre.",qP:"El padre escanea este código con la cámara de su celular y se le abre la tabla de estrellas para usar en casa durante la semana.",qSteps:["Pídale al padre que abra la cámara de su celular y apunte al código.","Que toque el enlace que aparece en la pantalla.","Configuren la tabla juntos con el niño antes de terminar la sesión."]}
 };
 
 const NEEDS = [
@@ -197,7 +221,7 @@ const TOOLS = [
    en:["Star chart at home","Open the weekly chart, show it to the family and share it with them."], es:["Tabla de estrellas en casa","Abra la tabla semanal, muéstresela a la familia y compártala con ellos."]},
   {e:"👨‍👧",link:"special",needs:["parent"],       roles:["pc"],       age:"2–8",
    en:["Special time","5 minutes of child-led play, with parent coaching."],       es:["Tiempo especial","5 minutos de juego dirigido por el niño, con coaching al padre."]},
-  {e:"👋",link:"checkin", needs:["start","feel"], roles:["iic","ba"], age:"5+",
+  {e:"👋",link:"checkin", needs:["start","feel"], roles:["iic","ba","pc"], age:"5+",
    en:["How am I today?","Quick check-in and check-out: weather, battery and what's on their mind."], es:["¿Cómo llego hoy?","Check-in y check-out rápido: clima, batería y lo que tiene en la mente."]},
   {e:"🎲",link:"dice",    needs:["start"],        roles:["iic","ba"], age:"5+",
    en:["Get-to-know-me dice","Roll for a question and take turns answering. Kids and teens."], es:["Dado Conóceme","Tira el dado, sale una pregunta y se turnan para contestar. Niños y adolescentes."]},
@@ -228,10 +252,9 @@ const toolsFor = n => TOOLS.filter(t => t.needs.includes(n) && forRole(t));
 
 function renderHome(){
   const u = UI[lang];
-  const rb = $("rolebar");
-  if(role!=="all"){ rb.hidden=false; rb.innerHTML = `${u.showing} <b>${u.roles[role]}</b> · <button id="all">${u.showAll}</button>`;
-    $("all").onclick = ()=>{ role="all"; try{history.replaceState(null,"",location.pathname);}catch(e){} paint(); }; }
-  else rb.hidden = true;
+  $("rf").setAttribute("aria-label",u.forLbl);
+  $("rf").innerHTML = `<span>${u.forLbl}</span>`+[["all",u.allR],["iic","IIC"],["ba","BA"],["pc","PC"]].map(([k,l])=>`<button data-r="${k}" aria-pressed="${role===k}" title="${k==="all"?"":u.roles[k]}">${l}</button>`).join("");
+  $("rf").querySelectorAll("button").forEach(b=>b.onclick=()=>{ role=b.dataset.r; try{history.replaceState(null,"",location.pathname+location.search+(role==="all"?"":"#"+role));}catch(e){} paint(); });
 
   $("needs").innerHTML = "";
   NEEDS.forEach(n=>{
@@ -247,15 +270,36 @@ function renderHome(){
   $("soon").innerHTML = `<h2>${u.soonT}</h2><p>${u.soonP}</p><ul>${soon.map(s=>`<li><span aria-hidden="true">${s.e}</span>${s[lang]}</li>`).join("")}</ul>`;
 }
 
+function toolCard(t,withNeed){
+  const u=UI[lang], n=withNeed&&NEEDS.find(x=>x.id===t.needs[0]);
+  return `<a class="tool" href="${LINKS[t.link]+"?v="+VER+(["home","anger","body","special","ladder"].includes(t.link)?"&t=1":"")+(window.ttClin&&ttClin()?"&c="+encodeURIComponent(ttClin()):"")}">
+      <span class="e" aria-hidden="true">${t.e}</span>
+      <div><h3>${t[lang][0]}</h3><p>${t[lang][1]}</p><span class="age">${u.ages} ${t.age}</span>${n?`<span class="in" style="--c:${n.c}">${n[lang][0]}</span>`:""}</div>
+      <span class="go" aria-hidden="true">›</span></a>`;
+}
+/* ---- search ---- */
+const KW={anger:"angry mad rage tantrum meltdown enojo ira coraje rabia berrinche bravo",body:"tipp dbt stress panic teen estres panico adolescente cuerpo",emotions:"feelings faces emotions sentimientos emociones caras",monster:"worry anxious anxiety fear ansiedad preocupacion miedo nervios",ba:"token reward first then abc behavior fichas premio conducta primero despues",home:"star chart reward parent home estrellas premio padres casa tabla",special:"play parent bonding pcit juego padres conexion",checkin:"check in check out mood weather battery animo clima bateria como estas",dice:"icebreaker rapport first visit questions game rompehielo conocer preguntas primera visita",ladder:"fear phobia exposure brave scared anxiety dark dogs miedo fobia exposicion valiente valentia ansiedad oscuridad perros escalera"};
+const norm=x=>(x||"").toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+const hay=t=>norm([t.en.join(" "),t.es.join(" "),KW[t.link]||"",t.needs.map(id=>{const n=NEEDS.find(x=>x.id===id);return n.en.join(" ")+" "+n.es.join(" ")}).join(" ")].join(" "));
+function runSearch(){
+  const u=UI[lang], raw=$("q").value, q=norm(raw).trim(), on=!!q;
+  $("qClr").hidden=!on; $("needs").hidden=on; $("soon").hidden=on||!SOON.filter(forRole).length; $("results").hidden=!on;
+  if(!on){$("results").innerHTML="";return;}
+  const words=q.split(/\s+/).map(w=>w.length>5?w.slice(0,Math.max(5,w.length-2)):w);
+  const hit=TOOLS.filter(t=>forRole(t)&&words.every(w=>hay(t).includes(w)));
+  const soonHit=SOON.filter(x=>forRole(x)&&words.every(w=>norm(x.en+" "+x.es).includes(w)));
+  $("results").innerHTML=(hit.length?`<p class="res-h">${u.results(hit.length)}</p>`+hit.map(t=>toolCard(t,true)).join(""):`<p class="empty">${u.noRes}</p>`)+
+    (soonHit.length?`<p class="soonres">${u.soonMatch} <b>${soonHit.map(x=>x.e+" "+x[lang]).join(" · ")}</b></p>`:"");
+}
+$("q").addEventListener("input",runSearch);
+$("qClr").onclick=()=>{$("q").value="";runSearch();$("q").focus();};
+
 function renderView(){
   const u = UI[lang], n = NEEDS.find(x=>x.id===open);
   $("back").textContent = u.back;
   $("vHead").innerHTML = `<div class="ico" style="--c:${n.c}" aria-hidden="true">${n.e}</div><div><h2>${n[lang][0]}</h2><p>${n[lang][1]}</p></div>`;
   const list = toolsFor(open);
-  $("vTools").innerHTML = list.length ? list.map(t=>`<a class="tool" href="${LINKS[t.link]+"?v="+VER+(["home","anger","body","special","ladder"].includes(t.link)?"&t=1":"")+(window.ttClin&&ttClin()?"&c="+encodeURIComponent(ttClin()):"")}">
-      <span class="e" aria-hidden="true">${t.e}</span>
-      <div><h3>${t[lang][0]}</h3><p>${t[lang][1]}</p><span class="age">${u.ages} ${t.age}</span></div>
-      <span class="go" aria-hidden="true">›</span></a>`).join("") : `<p class="empty">${u.none}</p>`;
+  $("vTools").innerHTML = list.length ? list.map(t=>toolCard(t)).join("") : `<p class="empty">${u.none}</p>`;
   $("vTools").querySelectorAll("[data-qr]").forEach(a=>a.onclick=e=>{e.preventDefault();openQR();});
 }
 const VER="6";
@@ -278,7 +322,8 @@ function paint(){
   document.documentElement.lang = lang; document.title = UI[lang].title;
   document.querySelectorAll("[data-t]").forEach(el=>el.textContent = UI[lang][el.dataset.t]);
   document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.lang===lang));
-  renderHome(); if(open) renderView(); if(!$("qBg").hidden) renderQR(); if(!$("fb").hidden) fbPaint();
+  $("q").placeholder=UI[lang].search; $("qClr").setAttribute("aria-label",UI[lang].clear); $("q").setAttribute("aria-label",UI[lang].search);
+  renderHome(); runSearch(); if(open) renderView(); if(!$("qBg").hidden) renderQR(); if(!$("fb").hidden) fbPaint();
 }
 document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{ lang=b.dataset.lang; paint(); });
 window.addEventListener("hashchange", ()=>{ const h=location.hash.slice(1); role=["iic","ba","pc"].includes(h)?h:"all"; open=null; show("home"); paint(); });
