@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bravery ladder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF3FF; --surface:#FFFFFF; --ink:#16224A; --muted:#5A6688;
+  --navy:#1A3A8F; --line:#D5DEF5; --soft:#E3EAFB; --acc:#5FB3E8; --gold:#FFC93C; --ok:#2FA77A; --mag:#C2185B;
+  box-sizing:border-box;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){--bg:#0F1530;--surface:#1A2246;--ink:#EEF2FF;--muted:#A8B3D6;--navy:#8FA9FF;--line:#2C3766;--soft:#232D58;color-scheme:dark}
+}
+:root[data-theme="dark"]{--bg:#0F1530;--surface:#1A2246;--ink:#EEF2FF;--muted:#A8B3D6;--navy:#8FA9FF;--line:#2C3766;--soft:#232D58;color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:Lato,"Helvetica Neue",Arial,sans-serif;font-size:17px;line-height:1.45;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:520px;margin:0 auto;padding:14px 18px 32px;display:flex;flex-direction:column;min-height:100vh;gap:14px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.alogo{display:block;height:44px;width:auto;border-radius:10px;background:#fff;padding:2px 6px}
+.lang{display:flex;background:var(--soft);border-radius:999px;padding:3px}
+.lang button{border:0;background:transparent;color:var(--muted);font:700 14px Lato,sans-serif;padding:6px 14px;border-radius:999px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--surface);color:var(--navy);box-shadow:0 1px 3px rgba(22,34,74,.15)}
+button{font-family:inherit}
+button:focus-visible,input:focus-visible{outline:3px solid var(--navy);outline-offset:2px}
+h1{font-family:"Baloo 2",system-ui,sans-serif;font-weight:800;font-size:clamp(34px,9.5vw,48px);line-height:1;margin:0}
+h2{font-family:"Baloo 2",system-ui,sans-serif;font-weight:800;font-size:clamp(24px,6.5vw,30px);line-height:1.05;margin:0}
+.lead{color:var(--muted);margin:0;max-width:36ch}
+.label{display:block;font:800 19px "Baloo 2",sans-serif;margin:0 0 6px}
+.field{width:100%;border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:14px;padding:11px 13px;font:400 17px Lato,sans-serif}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 13px;font:700 15px Lato,sans-serif;cursor:pointer;display:flex;align-items:center;gap:6px;transition:border-color .15s,background .15s}
+.chip:hover{border-color:var(--acc);background:var(--soft)}
+.chip[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+.next{border:0;background:#1A3A8F;color:#fff;border-radius:999px;padding:15px 22px;font:700 18px Lato,sans-serif;cursor:pointer;transition:background .15s}
+.next:hover{background:#244BB0}
+.next:disabled{opacity:.4;cursor:default}
+.ghost{border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:12px 16px;font:700 16px Lato,sans-serif;cursor:pointer;transition:border-color .15s,background .15s}
+.ghost:hover{border-color:var(--acc);background:var(--soft)}
+.link{border:0;background:none;color:var(--muted);font:700 15px Lato,sans-serif;cursor:pointer;padding:6px 0;align-self:center;text-decoration:underline}
+.link:hover{color:var(--navy)}
+.hint{min-height:20px;margin:0;color:#D9480F;font-weight:700;font-size:15px}
+.steps-edit{display:grid;gap:8px}
+.srow{display:flex;gap:8px;align-items:center}
+.srow .n{flex:none;width:30px;height:30px;border-radius:50%;background:var(--soft);display:flex;align-items:center;justify-content:center;font:800 15px "Baloo 2",sans-serif;color:var(--navy)}
+.srow .x{flex:none;border:0;background:none;color:var(--muted);font-size:20px;cursor:pointer;padding:4px 6px}
+.srow .x:hover{color:#D9480F}
+
+/* therapist bar */
+.tbar{display:flex;align-items:center;gap:12px;justify-content:space-between;background:#FFF7FA;border:2px solid #F4C0D1;border-radius:18px;padding:10px 14px;font-size:14px;color:#72243E}
+.tbar b{font-size:15px;color:#4B1528}
+.tshare{flex:none;border:0;background:var(--mag);color:#fff;border-radius:999px;padding:10px 14px;font:700 14px Lato,sans-serif;cursor:pointer}
+.tshare:hover{background:#A3144C}
+
+/* ladder */
+.goalcard{display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,#1A3A8F,#3A62D6);color:#fff;border-radius:22px;padding:14px 16px}
+.goalcard .e{font-size:40px;line-height:1}
+.goalcard small{display:block;opacity:.85;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.goalcard b{font:800 21px/1.1 "Baloo 2",sans-serif}
+.prog{display:flex;align-items:center;gap:10px;font-weight:700;color:var(--muted);font-size:15px}
+.bar{flex:1;height:10px;border-radius:999px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--gold);border-radius:999px;transition:width .5s}
+.ladder{position:relative;display:flex;flex-direction:column-reverse;gap:10px;padding:4px 0 4px 26px}
+.ladder::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:6px;border-radius:3px;background:repeating-linear-gradient(var(--line) 0 14px,transparent 14px 20px)}
+.rung{position:relative;display:flex;align-items:center;gap:12px;background:var(--surface);border:2px solid var(--line);border-radius:18px;padding:12px 14px;cursor:pointer;text-align:left;color:var(--ink);transition:border-color .15s,background .15s,transform .1s}
+.rung:hover{border-color:var(--acc);background:var(--soft)}
+.rung:active{transform:scale(.99)}
+.rung::before{content:"";position:absolute;left:-22px;top:50%;width:20px;height:4px;background:var(--line);border-radius:2px}
+.rung .st{flex:none;width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font:800 18px "Baloo 2",sans-serif;background:var(--soft);color:var(--navy)}
+.rung.done{border-color:var(--gold);background:#FFF8E1}
+.rung.done .st{background:var(--gold);color:#16224A}
+.rung.now{border-color:var(--navy);box-shadow:0 0 0 3px rgba(26,58,143,.15)}
+.rung.now .st{background:var(--navy);color:#fff}
+.rung.lock{opacity:.6}
+.rung .tx{min-width:0;flex:1}
+.rung .tx b{display:block;font-size:16.5px;line-height:1.25}
+.rung .tx small{color:var(--muted);font-size:13.5px}
+.rung .tag{flex:none;font:800 12px Lato,sans-serif;color:var(--navy);background:var(--soft);border-radius:999px;padding:3px 9px}
+.rung.done .tag{background:var(--gold);color:#16224A}
+.tools{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+
+/* practice */
+.therm{display:grid;grid-template-columns:repeat(11,1fr);gap:4px}
+.therm button{border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;height:46px;font:800 16px "Baloo 2",sans-serif;cursor:pointer;padding:0;transition:transform .1s}
+.therm button:hover{transform:translateY(-2px)}
+.therm button[aria-pressed="true"]{color:#fff;border-color:transparent}
+.ends{display:flex;justify-content:space-between;color:var(--muted);font-size:13.5px;margin-top:4px;font-weight:700}
+.pcard{background:var(--surface);border:2px solid var(--line);border-radius:22px;padding:16px;display:flex;flex-direction:column;gap:14px}
+.pstep{font:800 22px/1.15 "Baloo 2",sans-serif}
+.big{font-size:56px;text-align:center;line-height:1}
+.result{display:flex;align-items:center;justify-content:center;gap:16px;font:800 34px "Baloo 2",sans-serif}
+.result span{display:flex;flex-direction:column;align-items:center}
+.result small{font:700 13px Lato,sans-serif;color:var(--muted)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.toast{min-height:20px;text-align:center;color:var(--ok);font-weight:700;margin:0;font-size:15px}
+.hist{font-size:14px;color:var(--muted);margin:0}
+
+/* share sheet */
+.sbg{position:fixed;inset:0;z-index:60;background:rgba(10,15,30,.45);display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--bg);width:100%;max-width:560px;max-height:90vh;overflow-y:auto;border-radius:26px 26px 0 0;padding:18px 18px calc(24px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:12px}
+.shead{display:flex;justify-content:space-between;align-items:center}
+.shead button{border:0;background:var(--soft);color:var(--ink);width:38px;height:38px;border-radius:50%;font-size:18px;cursor:pointer}
+.qbox{align-self:center;background:#fff;padding:12px;border-radius:16px}
+.sheet ol{margin:0;padding-left:20px;display:grid;gap:4px;font-size:15.5px}
+
+:root{--hc:#1A3A8F}
+.hbtn{border:2px solid var(--line);background:var(--surface);color:var(--hc);border-radius:999px;padding:5px 11px 5px 6px;font:700 13.5px Lato,sans-serif;cursor:pointer;display:flex;align-items:center;gap:6px}
+.hbtn:hover{background:var(--soft)}
+.hbtn i{font-style:normal;width:20px;height:20px;border-radius:50%;background:var(--hc);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:13px}
+.hsheet-bg{position:fixed;inset:0;z-index:50;background:rgba(10,15,30,.45);display:flex;align-items:flex-end;justify-content:center}
+.hsheet{background:var(--bg);color:var(--ink);width:100%;max-width:560px;max-height:88vh;overflow-y:auto;border-radius:26px 26px 0 0;padding:18px 18px calc(24px + env(safe-area-inset-bottom,0px))}
+.hsheet-head{display:flex;justify-content:space-between;align-items:center;gap:10px;position:sticky;top:-18px;background:var(--bg);padding:6px 0 10px}
+.hsheet-head h2{font:800 24px/1.1 "Baloo 2",sans-serif;margin:0}
+.hsheet-head button{border:0;background:var(--soft);color:var(--ink);width:38px;height:38px;border-radius:50%;font-size:18px;cursor:pointer;flex:none}
+.hsec{background:var(--surface);border:2px solid var(--line);border-radius:20px;padding:14px 16px;margin-bottom:12px;font-size:16px;line-height:1.5}
+.hsec h3{margin:0 0 6px;font:700 19px/1.15 "Baloo 2",sans-serif;color:var(--hc)}
+.hsec p{margin:0}.hsec ol{margin:0;padding-left:20px;display:grid;gap:5px}
+.hsec.tip{background:var(--soft);border-color:transparent}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div style="display:flex;align-items:center;gap:10px"><img class="alogo" src="https://www.jotform.com/uploads/enmanuelf59/form_files/Captura%20de%20pantalla%202026-04-22%20160244.69fbcf54529891.59675446.jpg" alt="Aliado Community Health"><button class="hbtn" id="helpBtn" aria-haspopup="dialog"><i aria-hidden="true">?</i><span id="helpLbl">Help</span></button></div>
+    <div class="lang" role="group" aria-label="Language">
+      <button data-lang="en" aria-pressed="true">EN</button>
+      <button data-lang="es" aria-pressed="false">ES</button>
+    </div>
+  </div>
+
+  <div class="tbar" id="tbar" hidden><div><b data-t="tbarT"></b><br><span data-t="tbarP"></span></div><button class="tshare" id="tShare" data-t="tShare"></button></div>
+
+  <!-- Setup 1: fear -->
+  <section id="s1" hidden style="display:flex;flex-direction:column;gap:16px">
+    <div style="font-size:48px;line-height:1" aria-hidden="true">🪜</div>
+    <h1 data-t="title"></h1>
+    <p class="lead" data-t="lead"></p>
+    <div><label class="label" for="kid" data-t="kidQ"></label><input class="field" id="kid" maxlength="25" autocomplete="off"></div>
+    <div><p class="label" data-t="fearQ"></p><div class="chips" id="fears"></div>
+      <input class="field" id="fearTxt" maxlength="50" autocomplete="off" style="margin-top:10px" hidden></div>
+    <p class="hint" id="h1"></p>
+    <button class="next" id="n1" data-t="next"></button>
+  </section>
+
+  <!-- Setup 2: steps -->
+  <section id="s2" hidden style="display:flex;flex-direction:column;gap:14px">
+    <h2 data-t="stepsT"></h2>
+    <p class="lead" data-t="stepsP"></p>
+    <div class="steps-edit" id="stepsEdit"></div>
+    <button class="ghost" id="addStep" data-t="addStep"></button>
+    <div><p class="label" data-t="prizeQ"></p><div class="chips" id="prizes"></div></div>
+    <div><label class="label" for="big" data-t="bigQ"></label><input class="field" id="big" maxlength="40" autocomplete="off"></div>
+    <p class="hint" id="h2"></p>
+    <button class="next" id="n2" data-t="build"></button>
+    <button class="link" id="b2" data-t="back"></button>
+  </section>
+
+  <!-- Ladder -->
+  <section id="lad" hidden style="display:flex;flex-direction:column;gap:14px">
+    <div class="goalcard"><span class="e" aria-hidden="true">🏆</span><div><small id="goalSmall"></small><b id="goalTxt"></b></div></div>
+    <div class="prog"><span id="progTxt"></span><div class="bar"><i id="progBar"></i></div></div>
+    <div class="ladder" id="ladder"></div>
+    <p class="lead" style="font-size:15px" data-t="tapStep"></p>
+    <div class="tools"><button class="ghost" id="copy" data-t="copy"></button></div>
+    <p class="toast" id="toastL" aria-live="polite"></p>
+    <div class="tools"><button class="link" id="edit" data-t="edit"></button><button class="link" id="newL" data-t="newL"></button></div>
+  </section>
+
+  <!-- Practice -->
+  <section id="pr" hidden style="display:flex;flex-direction:column;gap:14px">
+    <p class="lead" id="prN" style="font-weight:700"></p>
+    <div class="pstep" id="prStep"></div>
+    <div class="pcard" id="pBefore">
+      <p class="label" style="margin:0" data-t="beforeQ"></p>
+      <div class="therm" id="thB"></div>
+      <div class="ends"><span data-t="calm0"></span><span data-t="scary10"></span></div>
+      <button class="next" id="goDo" data-t="goDo" disabled></button>
+    </div>
+    <div class="pcard" id="pDo" hidden>
+      <div class="big" aria-hidden="true">💪</div>
+      <p style="margin:0;text-align:center;font-size:18px" data-t="doIt"></p>
+      <button class="next" id="did" data-t="did"></button>
+    </div>
+    <div class="pcard" id="pAfter" hidden>
+      <p class="label" style="margin:0" data-t="afterQ"></p>
+      <div class="therm" id="thA"></div>
+      <div class="ends"><span data-t="calm0"></span><span data-t="scary10"></span></div>
+      <div class="result" id="res" hidden></div>
+      <p class="lead" id="resMsg" style="text-align:center;align-self:center"></p>
+      <div class="row2" id="endBtns" hidden>
+        <button class="ghost" id="again" data-t="again"></button>
+        <button class="next" id="climb" data-t="climb"></button>
+      </div>
+    </div>
+    <button class="link" id="prBack" data-t="toLadder"></button>
+  </section>
+</div>
+
+<!-- share sheet (therapist) -->
+<div class="sbg" id="sBg" hidden><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sT">
+  <div class="shead"><h2 id="sT" data-t="sT"></h2><button id="sX" aria-label="Close">✕</button></div>
+  <p class="lead" data-t="sP" style="max-width:none"></p>
+  <div class="chips" id="sLangs"></div>
+  <div class="qbox" id="qBox"></div>
+  <ol id="sSteps"></ol>
+  <button class="next" id="sSend" data-t="sSend"></button>
+  <p class="toast" id="sNote" aria-live="polite"></p>
+</div></div>
+
+<script>
+const UI={
+ en:{title:"Bravery ladder",lead:"Face a fear one small step at a time. Each step you climb makes the fear smaller.",
+  kidQ:"Child's first name (optional)",fearQ:"What fear are we facing?",fearPh:"Write the fear",next:"Next",needFear:"Pick or write a fear.",
+  stepsT:"Build the ladder",stepsP:"From the easiest step (bottom) to the hardest (top). Edit them so they fit this child.",
+  addStep:"+ Add a step",stepPh:"Step",prizeQ:"Prize for each step climbed",bigQ:"Big prize at the top",bigPh:"E.g. Trip to the park",
+  build:"Build my ladder 🪜",back:"← Back",needSteps:"Write at least 3 steps.",
+  goal:(k)=>k?`${k}'s goal`:"The goal",prog:(d,t)=>`${d} of ${t} steps`,tapStep:"Tap the next step to practice it. Practice each step until the fear goes down.",
+  copy:"📋 Copy for my note",copied:"Copied. Paste it into the progress note.",edit:"Edit ladder",newL:"Start a new ladder",confirmNew:"Delete this ladder and start a new one?",
+  step:(n,t)=>`Step ${n} of ${t}`,beforeQ:"Before: how scary does it feel right now?",calm0:"0 · Not scary",scary10:"10 · Super scary",goDo:"Ready, let's do it",
+  doIt:"Do the step now. Stay with it until the fear starts to go down. You can do it!",did:"I did it! ✅",
+  afterQ:"After: how scary does it feel now?",again:"Practice again later",climb:"Climbed it! ⭐",toLadder:"← Back to the ladder",
+  down:(a,b)=>`The fear went from ${a} to ${b}. That's your brain learning it's safe!`,same:()=>`Fear didn't go down yet. That's okay: practicing again is how it gets smaller.`,
+  tries:n=>`${n} ${n===1?"try":"tries"}`,doneTag:"⭐ Done",nowTag:"Next",
+  tbarT:"Therapist view",tbarP:"Share it so the family keeps it on their phone.",tShare:"📤 Share with family",
+  sT:"Bravery ladder for home",sP:"The parent scans the code or gets the link. The ladder is built and saved on the family's phone, so they practice during the week and you check it at the next visit.",
+  sSteps:["Ask the parent to open their phone camera and point at the code.","Have them tap the link.","Build the ladder together on their phone before you leave."],sSend:"📤 Send the link to the parent",
+  sCopied:"Link copied. Paste it in a text or WhatsApp to the parent.",
+  prizes:[["⭐","Sticker"],["🎮","10 extra min of play"],["🍕","Pick dinner"],["👨‍👧","Special time"],["🍪","Small treat"],["🎉","High five + praise"]]},
+ es:{title:"Escalera de valentía",lead:"Enfrentar un miedo un pasito a la vez. Cada escalón que subes hace el miedo más pequeño.",
+  kidQ:"Nombre del niño (opcional)",fearQ:"¿Qué miedo vamos a enfrentar?",fearPh:"Escribe el miedo",next:"Siguiente",needFear:"Escoge o escribe un miedo.",
+  stepsT:"Arma la escalera",stepsP:"Del escalón más fácil (abajo) al más difícil (arriba). Edítalos para que le queden a este niño.",
+  addStep:"+ Agregar escalón",stepPh:"Escalón",prizeQ:"Premio por cada escalón",bigQ:"Premio grande al llegar arriba",bigPh:"Ej: Ir al parque",
+  build:"Armar mi escalera 🪜",back:"← Atrás",needSteps:"Escribe por lo menos 3 escalones.",
+  goal:(k)=>k?`La meta de ${k}`:"La meta",prog:(d,t)=>`${d} de ${t} escalones`,tapStep:"Toca el próximo escalón para practicarlo. Practica cada uno hasta que el miedo baje.",
+  copy:"📋 Copiar para mi nota",copied:"Copiado. Pégalo en la nota de progreso.",edit:"Editar escalera",newL:"Empezar otra escalera",confirmNew:"¿Borrar esta escalera y empezar otra?",
+  step:(n,t)=>`Escalón ${n} de ${t}`,beforeQ:"Antes: ¿cuánto miedo sientes ahora?",calm0:"0 · Nada de miedo",scary10:"10 · Muchísimo miedo",goDo:"Listo, vamos a hacerlo",
+  doIt:"Haz el escalón ahora. Quédate ahí hasta que el miedo empiece a bajar. ¡Tú puedes!",did:"¡Lo hice! ✅",
+  afterQ:"Después: ¿cuánto miedo sientes ahora?",again:"Practicar otra vez después",climb:"¡Lo subí! ⭐",toLadder:"← Volver a la escalera",
+  down:(a,b)=>`El miedo bajó de ${a} a ${b}. ¡Tu cerebro está aprendiendo que es seguro!`,same:()=>`El miedo todavía no bajó. Está bien: practicando otra vez es como se hace más pequeño.`,
+  tries:n=>`${n} ${n===1?"intento":"intentos"}`,doneTag:"⭐ Listo",nowTag:"Siguiente",
+  tbarT:"Vista de la terapeuta",tbarP:"Compártela para que la familia la tenga en su celular.",tShare:"📤 Compartir con la familia",
+  sT:"Escalera de valentía para la casa",sP:"El padre escanea el código o recibe el link. La escalera se arma y se guarda en el celular de la familia, así practican en la semana y usted la revisa en la próxima visita.",
+  sSteps:["Pídale al padre que abra la cámara del celular y apunte al código.","Que toque el link que aparece.","Armen la escalera juntos en su celular antes de irse."],sSend:"📤 Enviar el link al padre",
+  sCopied:"Link copiado. Péguelo en un texto o WhatsApp al padre.",
+  prizes:[["⭐","Sticker"],["🎮","10 min más de juego"],["🍕","Escoger la cena"],["👨‍👧","Tiempo especial"],["🍪","Un dulce pequeño"],["🎉","Choca esos cinco + elogio"]]}
+};
+const FEARS=[
+ {id:"dark",e:"🌙",en:"The dark",es:"La oscuridad",steps:{en:["Be in a room with the lights dimmed","Turn off the light for 10 seconds with a parent","Turn off the light for 1 minute with a parent","Stay in the dark room alone for 1 minute","Fall asleep with only a night light"],es:["Estar en un cuarto con la luz bajita","Apagar la luz 10 segundos con papá o mamá","Apagar la luz 1 minuto con papá o mamá","Quedarse solo en el cuarto oscuro 1 minuto","Dormirse solo con una lucecita de noche"]}},
+ {id:"dogs",e:"🐶",en:"Dogs",es:"Los perros",steps:{en:["Look at pictures of dogs","Watch a video of a dog","Watch a dog from far away","Stand near a calm dog on a leash","Pet a calm dog"],es:["Ver fotos de perros","Ver un video de un perro","Mirar un perro de lejos","Pararse cerca de un perro tranquilo con correa","Tocar a un perro tranquilo"]}},
+ {id:"alone",e:"🏠",en:"Being away from parent",es:"Separarse de papá o mamá",steps:{en:["Parent goes to another room for 2 minutes","Parent goes to another room for 10 minutes","Stay with a trusted adult for 30 minutes","Parent leaves the house for 15 minutes","Go to school / sleep over at grandma's"],es:["Papá o mamá va a otro cuarto 2 minutos","Papá o mamá va a otro cuarto 10 minutos","Quedarse con un adulto de confianza 30 minutos","Papá o mamá sale de la casa 15 minutos","Ir a la escuela / dormir donde la abuela"]}},
+ {id:"talk",e:"🗣️",en:"Talking to people",es:"Hablar con otros",steps:{en:["Say hi to a relative on the phone","Order your own food at a restaurant","Ask a store worker a question","Raise your hand once in class","Read out loud in class"],es:["Saludar a un familiar por teléfono","Pedir tu propia comida en un restaurante","Hacerle una pregunta a alguien en una tienda","Levantar la mano una vez en clase","Leer en voz alta en clase"]}},
+ {id:"bugs",e:"🐛",en:"Bugs",es:"Los insectos",steps:{en:["Look at pictures of bugs","Watch a video of a bug","Look at a bug in a closed jar","Stand near a bug outside","Let a ladybug walk on your hand"],es:["Ver fotos de insectos","Ver un video de un insecto","Mirar un insecto en un frasco cerrado","Pararse cerca de un insecto afuera","Dejar que una mariquita camine en tu mano"]}},
+ {id:"doctor",e:"🩺",en:"Doctor / shots",es:"El médico / vacunas",steps:{en:["Play doctor with a toy kit","Look at pictures of a doctor's office","Sit in the clinic waiting room","Let the doctor check your ears","Get the check-up"],es:["Jugar al doctor con un kit de juguete","Ver fotos de un consultorio","Sentarse en la sala de espera","Dejar que el doctor te revise los oídos","Hacerse el chequeo"]}},
+ {id:"other",e:"✏️",en:"Other",es:"Otro",steps:{en:["","","","",""],es:["","","","",""]}}
+];
+const COLORS=["#2FA77A","#45B07A","#7CC36A","#A6C85A","#D3C94A","#FFC93C","#FFA552","#F28A4B","#EF6E4F","#E5534B","#D93B45"];
+const KEY="tt-ladder-v1";
+const $=id=>document.getElementById(id);
+const P=new URLSearchParams(location.search);
+const THER=P.get("t")==="1";
+let lang=P.get("lang")==="es"?"es":"en";
+let st=null;try{st=JSON.parse(localStorage.getItem(KEY)||"null")}catch(e){}
+let draft={kid:"",fear:null,fearTxt:"",steps:[],prize:0,big:""};
+let cur=null;
+const U=()=>UI[lang];
+function save(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
+function show(id){["s1","s2","lad","pr"].forEach(s=>$(s).hidden=s!==id);window.scrollTo(0,0);}
+function fearName(){if(!st)return"";if(st.fear==="other")return st.fearTxt;const f=FEARS.find(x=>x.id===st.fear);return f?f[st.lang||lang]:"";}
+
+function paint(){
+  document.documentElement.lang=lang;document.title=U().title;
+  document.querySelectorAll("[data-t]").forEach(el=>{const v=U()[el.dataset.t];if(typeof v==="string")el.textContent=v;});
+  document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.lang===lang));
+  $("tbar").hidden=!THER;
+  $("fearTxt").placeholder=U().fearPh;$("big").placeholder=U().bigPh;
+  renderFears();renderPrizes();if(!$("s2").hidden)renderStepsEdit();
+  if(!$("lad").hidden)renderLadder();if(!$("pr").hidden&&cur)renderPractice();
+}
+document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{lang=b.dataset.lang;paint();});
+
+/* ---- setup ---- */
+function renderFears(){
+  $("fears").innerHTML="";FEARS.forEach(f=>{const b=document.createElement("button");b.className="chip";b.setAttribute("aria-pressed",draft.fear===f.id);
+    b.innerHTML=`<span aria-hidden="true">${f.e}</span>${f[lang]}`;
+    b.onclick=()=>{draft.fear=f.id;$("fearTxt").hidden=f.id!=="other";$("h1").textContent="";renderFears();if(f.id==="other")$("fearTxt").focus();};
+    $("fears").appendChild(b);});
+}
+$("n1").onclick=()=>{
+  draft.kid=$("kid").value.trim();draft.fearTxt=$("fearTxt").value.trim();
+  if(!draft.fear||(draft.fear==="other"&&!draft.fearTxt)){$("h1").textContent=U().needFear;return;}
+  const f=FEARS.find(x=>x.id===draft.fear);
+  if(!draft.steps.length||draft._for!==draft.fear+lang){draft.steps=f.steps[lang].slice();draft._for=draft.fear+lang;}
+  renderStepsEdit();show("s2");
+};
+function renderStepsEdit(){
+  $("stepsEdit").innerHTML="";
+  draft.steps.forEach((s,i)=>{const r=document.createElement("div");r.className="srow";
+    r.innerHTML=`<span class="n">${i+1}</span><input class="field" maxlength="70" autocomplete="off"><button class="x" aria-label="Remove">✕</button>`;
+    const inp=r.querySelector("input");inp.value=s;inp.placeholder=U().stepPh+" "+(i+1);inp.oninput=()=>draft.steps[i]=inp.value;
+    r.querySelector(".x").onclick=()=>{draft.steps.splice(i,1);renderStepsEdit();};
+    $("stepsEdit").appendChild(r);});
+  $("addStep").hidden=draft.steps.length>=8;
+}
+$("addStep").onclick=()=>{draft.steps.push("");renderStepsEdit();const ins=$("stepsEdit").querySelectorAll("input");ins[ins.length-1].focus();};
+function renderPrizes(){
+  $("prizes").innerHTML="";U().prizes.forEach((p,i)=>{const b=document.createElement("button");b.className="chip";b.setAttribute("aria-pressed",draft.prize===i);
+    b.innerHTML=`<span aria-hidden="true">${p[0]}</span>${p[1]}`;b.onclick=()=>{draft.prize=i;renderPrizes();};$("prizes").appendChild(b);});
+}
+$("b2").onclick=()=>show("s1");
+$("n2").onclick=()=>{
+  const steps=draft.steps.map(s=>s.trim()).filter(Boolean);
+  if(steps.length<3){$("h2").textContent=U().needSteps;return;}
+  draft.big=$("big").value.trim();
+  const old=st&&st.editing?st:null;
+  st={kid:draft.kid,fear:draft.fear,fearTxt:draft.fearTxt,lang,prize:draft.prize,big:draft.big,created:Date.now(),
+    steps:steps.map((t,i)=>{const prev=old&&old.steps[i]&&old.steps[i].t===t?old.steps[i]:null;return prev||{t,done:false,tries:[]};})};
+  save();if(window.ttLog)ttLog("complete",{answer:"built "+st.fear+" "+steps.length+" steps"});
+  renderLadder();show("lad");
+};
+
+/* ---- ladder ---- */
+function renderLadder(){
+  $("goalSmall").textContent=U().goal(st.kid);
+  $("goalTxt").textContent=(st.big?st.big+" · ":"")+fearName();
+  const d=st.steps.filter(s=>s.done).length,t=st.steps.length;
+  $("progTxt").textContent=U().prog(d,t);$("progBar").style.width=(100*d/t)+"%";
+  const nextI=st.steps.findIndex(s=>!s.done);
+  $("ladder").innerHTML="";
+  st.steps.forEach((s,i)=>{const b=document.createElement("button");
+    b.className="rung"+(s.done?" done":(i===nextI?" now":(i>nextI&&nextI>=0?" lock":"")));
+    const last=s.tries[s.tries.length-1];
+    const sub=s.tries.length?`${U().tries(s.tries.length)} · ${last.b} → ${last.a}`:"";
+    b.innerHTML=`<span class="st">${s.done?"⭐":i+1}</span><span class="tx"><b></b><small>${sub}</small></span>${s.done?`<span class="tag">${U().doneTag}</span>`:(i===nextI?`<span class="tag">${U().nowTag}</span>`:"")}`;
+    b.querySelector("b").textContent=s.t;
+    b.onclick=()=>startPractice(i);$("ladder").appendChild(b);});
+  $("toastL").textContent="";
+}
+$("edit").onclick=()=>{draft={kid:st.kid,fear:st.fear,fearTxt:st.fearTxt,steps:st.steps.map(s=>s.t),prize:st.prize,big:st.big,_for:st.fear+lang};
+  st.editing=true;$("kid").value=st.kid;$("fearTxt").value=st.fearTxt;$("fearTxt").hidden=st.fear!=="other";$("big").value=st.big;renderFears();renderStepsEdit();show("s2");};
+$("newL").onclick=()=>{if(!confirm(U().confirmNew))return;st=null;try{localStorage.removeItem(KEY)}catch(e){}
+  draft={kid:"",fear:null,fearTxt:"",steps:[],prize:0,big:""};$("kid").value="";$("fearTxt").value="";$("big").value="";renderFears();show("s1");};
+$("copy").onclick=async()=>{
+  const d=st.steps.filter(s=>s.done).length,t=st.steps.length;
+  const fearEn=st.fear==="other"?st.fearTxt:FEARS.find(x=>x.id===st.fear).en.toLowerCase();
+  let last=null,li=-1;st.steps.forEach((s,i)=>{const x=s.tries[s.tries.length-1];if(x&&(!last||x.at>last.at)){last=x;li=i;}});
+  let txt=`Gradual exposure (bravery ladder) targeting fear of ${fearEn}: ${d} of ${t} steps completed.`;
+  if(last)txt+=` Most recent practice: step ${li+1} ("${st.steps[li].t}"), fear rating ${last.b}/10 before and ${last.a}/10 after${last.a<last.b?", showing reduction in anxiety with practice":""}.`;
+  txt+=` Youth and caregiver will continue practicing between sessions.`;
+  try{await navigator.clipboard.writeText(txt);}catch(e){const a=document.createElement("textarea");a.value=txt;document.body.appendChild(a);a.select();try{document.execCommand("copy")}catch(_){}a.remove();}
+  $("toastL").textContent=U().copied;};
+
+/* ---- practice ---- */
+function therm(el,val,onPick){el.innerHTML="";for(let n=0;n<=10;n++){const b=document.createElement("button");b.textContent=n;b.setAttribute("aria-pressed",val===n);
+  if(val===n)b.style.background=COLORS[n];b.onclick=()=>onPick(n);el.appendChild(b);}}
+function startPractice(i){cur={i,b:null,a:null,stage:"before"};renderPractice();show("pr");}
+function renderPractice(){
+  const s=st.steps[cur.i];
+  $("prN").textContent=U().step(cur.i+1,st.steps.length);$("prStep").textContent=s.t;
+  $("pBefore").hidden=cur.stage!=="before";$("pDo").hidden=cur.stage!=="do";$("pAfter").hidden=cur.stage!=="after";
+  therm($("thB"),cur.b,n=>{cur.b=n;$("goDo").disabled=false;renderPractice();});$("goDo").disabled=cur.b===null;
+  therm($("thA"),cur.a,n=>{cur.a=n;renderPractice();});
+  if(cur.a!==null){$("res").hidden=false;$("endBtns").hidden=false;
+    $("res").innerHTML=`<span style="color:${COLORS[cur.b]}">${cur.b}<small>${lang==="es"?"antes":"before"}</small></span>→<span style="color:${COLORS[cur.a]}">${cur.a}<small>${lang==="es"?"después":"after"}</small></span>`;
+    $("resMsg").textContent=cur.a<cur.b?U().down(cur.b,cur.a):U().same();}
+  else{$("res").hidden=true;$("endBtns").hidden=true;$("resMsg").textContent="";}
+}
+$("goDo").onclick=()=>{cur.stage="do";renderPractice();};
+$("did").onclick=()=>{cur.stage="after";renderPractice();};
+function record(done){const s=st.steps[cur.i];s.tries.push({b:cur.b,a:cur.a,at:Date.now()});if(done)s.done=true;save();
+  if(window.ttLog)ttLog("complete",{answer:`step ${cur.i+1}/${st.steps.length} ${cur.b}->${cur.a}${done?" climbed":""}`});
+  cur=null;renderLadder();show("lad");}
+$("again").onclick=()=>record(false);
+$("climb").onclick=()=>record(true);
+$("prBack").onclick=()=>{cur=null;renderLadder();show("lad");};
+
+/* ---- share (therapist) ---- */
+let qLang="en";
+function famURL(){return "https://enmanuelf-ai.github.io/billing/herramientas-terapeuticas/escalera-valentia.html?lang="+qLang+(window.ttClin&&ttClin()?"&c="+encodeURIComponent(ttClin()):"");}
+function renderShare(){
+  $("sSteps").innerHTML=U().sSteps.map(x=>`<li>${x}</li>`).join("");
+  $("sLangs").innerHTML="";[["en","English"],["es","Español"]].forEach(([k,l])=>{const b=document.createElement("button");b.className="chip";b.textContent=l;b.setAttribute("aria-pressed",qLang===k);b.onclick=()=>{qLang=k;renderShare();};$("sLangs").appendChild(b);});
+  $("qBox").innerHTML="";try{new QRCode($("qBox"),{text:famURL(),width:200,height:200,correctLevel:QRCode.CorrectLevel.M});$("qBox").removeAttribute("title");}catch(e){$("qBox").textContent="QR not available";}
+  $("sNote").textContent="";}
+$("tShare").onclick=()=>{qLang=lang;renderShare();$("sBg").hidden=false;$("sX").focus();if(window.ttLog)ttLog("share_open");};
+$("sX").onclick=()=>{$("sBg").hidden=true;};
+$("sBg").onclick=e=>{if(e.target.id==="sBg")$("sBg").hidden=true;};
+$("sSend").onclick=async()=>{const text=(qLang==="es"?"¡Hola! Aquí tiene la Escalera de valentía para practicar en casa con su hijo esta semana. Su terapeuta la revisará con usted en la próxima visita: ":"Hi! Here is the Bravery ladder to practice at home with your child this week. Your therapist will review it with you at the next visit: ")+famURL();
+  if(window.ttLog)ttLog("share_link");
+  try{if(navigator.share){await navigator.share({text});return;}}catch(e){if(e&&e.name==="AbortError")return;}
+  try{await navigator.clipboard.writeText(text);}catch(e){const a=document.createElement("textarea");a.value=text;document.body.appendChild(a);a.select();try{document.execCommand("copy")}catch(_){}a.remove();}
+  $("sNote").textContent=U().sCopied;};
+
+/* ---- start ---- */
+paint();
+if(st&&st.steps&&st.steps.length){renderLadder();show("lad");}else show("s1");
+</script>
+
+<div class="hsheet-bg" id="hBg" hidden><div class="hsheet" role="dialog" aria-modal="true" aria-labelledby="hT2"><div class="hsheet-head"><h2 id="hT2"></h2><button id="hX" aria-label="Close">✕</button></div><div id="hB2"></div></div></div>
+<script>
+(function(){
+const H={es:{title:"¿Cómo funciona la escalera?",goal:"Es exposición gradual, la técnica con más respaldo para la ansiedad en niños: enfrentar el miedo de a poquito, del paso más fácil al más difícil, hasta que el miedo baja. Para niños desde 5 años y adolescentes.",
+ how:["Toca <b>Compartir con la familia</b> y que el padre abra el link en su celular. La escalera se guarda en el celular de la familia, no en el de usted.","Escojan el miedo y armen la escalera de 5 a 8 escalones, del más fácil al más difícil. Los ejemplos se pueden editar.","Escojan el premio por escalón y el premio grande de arriba.","En cada práctica: el niño marca su miedo antes (0 a 10), hace el escalón, y marca su miedo después.","Se sube al siguiente escalón cuando el miedo de ese paso ya está bajo (más o menos 3 o menos). Si no bajó, se practica otra vez.","En la próxima visita revisen la escalera en el celular de la familia y toquen <b>Copiar para mi nota</b>."],
+ tips:["Que el niño ayude a escoger los escalones: si siente que la escalera es suya, se compromete más.","Quedarse en el escalón hasta que el miedo baje es lo que hace que funcione. Evite rescatar al niño apenas siente miedo.","Practicar varias veces en la semana funciona mucho mejor que una sola vez en la visita.","Si el niño no puede con un escalón, inventen uno intermedio más fácil."]},
+ en:{title:"How does the ladder work?",goal:"It's gradual exposure, the best-supported technique for childhood anxiety: facing the fear little by little, from the easiest step to the hardest, until the fear goes down. For ages 5 and up, including teens.",
+ how:["Tap <b>Share with family</b> and have the parent open the link on their phone. The ladder is saved on the family's phone, not yours.","Pick the fear and build a ladder of 5 to 8 steps, easiest to hardest. The examples can be edited.","Pick the prize for each step and the big prize at the top.","Each practice: the child rates the fear before (0 to 10), does the step, then rates it after.","Move up when the fear for that step is low (around 3 or less). If it didn't go down, practice it again.","At the next visit, review the ladder on the family's phone and tap <b>Copy for my note</b>."],
+ tips:["Let the child help choose the steps: when the ladder feels like theirs, they commit more.","Staying with the step until the fear drops is what makes it work. Avoid rescuing the child as soon as they feel scared.","Practicing several times a week works much better than once at the visit.","If a step is too hard, make up an easier one in between."]}};
+const L={es:{btn:"Ayuda",goal:"Para qué sirve",how:"Cómo usarlo",close:"Cerrar"},en:{btn:"Help",goal:"What it's for",how:"How to use it",close:"Close"}};
+const g=id=>document.getElementById(id),lg=()=>document.documentElement.lang==="es"?"es":"en";
+function render(){const l=lg(),d=H[l],u=L[l];g("helpLbl").textContent=u.btn;g("hT2").textContent=d.title;g("hX").setAttribute("aria-label",u.close);
+ let h=`<div class="hsec"><h3>${u.goal}</h3><p>${d.goal}</p></div><div class="hsec"><h3>${u.how}</h3><ol>${d.how.map(x=>`<li>${x}</li>`).join("")}</ol></div>`;
+ d.tips.forEach(t=>h+=`<div class="hsec tip"><p>💡 ${t}</p></div>`);g("hB2").innerHTML=h;}
+g("helpBtn").onclick=()=>{render();g("hBg").hidden=false;g("hX").focus();};
+g("hX").onclick=()=>{g("hBg").hidden=true;g("helpBtn").focus();};
+g("hBg").onclick=e=>{if(e.target.id==="hBg")g("hX").click();};
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!g("hBg").hidden)g("hX").click();});
+new MutationObserver(render).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});
+render();
+})();
+</script>
+<script>
+/* TT_LOG: anonymous usage log (no client data) */
+(function(){
+let FLOWP=null;const getFlow=()=>{if(window.TT_FLOW)return Promise.resolve(window.TT_FLOW);if(FLOWP)return FLOWP;
+ let c=null;try{c=sessionStorage.getItem("tt-flow")}catch(e){}if(c)return FLOWP=Promise.resolve(c);
+ return FLOWP=fetch("tt-flow.txt",{cache:"no-store"}).then(r=>r.ok?r.text():"").then(t=>{t=(t||"").trim();try{if(t)sessionStorage.setItem("tt-flow",t)}catch(e){}return t;}).catch(()=>"");};
+const P=new URLSearchParams(location.search);
+let C=P.get("c")||"";try{if(C)sessionStorage.setItem("tt-c",C);else C=sessionStorage.getItem("tt-c")||"";}catch(e){}
+const MODE=P.get("t")==="1"?"therapist":"family";
+window.ttClin=()=>C;
+window.ttLog=function(event,extra){
+ const body=Object.assign({event,tool:'Bravery ladder',clinician:C,mode:MODE,lang:document.documentElement.lang||"en",answer:"",comment:""},extra||{});
+ getFlow().then(FLOW=>{if(!FLOW||FLOW.indexOf("https://")!==0)return;try{fetch(FLOW,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body),keepalive:true}).catch(()=>{});}catch(e){}});};
+ttLog("open");
+})();
+</script>
+</body>
+</html>

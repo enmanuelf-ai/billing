@@ -157,7 +157,8 @@ const LINKS = {
   body:     "kit-cuerpo-teens.html",
   home:     "tabla-casa.html",
   checkin:  "como-llego-hoy.html",
-  dice:     "dado-conoceme.html"
+  dice:     "dado-conoceme.html",
+  ladder:   "escalera-valentia.html"
 };
 
 const UI = {
@@ -199,7 +200,9 @@ const TOOLS = [
   {e:"👋",link:"checkin", needs:["start","feel"], roles:["iic","ba"], age:"5+",
    en:["How am I today?","Quick check-in and check-out: weather, battery and what's on their mind."], es:["¿Cómo llego hoy?","Check-in y check-out rápido: clima, batería y lo que tiene en la mente."]},
   {e:"🎲",link:"dice",    needs:["start"],        roles:["iic","ba"], age:"5+",
-   en:["Get-to-know-me dice","Roll for a question and take turns answering. Kids and teens."], es:["Dado Conóceme","Tira el dado, sale una pregunta y se turnan para contestar. Niños y adolescentes."]}
+   en:["Get-to-know-me dice","Roll for a question and take turns answering. Kids and teens."], es:["Dado Conóceme","Tira el dado, sale una pregunta y se turnan para contestar. Niños y adolescentes."]},
+  {e:"🪜",link:"ladder",  needs:["worry"],        roles:["iic","ba","pc"], age:"5+",
+   en:["Bravery ladder","Face a fear one small step at a time. Share it with the family."], es:["Escalera de valentía","Enfrentar un miedo un pasito a la vez. Compártela con la familia."]}
 ];
 
 /* coming soon */
@@ -249,7 +252,7 @@ function renderView(){
   $("back").textContent = u.back;
   $("vHead").innerHTML = `<div class="ico" style="--c:${n.c}" aria-hidden="true">${n.e}</div><div><h2>${n[lang][0]}</h2><p>${n[lang][1]}</p></div>`;
   const list = toolsFor(open);
-  $("vTools").innerHTML = list.length ? list.map(t=>`<a class="tool" href="${LINKS[t.link]+"?v="+VER+(["home","anger","body","special"].includes(t.link)?"&t=1":"")+(window.ttClin&&ttClin()?"&c="+encodeURIComponent(ttClin()):"")}">
+  $("vTools").innerHTML = list.length ? list.map(t=>`<a class="tool" href="${LINKS[t.link]+"?v="+VER+(["home","anger","body","special","ladder"].includes(t.link)?"&t=1":"")+(window.ttClin&&ttClin()?"&c="+encodeURIComponent(ttClin()):"")}">
       <span class="e" aria-hidden="true">${t.e}</span>
       <div><h3>${t[lang][0]}</h3><p>${t[lang][1]}</p><span class="age">${u.ages} ${t.age}</span></div>
       <span class="go" aria-hidden="true">›</span></a>`).join("") : `<p class="empty">${u.none}</p>`;
