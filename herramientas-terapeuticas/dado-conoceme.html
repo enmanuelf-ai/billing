@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Get-to-know-me dice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF3FF; --surface:#FFFFFF; --ink:#16224A; --muted:#5A6688;
+  --navy:#1A3A8F; --line:#D5DEF5; --soft:#E3EAFB; --acc:#5FB3E8; --cat:#FFC93C;
+  box-sizing:border-box;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){--bg:#0F1530;--surface:#1A2246;--ink:#EEF2FF;--muted:#A8B3D6;--navy:#8FA9FF;--line:#2C3766;--soft:#232D58;color-scheme:dark}
+}
+:root[data-theme="dark"]{--bg:#0F1530;--surface:#1A2246;--ink:#EEF2FF;--muted:#A8B3D6;--navy:#8FA9FF;--line:#2C3766;--soft:#232D58;color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:Lato,"Helvetica Neue",Arial,sans-serif;font-size:17px;line-height:1.45;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:520px;margin:0 auto;padding:14px 18px 28px;display:flex;flex-direction:column;min-height:100vh}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.alogo{display:block;height:44px;width:auto;border-radius:10px;background:#fff;padding:2px 6px}
+.lang{display:flex;background:var(--soft);border-radius:999px;padding:3px}
+.lang button{border:0;background:transparent;color:var(--muted);font:700 14px Lato,sans-serif;padding:6px 14px;border-radius:999px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--surface);color:var(--navy);box-shadow:0 1px 3px rgba(22,34,74,.15)}
+button{font-family:inherit}
+button:focus-visible{outline:3px solid var(--navy);outline-offset:2px}
+h1{font-family:"Baloo 2",system-ui,sans-serif;font-weight:800;font-size:clamp(38px,10.5vw,54px);line-height:.98;margin:0}
+.lead{color:var(--muted);margin:0;max-width:34ch}
+.start{flex:1;display:flex;flex-direction:column;justify-content:center;gap:20px;padding-top:10px}
+.big-ico{font-size:52px;line-height:1}
+.modes{display:grid;gap:12px}
+.mode{display:flex;align-items:center;gap:16px;text-align:left;cursor:pointer;background:var(--surface);border:2px solid var(--line);border-radius:22px;padding:16px 18px;color:var(--ink);transition:border-color .15s,background .15s,transform .1s}
+.mode:hover{border-color:var(--acc);background:var(--soft)}
+.mode:active{transform:scale(.98)}
+.mode .ico{font-size:40px;line-height:1}
+.mode b{display:block;font-family:"Baloo 2",system-ui,sans-serif;font-size:22px;line-height:1.1}
+.mode span{color:var(--muted);font-size:15px}
+
+.game{flex:1;display:flex;flex-direction:column;gap:16px;padding-top:12px}
+.bar{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-weight:700;font-size:15px}
+.legend{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.legend span{display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:700;color:var(--muted);background:var(--surface);border:2px solid var(--line);border-radius:12px;padding:5px 8px;transition:border-color .2s,color .2s}
+.legend span.hit{border-color:var(--c);color:var(--ink)}
+.legend i{flex:none;width:12px;height:12px;border-radius:4px;background:var(--c)}
+
+.stage{display:flex;flex-direction:column;align-items:center;gap:14px;padding:6px 0}
+.die{width:150px;height:150px;border:0;border-radius:34px;background:var(--cat);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:78px;line-height:1;
+  box-shadow:0 10px 0 rgba(22,34,74,.18), inset 0 -8px 0 rgba(0,0,0,.08);transition:background .2s,transform .15s}
+.die:hover{transform:translateY(-3px)}
+.die:active{transform:translateY(2px);box-shadow:0 5px 0 rgba(22,34,74,.18), inset 0 -8px 0 rgba(0,0,0,.08)}
+.die.roll{animation:roll .7s cubic-bezier(.3,1.4,.5,1)}
+@keyframes roll{0%{transform:rotate(0) scale(1)}35%{transform:rotate(200deg) scale(.82)}70%{transform:rotate(330deg) scale(1.08)}100%{transform:rotate(360deg) scale(1)}}
+.tap{margin:0;color:var(--muted);font-weight:700}
+
+.qcard{background:var(--surface);border:3px solid var(--cat);border-radius:28px;padding:18px 20px 20px;display:flex;flex-direction:column;gap:10px;min-height:150px;transition:border-color .2s}
+.qcat{display:inline-flex;align-self:flex-start;align-items:center;gap:6px;background:var(--cat);color:#16224A;border-radius:999px;padding:4px 12px;font:800 14px Lato,sans-serif;text-transform:uppercase;letter-spacing:.04em}
+.qtext{font:800 clamp(24px,6.6vw,30px)/1.15 "Baloo 2",system-ui,sans-serif;margin:0}
+.qhint{margin:0;color:var(--muted);font-size:15px}
+.qcard.empty{border-style:dashed;border-color:var(--line);justify-content:center;align-items:center;text-align:center}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.next{border:0;background:#1A3A8F;color:#fff;border-radius:999px;padding:15px 22px;font:700 18px Lato,sans-serif;cursor:pointer;transition:background .15s}
+.next:hover{background:#244BB0}
+.ghost{border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:13px 16px;font:700 16px Lato,sans-serif;cursor:pointer;transition:border-color .15s,background .15s}
+.ghost:hover{border-color:var(--acc);background:var(--soft)}
+.ghost:disabled{opacity:.4;cursor:default}
+.quit{border:0;background:none;color:var(--muted);font:700 15px Lato,sans-serif;cursor:pointer;padding:6px 0;align-self:center}
+.quit:hover{color:var(--navy)}
+.turn{display:flex;align-items:center;justify-content:center;gap:8px;font-weight:700;color:var(--muted);font-size:15px}
+.turn b{color:var(--ink)}
+
+:root{--hc:#1A3A8F}
+.hbtn{border:2px solid var(--line);background:var(--surface);color:var(--hc);border-radius:999px;padding:5px 11px 5px 6px;font:700 13.5px Lato,sans-serif;cursor:pointer;display:flex;align-items:center;gap:6px}
+.hbtn:hover{background:var(--soft)}
+.hbtn i{font-style:normal;width:20px;height:20px;border-radius:50%;background:var(--hc);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:13px}
+.hsheet-bg{position:fixed;inset:0;z-index:50;background:rgba(10,15,30,.45);display:flex;align-items:flex-end;justify-content:center}
+.hsheet{background:var(--bg);color:var(--ink);width:100%;max-width:560px;max-height:88vh;overflow-y:auto;border-radius:26px 26px 0 0;padding:18px 18px calc(24px + env(safe-area-inset-bottom,0px))}
+.hsheet-head{display:flex;justify-content:space-between;align-items:center;gap:10px;position:sticky;top:-18px;background:var(--bg);padding:6px 0 10px}
+.hsheet-head h2{font:800 24px/1.1 "Baloo 2",sans-serif;margin:0}
+.hsheet-head button{border:0;background:var(--soft);color:var(--ink);width:38px;height:38px;border-radius:50%;font-size:18px;cursor:pointer;flex:none}
+.hsec{background:var(--surface);border:2px solid var(--line);border-radius:20px;padding:14px 16px;margin-bottom:12px;font-size:16px;line-height:1.5}
+.hsec h3{margin:0 0 6px;font:700 19px/1.15 "Baloo 2",sans-serif;color:var(--hc)}
+.hsec p{margin:0}.hsec ol{margin:0;padding-left:20px;display:grid;gap:5px}
+.hsec.tip{background:var(--soft);border-color:transparent}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div style="display:flex;align-items:center;gap:10px"><img class="alogo" src="https://www.jotform.com/uploads/enmanuelf59/form_files/Captura%20de%20pantalla%202026-04-22%20160244.69fbcf54529891.59675446.jpg" alt="Aliado Community Health"><button class="hbtn" id="helpBtn" aria-haspopup="dialog"><i aria-hidden="true">?</i><span id="helpLbl">Help</span></button></div>
+    <div class="lang" role="group" aria-label="Language">
+      <button data-lang="en" aria-pressed="true">EN</button>
+      <button data-lang="es" aria-pressed="false">ES</button>
+    </div>
+  </div>
+
+  <section class="start" id="start">
+    <div class="big-ico" aria-hidden="true">🎲</div>
+    <h1 data-t="title"></h1>
+    <p class="lead" data-t="lead"></p>
+    <div class="modes">
+      <button class="mode" data-age="kids"><span class="ico" aria-hidden="true">🧒</span><div><b data-t="kids"></b><span data-t="kidsSub"></span></div></button>
+      <button class="mode" data-age="teens"><span class="ico" aria-hidden="true">🧑</span><div><b data-t="teens"></b><span data-t="teensSub"></span></div></button>
+    </div>
+  </section>
+
+  <section class="game" id="game" hidden>
+    <div class="legend" id="legend"></div>
+    <div class="stage">
+      <button class="die" id="die" aria-label="Roll the dice">🎲</button>
+      <p class="tap" id="tap" data-t="tap"></p>
+    </div>
+    <div class="qcard empty" id="qcard"><p class="qhint" data-t="empty"></p></div>
+    <div class="turn" id="turn" hidden></div>
+    <div class="row2">
+      <button class="ghost" id="other" data-t="other" disabled></button>
+      <button class="next" id="roll" data-t="roll"></button>
+    </div>
+    <button class="quit" id="quit" data-t="quit"></button>
+  </section>
+</div>
+
+<script>
+const UI={
+ en:{title:"Get-to-know-me dice",lead:"Roll the dice, get a question, and take turns answering. The therapist answers too!",
+  kids:"Kids",kidsSub:"Ages 5–11",teens:"Teens",teensSub:"Ages 12+",
+  tap:"Tap the dice to roll",empty:"Roll the dice to get your first question.",roll:"🎲 Roll",other:"🔁 Another one",
+  quit:"Leave",turnL:"Now answers:",you:"the child",me:"the therapist",rolls:n=>`${n} ${n===1?"question":"questions"}`},
+ es:{title:"Dado Conóceme",lead:"Tira el dado, sale una pregunta y se turnan para contestar. ¡La terapeuta también contesta!",
+  kids:"Niños",kidsSub:"De 5 a 11 años",teens:"Adolescentes",teensSub:"12 años o más",
+  tap:"Toca el dado para tirarlo",empty:"Tira el dado para tu primera pregunta.",roll:"🎲 Tirar",other:"🔁 Otra",
+  quit:"Salir",turnL:"Ahora contesta:",you:"el niño",me:"la terapeuta",rolls:n=>`${n} ${n===1?"pregunta":"preguntas"}`}
+};
+const CATS=[
+ {id:"fav",e:"⭐",c:"#FFC93C",en:"Favorites",es:"Favoritos"},
+ {id:"people",e:"👨‍👩‍👧",c:"#FF9F8A",en:"My people",es:"Mi gente"},
+ {id:"imagine",e:"🦄",c:"#C3B2F7",en:"Imagine",es:"Imagina"},
+ {id:"school",e:"🎒",c:"#8ED6B4",en:"School & days",es:"Escuela y días"},
+ {id:"feel",e:"💛",c:"#9CC8F7",en:"Feelings",es:"Emociones"},
+ {id:"wild",e:"🎉",c:"#FFB4E0",en:"Wild card",es:"Comodín"}
+];
+const Q={kids:{
+ fav:[["What's your favorite food?","¿Cuál es tu comida favorita?"],["What's your favorite animal and why?","¿Cuál es tu animal favorito y por qué?"],["What's your favorite game to play?","¿Cuál es tu juego favorito?"],["What's your favorite movie or show?","¿Cuál es tu película o programa favorito?"],["What's your favorite color?","¿Cuál es tu color favorito?"],["What's your favorite thing to do on the weekend?","¿Qué es lo que más te gusta hacer el fin de semana?"]],
+ people:[["Who makes you laugh the most?","¿Quién te hace reír más?"],["Who do you live with?","¿Con quién vives?"],["Who is someone you can talk to when you're sad?","¿Con quién puedes hablar cuando estás triste?"],["Do you have a pet, or would you like one?","¿Tienes una mascota o te gustaría tener una?"],["What's something fun you do with your family?","¿Qué cosa divertida haces con tu familia?"],["Who is your best friend? What do you like about them?","¿Quién es tu mejor amigo? ¿Qué te gusta de él o ella?"]],
+ imagine:[["If you had a superpower, what would it be?","Si tuvieras un superpoder, ¿cuál sería?"],["If you could be any animal for a day, which one?","Si pudieras ser un animal por un día, ¿cuál serías?"],["If you had three wishes, what would they be?","Si tuvieras tres deseos, ¿cuáles serían?"],["If you could go anywhere in the world, where would you go?","Si pudieras ir a cualquier lugar del mundo, ¿adónde irías?"],["If you were in charge of the house for a day, what would you change?","Si mandaras en la casa por un día, ¿qué cambiarías?"],["What would your dream bedroom look like?","¿Cómo sería el cuarto de tus sueños?"]],
+ school:[["What's the best part of your day?","¿Cuál es la mejor parte de tu día?"],["What's your favorite thing at school?","¿Qué es lo que más te gusta de la escuela?"],["What's something hard at school?","¿Qué se te hace difícil en la escuela?"],["What do you do right after school?","¿Qué haces cuando llegas de la escuela?"],["What do you want to be when you grow up?","¿Qué quieres ser cuando seas grande?"],["What's your bedtime routine like?","¿Cómo es tu rutina antes de dormir?"]],
+ feel:[["What makes you really happy?","¿Qué te hace muy feliz?"],["What's something that makes you mad?","¿Qué cosa te hace enojar?"],["What helps you feel better when you're upset?","¿Qué te ayuda a sentirte mejor cuando estás molesto?"],["What's something that scares you a little?","¿Qué cosa te da un poquito de miedo?"],["When do you feel proud of yourself?","¿Cuándo te sientes orgulloso de ti?"],["What's something nice someone did for you?","¿Qué cosa bonita hizo alguien por ti?"]],
+ wild:[["Make your funniest face!","¡Haz tu cara más chistosa!"],["Tell a joke you know.","Cuenta un chiste que te sepas."],["Show us a dance move!","¡Enséñanos un paso de baile!"],["Say three things you're good at.","Di tres cosas en las que eres bueno."],["Teach the therapist something you know how to do.","Enséñale a la terapeuta algo que sepas hacer."],["Do your best animal sound!","¡Haz el mejor sonido de animal que puedas!"]]},
+teens:{
+ fav:[["What music are you into right now?","¿Qué música estás escuchando ahora?"],["What's a show or series you'd recommend?","¿Qué serie o programa recomendarías?"],["What's your go-to food when you're hungry?","¿Qué comes primero cuando tienes hambre?"],["What app do you use the most?","¿Qué app usas más?"],["What's a game or hobby you could spend hours on?","¿Qué juego o hobby podrías hacer por horas?"],["Best way to spend a free afternoon?","¿Cuál es la mejor forma de pasar una tarde libre?"]],
+ people:[["Who's someone you trust?","¿En quién confías?"],["Who in your life gets you the most?","¿Quién en tu vida te entiende más?"],["What do your friends like about you?","¿Qué les gusta a tus amigos de ti?"],["Who's someone you look up to?","¿A quién admiras?"],["What's one thing you wish adults understood about you?","¿Qué te gustaría que los adultos entendieran de ti?"],["Describe your family in three words.","Describe a tu familia en tres palabras."]],
+ imagine:[["If you could live anywhere, where would it be?","Si pudieras vivir en cualquier lugar, ¿dónde sería?"],["If you won a million dollars, what's the first thing you'd do?","Si te ganaras un millón de dólares, ¿qué harías primero?"],["What would your perfect day look like?","¿Cómo sería tu día perfecto?"],["If you could master one skill overnight, what would it be?","Si pudieras dominar una habilidad de la noche a la mañana, ¿cuál sería?"],["Where do you see yourself in five years?","¿Dónde te ves en cinco años?"],["If you could change one rule in the world, what would it be?","Si pudieras cambiar una regla del mundo, ¿cuál sería?"]],
+ school:[["What's a class you actually like?","¿Qué clase te gusta de verdad?"],["What's the most stressful part of your week?","¿Qué es lo más estresante de tu semana?"],["What's something you're working toward?","¿Hacia qué meta estás trabajando?"],["What do you usually do after school?","¿Qué haces normalmente después de la escuela?"],["How do you usually sleep?","¿Cómo sueles dormir?"],["What's one thing you'd change about school?","¿Qué cambiarías de la escuela?"]],
+ feel:[["What stresses you out the most lately?","¿Qué te estresa más últimamente?"],["What do you do when you need to calm down?","¿Qué haces cuando necesitas calmarte?"],["What's something that made you proud recently?","¿Qué te hizo sentir orgulloso últimamente?"],["What's something people get wrong about you?","¿Qué es algo que la gente malinterpreta de ti?"],["When do you feel most like yourself?","¿Cuándo te sientes más tú mismo?"],["What's a small thing that can ruin your day?","¿Qué cosa pequeña te puede arruinar el día?"]],
+ wild:[["Two truths and a lie: go!","Dos verdades y una mentira: ¡dale!"],["Show a song you like right now.","Pon una canción que te guste ahora."],["What's the most random fact you know?","¿Cuál es el dato más random que sabes?"],["Rate your week from 1 to 10 and say why.","Dale una nota del 1 al 10 a tu semana y di por qué."],["Say one thing you're good at, no modesty.","Di algo en lo que eres bueno, sin modestia."],["Ask the therapist any question.","Hazle a la terapeuta cualquier pregunta."]]}};
+
+const $=id=>document.getElementById(id);
+let lang="en",age="kids",used={},cur=null,count=0,turn=0,hit=new Set(),rolling=false;
+const U=()=>UI[lang];
+function paint(){
+  document.documentElement.lang=lang;document.title=U().title;
+  document.querySelectorAll("[data-t]").forEach(el=>{const v=U()[el.dataset.t];if(typeof v==="string")el.textContent=v;});
+  document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.lang===lang));
+  $("die").setAttribute("aria-label",lang==="es"?"Tirar el dado":"Roll the dice");
+  renderLegend(); if(cur)renderQ();
+}
+document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{lang=b.dataset.lang;paint();});
+function show(id){["start","game"].forEach(s=>$(s).hidden=s!==id);window.scrollTo(0,0);}
+function renderLegend(){
+  $("legend").innerHTML=CATS.map(c=>`<span style="--c:${c.c}" class="${hit.has(c.id)?"hit":""}"><i></i>${c[lang]}</span>`).join("");
+}
+function pick(catId){
+  const pool=Q[age][catId];used[catId]=used[catId]||[];
+  if(used[catId].length>=pool.length)used[catId]=[];
+  let i;do{i=Math.floor(Math.random()*pool.length)}while(used[catId].includes(i));
+  used[catId].push(i);return i;
+}
+function renderQ(){
+  const c=CATS.find(x=>x.id===cur.cat);
+  document.documentElement.style.setProperty("--cat",c.c);
+  $("qcard").className="qcard";
+  $("qcard").innerHTML=`<span class="qcat"><span aria-hidden="true">${c.e}</span>${c[lang]}</span><p class="qtext">${Q[age][cur.cat][cur.i][lang==="es"?1:0]}</p>`;
+  $("die").textContent=c.e;
+  $("turn").hidden=false;
+  $("turn").innerHTML=`${U().turnL} <b>${turn%2===0?U().you:U().me}</b> · ${U().rolls(count)}`;
+  $("other").disabled=false;
+}
+function roll(){
+  if(rolling)return;rolling=true;
+  const d=$("die");d.classList.remove("roll");void d.offsetWidth;d.classList.add("roll");
+  let n=0;const faces=CATS.map(c=>c.e);
+  const spin=setInterval(()=>{d.textContent=faces[n++%faces.length];},90);
+  setTimeout(()=>{clearInterval(spin);
+    const c=CATS[Math.floor(Math.random()*CATS.length)];
+    cur={cat:c.id,i:pick(c.id)};hit.add(c.id);count++;if(count>1)turn++;
+    renderLegend();renderQ();$("tap").hidden=true;rolling=false;
+    if(count===1&&window.ttLog)ttLog("complete",{answer:age});
+  },650);
+}
+$("die").onclick=roll;$("roll").onclick=roll;
+$("other").onclick=()=>{if(!cur)return;cur.i=pick(cur.cat);renderQ();};
+document.querySelectorAll(".mode").forEach(b=>b.onclick=()=>{age=b.dataset.age;used={};cur=null;count=0;turn=0;hit=new Set();
+  document.documentElement.style.setProperty("--cat","#FFC93C");
+  $("qcard").className="qcard empty";$("qcard").innerHTML=`<p class="qhint">${U().empty}</p>`;
+  $("die").textContent="🎲";$("tap").hidden=false;$("turn").hidden=true;$("other").disabled=true;
+  renderLegend();show("game");});
+$("quit").onclick=()=>show("start");
+paint();
+</script>
+
+<div class="hsheet-bg" id="hBg" hidden><div class="hsheet" role="dialog" aria-modal="true" aria-labelledby="hT2"><div class="hsheet-head"><h2 id="hT2"></h2><button id="hX" aria-label="Close">✕</button></div><div id="hB2"></div></div></div>
+<script>
+(function(){
+const H={es:{title:"¿Cómo funciona el dado?",goal:"Rompe el hielo y crea confianza en las primeras visitas, o reconecta después de una semana difícil. Al turnarse, el niño ve que la terapeuta también comparte, y la conversación se siente como un juego, no una entrevista.",
+ how:["Escoge <b>Niños</b> (5 a 11) o <b>Adolescentes</b> (12+). Las preguntas cambian según la edad.","El niño toca el dado. Sale una categoría con su color y una pregunta.","Se turnan: primero contesta el niño, en la siguiente tirada contestas tú. La app te indica a quién le toca.","Si una pregunta no encaja, toca <b>Otra</b> para cambiarla sin perder la categoría.","Con 5 o 6 preguntas basta para unos 10 minutos."],
+ tips:["Contesta de verdad y con cosas sencillas. Lo que compartes tú le da permiso al niño para abrirse.","Si una respuesta toca algo importante (familia, miedo, escuela), deja el dado y sigue esa conversación.","Las preguntas de Emociones son buenas para ir entrando en el trabajo de la sesión."]},
+ en:{title:"How does the dice work?",goal:"Breaks the ice and builds trust in the first visits, or reconnects after a hard week. By taking turns, the child sees the therapist shares too, and the conversation feels like a game, not an interview.",
+ how:["Pick <b>Kids</b> (5–11) or <b>Teens</b> (12+). Questions change by age.","The child taps the dice. A category comes up with its color and a question.","Take turns: the child answers first, you answer on the next roll. The app shows whose turn it is.","If a question doesn't fit, tap <b>Another one</b> to change it in the same category.","5 or 6 questions is enough for about 10 minutes."],
+ tips:["Answer for real, with simple things. What you share gives the child permission to open up.","If an answer touches something important (family, fear, school), set the dice aside and follow that conversation.","Feelings questions are a good bridge into the work of the session."]}};
+const L={es:{btn:"Ayuda",goal:"Para qué sirve",how:"Cómo usarlo",close:"Cerrar"},en:{btn:"Help",goal:"What it's for",how:"How to use it",close:"Close"}};
+const g=id=>document.getElementById(id),lg=()=>document.documentElement.lang==="es"?"es":"en";
+function render(){const l=lg(),d=H[l],u=L[l];g("helpLbl").textContent=u.btn;g("hT2").textContent=d.title;g("hX").setAttribute("aria-label",u.close);
+ let h=`<div class="hsec"><h3>${u.goal}</h3><p>${d.goal}</p></div><div class="hsec"><h3>${u.how}</h3><ol>${d.how.map(x=>`<li>${x}</li>`).join("")}</ol></div>`;
+ d.tips.forEach(t=>h+=`<div class="hsec tip"><p>💡 ${t}</p></div>`);g("hB2").innerHTML=h;}
+g("helpBtn").onclick=()=>{render();g("hBg").hidden=false;g("hX").focus();};
+g("hX").onclick=()=>{g("hBg").hidden=true;g("helpBtn").focus();};
+g("hBg").onclick=e=>{if(e.target.id==="hBg")g("hX").click();};
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!g("hBg").hidden)g("hX").click();});
+new MutationObserver(render).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});
+render();
+})();
+</script>
+<script>
+/* TT_LOG: anonymous usage log (no client data) */
+(function(){
+let FLOWP=null;const getFlow=()=>{if(window.TT_FLOW)return Promise.resolve(window.TT_FLOW);if(FLOWP)return FLOWP;
+ let c=null;try{c=sessionStorage.getItem("tt-flow")}catch(e){}if(c)return FLOWP=Promise.resolve(c);
+ return FLOWP=fetch("tt-flow.txt",{cache:"no-store"}).then(r=>r.ok?r.text():"").then(t=>{t=(t||"").trim();try{if(t)sessionStorage.setItem("tt-flow",t)}catch(e){}return t;}).catch(()=>"");};
+const P=new URLSearchParams(location.search);
+let C=P.get("c")||"";try{if(C)sessionStorage.setItem("tt-c",C);else C=sessionStorage.getItem("tt-c")||"";}catch(e){}
+window.ttLog=function(event,extra){
+ const body=Object.assign({event,tool:'Get-to-know-me dice',clinician:C,mode:"therapist",lang:document.documentElement.lang||"en",answer:"",comment:""},extra||{});
+ getFlow().then(FLOW=>{if(!FLOW||FLOW.indexOf("https://")!==0)return;try{fetch(FLOW,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body),keepalive:true}).catch(()=>{});}catch(e){}});};
+ttLog("open");
+})();
+</script>
+</body>
+</html>

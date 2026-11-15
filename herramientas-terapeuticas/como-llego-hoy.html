@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>How am I today?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF3FF; --surface:#FFFFFF; --ink:#16224A; --muted:#5A6688;
+  --navy:#1A3A8F; --line:#D5DEF5; --sun:#FFC93C; --soft:#E3EAFB; --acc:#5FB3E8;
+  box-sizing:border-box;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){--bg:#0F1530;--surface:#1A2246;--ink:#EEF2FF;--muted:#A8B3D6;--navy:#8FA9FF;--line:#2C3766;--soft:#232D58;color-scheme:dark}
+}
+:root[data-theme="dark"]{--bg:#0F1530;--surface:#1A2246;--ink:#EEF2FF;--muted:#A8B3D6;--navy:#8FA9FF;--line:#2C3766;--soft:#232D58;color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:Lato,"Helvetica Neue",Arial,sans-serif;font-size:17px;line-height:1.45;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:520px;margin:0 auto;padding:14px 18px 28px;display:flex;flex-direction:column;min-height:100vh}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.alogo{display:block;height:44px;width:auto;border-radius:10px;background:#fff;padding:2px 6px}
+.lang{display:flex;background:var(--soft);border-radius:999px;padding:3px}
+.lang button{border:0;background:transparent;color:var(--muted);font:700 14px Lato,sans-serif;padding:6px 14px;border-radius:999px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--surface);color:var(--navy);box-shadow:0 1px 3px rgba(22,34,74,.15)}
+button{font-family:inherit}
+button:focus-visible{outline:3px solid var(--navy);outline-offset:2px}
+h1{font-family:"Baloo 2",system-ui,sans-serif;font-weight:800;font-size:clamp(38px,10.5vw,54px);line-height:.98;margin:0}
+h2{font-family:"Baloo 2",system-ui,sans-serif;font-weight:800;font-size:clamp(26px,7vw,32px);line-height:1.05;margin:0}
+.lead{color:var(--muted);margin:0;max-width:34ch}
+.start{flex:1;display:flex;flex-direction:column;justify-content:center;gap:20px;padding-top:10px}
+.big-ico{font-size:52px;line-height:1;letter-spacing:4px}
+.modes{display:grid;gap:12px}
+.mode{display:flex;align-items:center;gap:16px;text-align:left;cursor:pointer;background:var(--surface);border:2px solid var(--line);border-radius:22px;padding:16px 18px;color:var(--ink);transition:border-color .15s,background .15s,transform .1s}
+.mode:hover{border-color:var(--acc);background:var(--soft)}
+.mode:active{transform:scale(.98)}
+.mode .ico{font-size:40px;line-height:1}
+.mode b{display:block;font-family:"Baloo 2",system-ui,sans-serif;font-size:22px;line-height:1.1}
+.mode span{color:var(--muted);font-size:15px}
+.mode .done{display:inline-block;margin-top:4px;font-size:13px;font-weight:700;color:#2FA77A}
+
+.step{flex:1;display:flex;flex-direction:column;gap:16px;padding-top:12px}
+.progress{display:flex;gap:5px}
+.progress i{flex:1;height:8px;border-radius:999px;background:var(--line);transition:background .3s}
+.progress i.done{background:var(--sun)}.progress i.now{background:var(--navy)}
+.kicker{font:700 14px Lato,sans-serif;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:0}
+
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.card{border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:20px;padding:14px 6px 12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;transition:border-color .15s,background .15s,transform .1s}
+.card:hover{border-color:var(--acc);background:var(--soft)}
+.card:active{transform:scale(.97)}
+.card .e{font-size:clamp(40px,12vw,54px);line-height:1}
+.card b{font:700 15px/1.15 Lato,sans-serif;text-align:center}
+.card.sel{border-color:var(--navy);background:var(--soft);box-shadow:0 0 0 3px rgba(26,58,143,.15)}
+
+.battery{display:flex;flex-direction:column;align-items:center;gap:14px;background:var(--surface);border:2px solid var(--line);border-radius:28px;padding:22px 16px}
+.batt{display:flex;align-items:center}
+.batt-body{display:flex;gap:6px;padding:7px;border:5px solid var(--ink);border-radius:16px;width:min(260px,70vw);height:96px}
+.batt-cap{width:12px;height:36px;background:var(--ink);border-radius:0 6px 6px 0}
+.cell{flex:1;border:0;border-radius:8px;background:var(--line);cursor:pointer;transition:background .2s}
+.cell.on{background:var(--bc,#2FA77A)}
+.cell:hover{outline:2px solid var(--acc)}
+.blabel{font:800 24px "Baloo 2",system-ui,sans-serif;min-height:32px;text-align:center}
+.bsub{color:var(--muted);font-size:15px;margin:0;text-align:center}
+
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:11px 16px;font:700 16px Lato,sans-serif;cursor:pointer;display:flex;align-items:center;gap:8px;transition:border-color .15s,background .15s}
+.chip:hover{border-color:var(--acc);background:var(--soft)}
+.chip.sel{border-color:var(--navy);background:var(--navy);color:#fff}
+
+.next{border:0;background:#1A3A8F;color:#fff;border-radius:999px;padding:15px 22px;font:700 18px Lato,sans-serif;cursor:pointer;transition:background .15s}
+.next:hover{background:#244BB0}
+.next:disabled{opacity:.4;cursor:default}
+.ghost{border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:13px 22px;font:700 17px Lato,sans-serif;cursor:pointer;transition:border-color .15s,background .15s}
+.ghost:hover{border-color:var(--acc);background:var(--soft)}
+.quit{border:0;background:none;color:var(--muted);font:700 15px Lato,sans-serif;cursor:pointer;padding:6px 0;align-self:center}
+.quit:hover{color:var(--navy)}
+.spacer{flex:1}
+
+.result{background:var(--surface);border:2px solid var(--line);border-radius:28px;padding:20px 18px;display:flex;flex-direction:column;gap:14px}
+.rrow{display:flex;align-items:center;gap:14px}
+.rrow .e{font-size:44px;line-height:1;flex:none;width:52px;text-align:center}
+.rrow small{display:block;color:var(--muted);font-size:13.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.rrow b{font:800 22px/1.15 "Baloo 2",system-ui,sans-serif}
+.compare{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;background:var(--soft);border-radius:20px;padding:12px}
+.compare div{text-align:center}
+.compare .e{font-size:40px;line-height:1}
+.compare small{display:block;color:var(--muted);font-size:13px;font-weight:700}
+.compare .arrow{font-size:24px;color:var(--muted)}
+.talk{background:var(--soft);border-radius:20px;padding:14px 16px}
+.talk h3{margin:0 0 6px;font:700 18px "Baloo 2",system-ui,sans-serif;color:var(--navy)}
+.talk p{margin:0;font-size:17px}
+.row{display:grid;gap:10px}
+.toast{min-height:22px;text-align:center;color:#2FA77A;font-weight:700;margin:0}
+
+:root{--hc:#1A3A8F}
+.hbtn{border:2px solid var(--line);background:var(--surface);color:var(--hc);border-radius:999px;padding:5px 11px 5px 6px;font:700 13.5px Lato,sans-serif;cursor:pointer;display:flex;align-items:center;gap:6px}
+.hbtn:hover{background:var(--soft)}
+.hbtn i{font-style:normal;width:20px;height:20px;border-radius:50%;background:var(--hc);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:13px}
+.hsheet-bg{position:fixed;inset:0;z-index:50;background:rgba(10,15,30,.45);display:flex;align-items:flex-end;justify-content:center}
+.hsheet{background:var(--bg);color:var(--ink);width:100%;max-width:560px;max-height:88vh;overflow-y:auto;border-radius:26px 26px 0 0;padding:18px 18px calc(24px + env(safe-area-inset-bottom,0px))}
+.hsheet-head{display:flex;justify-content:space-between;align-items:center;gap:10px;position:sticky;top:-18px;background:var(--bg);padding:6px 0 10px}
+.hsheet-head h2{font:800 24px/1.1 "Baloo 2",sans-serif;margin:0}
+.hsheet-head button{border:0;background:var(--soft);color:var(--ink);width:38px;height:38px;border-radius:50%;font-size:18px;cursor:pointer;flex:none}
+.hsec{background:var(--surface);border:2px solid var(--line);border-radius:20px;padding:14px 16px;margin-bottom:12px;font-size:16px;line-height:1.5}
+.hsec h3{margin:0 0 6px;font:700 19px/1.15 "Baloo 2",sans-serif;color:var(--hc)}
+.hsec p{margin:0}.hsec ol{margin:0;padding-left:20px;display:grid;gap:5px}
+.hsec.tip{background:var(--soft);border-color:transparent}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div style="display:flex;align-items:center;gap:10px"><img class="alogo" src="https://www.jotform.com/uploads/enmanuelf59/form_files/Captura%20de%20pantalla%202026-04-22%20160244.69fbcf54529891.59675446.jpg" alt="Aliado Community Health"><button class="hbtn" id="helpBtn" aria-haspopup="dialog"><i aria-hidden="true">?</i><span id="helpLbl">Help</span></button></div>
+    <div class="lang" role="group" aria-label="Language">
+      <button data-lang="en" aria-pressed="true">EN</button>
+      <button data-lang="es" aria-pressed="false">ES</button>
+    </div>
+  </div>
+
+  <!-- Start -->
+  <section class="start" id="start">
+    <div class="big-ico" aria-hidden="true">☀️⛅🌧️</div>
+    <h1 data-t="title"></h1>
+    <p class="lead" data-t="lead"></p>
+    <div class="modes">
+      <button class="mode" data-mode="in"><span class="ico" aria-hidden="true">👋</span><div><b data-t="mIn"></b><span data-t="mInSub"></span><span class="done" id="doneIn" hidden></span></div></button>
+      <button class="mode" data-mode="out"><span class="ico" aria-hidden="true">🚪</span><div><b data-t="mOut"></b><span data-t="mOutSub"></span><span class="done" id="doneOut" hidden></span></div></button>
+    </div>
+  </section>
+
+  <!-- Step 1: weather -->
+  <section class="step" id="s1" hidden>
+    <div class="progress"><i class="now"></i><i></i><i></i></div>
+    <p class="kicker" id="k1"></p>
+    <h2 data-t="q1"></h2>
+    <div class="grid" id="weather"></div>
+    <div class="spacer"></div>
+    <button class="next" id="n1" disabled data-t="next"></button>
+    <button class="quit" data-quit data-t="quit"></button>
+  </section>
+
+  <!-- Step 2: battery -->
+  <section class="step" id="s2" hidden>
+    <div class="progress"><i class="done"></i><i class="now"></i><i></i></div>
+    <p class="kicker" id="k2"></p>
+    <h2 data-t="q2"></h2>
+    <div class="battery">
+      <div class="batt"><div class="batt-body" id="cells"></div><div class="batt-cap"></div></div>
+      <div class="blabel" id="blabel"></div>
+      <p class="bsub" data-t="bsub"></p>
+    </div>
+    <div class="spacer"></div>
+    <button class="next" id="n2" disabled data-t="next"></button>
+    <button class="quit" data-quit data-t="quit"></button>
+  </section>
+
+  <!-- Step 3: on my mind -->
+  <section class="step" id="s3" hidden>
+    <div class="progress"><i class="done"></i><i class="done"></i><i class="now"></i></div>
+    <p class="kicker" id="k3"></p>
+    <h2 data-t="q3"></h2>
+    <p class="lead" data-t="q3sub"></p>
+    <div class="chips" id="chips"></div>
+    <div class="spacer"></div>
+    <button class="next" id="n3" disabled data-t="see"></button>
+    <button class="quit" data-quit data-t="quit"></button>
+  </section>
+
+  <!-- Result -->
+  <section class="step" id="res" hidden>
+    <h2 id="resT"></h2>
+    <div class="result" id="resCard"></div>
+    <div class="talk"><h3 data-t="talkT"></h3><p id="talkQ"></p></div>
+    <div class="row">
+      <button class="next" id="copy" data-t="copy"></button>
+      <p class="toast" id="toast" aria-live="polite"></p>
+      <button class="ghost" id="home" data-t="home"></button>
+    </div>
+  </section>
+</div>
+
+<script>
+const UI={
+ en:{title:"How am I today?",lead:"A quick check-in to start (or end) the visit. Three taps, then we talk.",
+  mIn:"Check-in",mInSub:"At the start of the visit",mOut:"Check-out",mOutSub:"Before you leave",doneTag:"✓ Done today",
+  kIn:"Check-in",kOut:"Check-out",step:(n)=>` · Step ${n} of 3`,
+  q1:"What's the weather inside you right now?",q2:"How full is your battery?",bsub:"Tap the battery to fill it.",
+  q3:"What's on your mind?",q3sub:"Pick as many as you want.",
+  next:"Next",see:"See my check-in",quit:"Leave",
+  resIn:"My check-in",resOut:"My check-out",lw:"Weather",lb:"Battery",lm:"On my mind",nothing:"Nothing special",
+  talkT:"Let's talk",copy:"📋 Copy for my note",copied:"Copied. Paste it into the progress note.",home:"Back to start",
+  before:"Arrived",after:"Leaving",
+  batt:["Empty","Low","Half","Good","Full!"]},
+ es:{title:"¿Cómo llego hoy?",lead:"Un check-in rápido para empezar (o terminar) la visita. Tres toques y conversamos.",
+  mIn:"Llegada",mInSub:"Al empezar la visita",mOut:"Salida",mOutSub:"Antes de irnos",doneTag:"✓ Hecho hoy",
+  kIn:"Llegada",kOut:"Salida",step:(n)=>` · Paso ${n} de 3`,
+  q1:"¿Cómo está el clima dentro de ti ahora?",q2:"¿Qué tan llena está tu batería?",bsub:"Toca la batería para llenarla.",
+  q3:"¿Qué tienes en la mente?",q3sub:"Escoge todas las que quieras.",
+  next:"Siguiente",see:"Ver mi check-in",quit:"Salir",
+  resIn:"Mi llegada",resOut:"Mi salida",lw:"Clima",lb:"Batería",lm:"En mi mente",nothing:"Nada en especial",
+  talkT:"Conversemos",copy:"📋 Copiar para mi nota",copied:"Copiado. Pégalo en la nota de progreso.",home:"Volver al inicio",
+  before:"Llegó",after:"Se va",
+  batt:["Vacía","Baja","A la mitad","Bien","¡Llena!"]}
+};
+const WEATHER=[
+ {id:"sun",e:"☀️",en:"Sunny",es:"Soleado",note:"bright/positive",
+  q:{en:"What made today a sunny day? How can we keep that going?",es:"¿Qué hizo que hoy fuera un día soleado? ¿Cómo podemos mantenerlo?"}},
+ {id:"part",e:"⛅",en:"Partly cloudy",es:"Algo nublado",note:"mixed",
+  q:{en:"What's the sunny part today, and what's the cloud?",es:"¿Cuál es la parte soleada de hoy y cuál es la nube?"}},
+ {id:"cloud",e:"☁️",en:"Cloudy",es:"Nublado",note:"low/flat",
+  q:{en:"Clouds can feel heavy. When did the clouds show up today?",es:"Las nubes pueden pesar. ¿Cuándo aparecieron las nubes hoy?"}},
+ {id:"rain",e:"🌧️",en:"Rainy",es:"Lluvioso",note:"sad",
+  q:{en:"What's making it rain inside? Who or what helps when it rains?",es:"¿Qué hace que llueva por dentro? ¿Quién o qué te ayuda cuando llueve?"}},
+ {id:"storm",e:"⛈️",en:"Stormy",es:"Tormenta",note:"angry/upset",
+  q:{en:"Storms are strong. What started the storm? What can help it calm down?",es:"Las tormentas son fuertes. ¿Qué empezó la tormenta? ¿Qué puede ayudar a calmarla?"}},
+ {id:"fog",e:"🌫️",en:"Foggy",es:"Con neblina",note:"confused/unsure",
+  q:{en:"Foggy can mean confused or tired. What feels hard to see clearly today?",es:"La neblina puede ser confusión o cansancio. ¿Qué se te hace difícil ver claro hoy?"}},
+ {id:"wind",e:"🌪️",en:"Windy",es:"Ventoso",note:"restless/worried",
+  q:{en:"Lots of wind inside! Is something making you restless or worried?",es:"¡Mucho viento por dentro! ¿Algo te tiene inquieto o preocupado?"}},
+ {id:"snow",e:"❄️",en:"Frozen",es:"Congelado",note:"shut down/numb",
+  q:{en:"Sometimes we freeze when things are too much. What would help you warm up a little?",es:"A veces nos congelamos cuando algo es demasiado. ¿Qué te ayudaría a calentarte un poco?"}},
+ {id:"rainbow",e:"🌈",en:"Rainbow",es:"Arcoíris",note:"better after a hard time",
+  q:{en:"A rainbow comes after the rain. What got better?",es:"El arcoíris sale después de la lluvia. ¿Qué mejoró?"}}
+];
+const MIND=[
+ {id:"school",e:"🏫",en:"School",es:"La escuela"},{id:"family",e:"🏠",en:"Family",es:"La familia"},
+ {id:"friends",e:"👫",en:"Friends",es:"Amigos"},{id:"sleep",e:"😴",en:"Sleep / tired",es:"Sueño / cansancio"},
+ {id:"body",e:"🤒",en:"My body",es:"Mi cuerpo"},{id:"phone",e:"📱",en:"Phone / games",es:"Celular / juegos"},
+ {id:"fun",e:"🎉",en:"Something fun",es:"Algo divertido"},{id:"worry",e:"😟",en:"A worry",es:"Una preocupación"},
+ {id:"fight",e:"💢",en:"A fight",es:"Una pelea"},{id:"nothing",e:"🙂",en:"Nothing special",es:"Nada en especial"}
+];
+const BC=["#E5484D","#F08A5D","#FFC93C","#7CCB9E","#2FA77A"];
+const $=id=>document.getElementById(id);
+let lang="en",mode="in",S={w:null,b:0,m:[]};
+const today=()=>new Date().toISOString().slice(0,10);
+const store={get(k){try{return JSON.parse(sessionStorage.getItem("cl-"+today()+"-"+k)||"null")}catch(e){return null}},
+ set(k,v){try{sessionStorage.setItem("cl-"+today()+"-"+k,JSON.stringify(v))}catch(e){}}};
+const U=()=>UI[lang];
+
+function paint(){
+  document.documentElement.lang=lang;document.title=U().title;
+  document.querySelectorAll("[data-t]").forEach(el=>{const v=U()[el.dataset.t];if(typeof v==="string")el.textContent=v;});
+  document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.lang===lang));
+  ["1","2","3"].forEach(n=>$("k"+n).textContent=(mode==="in"?U().kIn:U().kOut)+U().step(n));
+  $("doneIn").hidden=!store.get("in");$("doneOut").hidden=!store.get("out");
+  $("doneIn").textContent=$("doneOut").textContent=U().doneTag;
+  renderWeather();renderBattery();renderChips();
+  if(!$("res").hidden)renderResult();
+}
+document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{lang=b.dataset.lang;paint();});
+function show(id){["start","s1","s2","s3","res"].forEach(s=>$(s).hidden=s!==id);window.scrollTo(0,0);}
+
+function renderWeather(){
+  $("weather").innerHTML="";
+  WEATHER.forEach(w=>{const b=document.createElement("button");b.className="card"+(S.w===w.id?" sel":"");
+    b.innerHTML=`<span class="e" aria-hidden="true">${w.e}</span><b>${w[lang]}</b>`;
+    b.onclick=()=>{S.w=w.id;renderWeather();$("n1").disabled=false;};$("weather").appendChild(b);});
+  $("n1").disabled=!S.w;
+}
+function renderBattery(){
+  $("cells").innerHTML="";
+  for(let i=1;i<=5;i++){const c=document.createElement("button");c.className="cell"+(i<=S.b?" on":"");
+    c.style.setProperty("--bc",S.b?BC[S.b-1]:"");c.setAttribute("aria-label",`${i} / 5`);
+    c.onclick=()=>{S.b=i;renderBattery();$("n2").disabled=false;};$("cells").appendChild(c);}
+  $("blabel").textContent=S.b?`${S.b}/5 · ${U().batt[S.b-1]}`:"";
+  $("n2").disabled=!S.b;
+}
+function renderChips(){
+  $("chips").innerHTML="";
+  MIND.forEach(m=>{const b=document.createElement("button");b.className="chip"+(S.m.includes(m.id)?" sel":"");
+    b.setAttribute("aria-pressed",S.m.includes(m.id));
+    b.innerHTML=`<span aria-hidden="true">${m.e}</span>${m[lang]}`;
+    b.onclick=()=>{
+      if(m.id==="nothing")S.m=S.m.includes("nothing")?[]:["nothing"];
+      else{S.m=S.m.filter(x=>x!=="nothing");S.m=S.m.includes(m.id)?S.m.filter(x=>x!==m.id):[...S.m,m.id];}
+      renderChips();};
+    $("chips").appendChild(b);});
+  $("n3").disabled=!S.m.length;
+}
+const W=id=>WEATHER.find(w=>w.id===id), M=id=>MIND.find(m=>m.id===id);
+
+function renderResult(){
+  const u=U(),w=W(S.w);
+  $("resT").textContent=mode==="in"?u.resIn:u.resOut;
+  let h=`<div class="rrow"><span class="e" aria-hidden="true">${w.e}</span><div><small>${u.lw}</small><b>${w[lang]}</b></div></div>
+   <div class="rrow"><span class="e" aria-hidden="true">🔋</span><div><small>${u.lb}</small><b>${S.b}/5 · ${u.batt[S.b-1]}</b></div></div>
+   <div class="rrow"><span class="e" aria-hidden="true">💭</span><div><small>${u.lm}</small><b>${S.m.map(id=>M(id)[lang]).join(", ")}</b></div></div>`;
+  const other=store.get(mode==="in"?"out":"in");
+  if(mode==="out"&&other){const a=W(other.w);
+    h+=`<div class="compare"><div><span class="e">${a.e}</span><small>${u.before} · 🔋${other.b}/5</small></div><span class="arrow">→</span><div><span class="e">${w.e}</span><small>${u.after} · 🔋${S.b}/5</small></div></div>`;}
+  $("resCard").innerHTML=h;
+  $("talkQ").textContent=w.q[lang];
+}
+function noteText(){
+  const w=W(S.w),inn=store.get("in"),out=store.get("out");
+  const desc=s=>`described their mood as "${W(s.w).en.toLowerCase()}" (${W(s.w).note}), energy ${s.b}/5, on their mind: ${s.m.map(id=>M(id).en.toLowerCase()).join(", ")}`;
+  let t="";
+  if(inn)t+=`Check-in (start of session): youth ${desc(inn)}.`;
+  if(out)t+=(t?" ":"")+`Check-out (end of session): youth ${desc(out)}.`;
+  return t;
+}
+
+document.querySelectorAll(".mode").forEach(b=>b.onclick=()=>{mode=b.dataset.mode;S={w:null,b:0,m:[]};paint();show("s1");});
+$("n1").onclick=()=>show("s2");
+$("n2").onclick=()=>show("s3");
+$("n3").onclick=()=>{store.set(mode,S);renderResult();$("toast").textContent="";show("res");
+  if(window.ttLog)ttLog("complete",{answer:mode==="in"?"check-in":"check-out"});};
+$("copy").onclick=async()=>{const t=noteText();
+  try{await navigator.clipboard.writeText(t);}catch(e){const a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();try{document.execCommand("copy")}catch(_){}a.remove();}
+  $("toast").textContent=U().copied;};
+$("home").onclick=()=>{paint();show("start");};
+document.querySelectorAll("[data-quit]").forEach(b=>b.onclick=()=>{paint();show("start");});
+paint();
+</script>
+
+<div class="hsheet-bg" id="hBg" hidden><div class="hsheet" role="dialog" aria-modal="true" aria-labelledby="hT2"><div class="hsheet-head"><h2 id="hT2"></h2><button id="hX" aria-label="Close">✕</button></div><div id="hB2"></div></div></div>
+<script>
+(function(){
+const H={es:{title:"¿Cómo funciona?",goal:"Un check-in de 2 minutos para abrir la visita: el niño o joven pone en palabras cómo llega, sin tener que explicarlo todo. Sirve para todas las edades (de 5 años en adelante).",
+ how:["Al empezar la visita, toca <b>Llegada</b> y pásale el teléfono al niño.","Escoge el clima que se parece a cómo se siente por dentro, llena la batería según su energía y marca lo que tiene en la mente.","Lean juntos la pregunta de <b>Conversemos</b>: abre la conversación sin interrogar.","Antes de irte, haz la <b>Salida</b>. Verás la comparación de cómo llegó y cómo se va.","Toca <b>Copiar para mi nota</b> y pégalo en la nota de progreso."],
+ tips:["Haz tú también tu propio check-in en voz alta (\"yo llegué algo nublado porque había tráfico\"). Modelar ayuda a que el niño se abra.","Si marca tormenta, congelado o una pelea, deja la agenda para después y empieza por ahí.","No se guarda ningún dato del niño: lo que se copia queda solo en tu nota."]},
+ en:{title:"How does it work?",goal:"A 2-minute check-in to open the visit: the child or teen puts into words how they arrive, without having to explain everything. Works for all ages (5 and up).",
+ how:["At the start of the visit, tap <b>Check-in</b> and hand the phone to the child.","They pick the weather that matches how they feel inside, fill the battery for their energy, and mark what's on their mind.","Read the <b>Let's talk</b> question together: it opens the conversation without interrogating.","Before you leave, do the <b>Check-out</b>. You'll see how they arrived compared to how they're leaving.","Tap <b>Copy for my note</b> and paste it into the progress note."],
+ tips:["Do your own check-in out loud too (\"I arrived a bit cloudy because of traffic\"). Modeling helps the child open up.","If they pick stormy, frozen or a fight, set the agenda aside and start there.","No child data is saved: what you copy only goes into your note."]}};
+const L={es:{btn:"Ayuda",goal:"Para qué sirve",how:"Cómo usarlo",close:"Cerrar"},en:{btn:"Help",goal:"What it's for",how:"How to use it",close:"Close"}};
+const g=id=>document.getElementById(id),lg=()=>document.documentElement.lang==="es"?"es":"en";
+function render(){const l=lg(),d=H[l],u=L[l];g("helpLbl").textContent=u.btn;g("hT2").textContent=d.title;g("hX").setAttribute("aria-label",u.close);
+ let h=`<div class="hsec"><h3>${u.goal}</h3><p>${d.goal}</p></div><div class="hsec"><h3>${u.how}</h3><ol>${d.how.map(x=>`<li>${x}</li>`).join("")}</ol></div>`;
+ d.tips.forEach(t=>h+=`<div class="hsec tip"><p>💡 ${t}</p></div>`);g("hB2").innerHTML=h;}
+g("helpBtn").onclick=()=>{render();g("hBg").hidden=false;g("hX").focus();};
+g("hX").onclick=()=>{g("hBg").hidden=true;g("helpBtn").focus();};
+g("hBg").onclick=e=>{if(e.target.id==="hBg")g("hX").click();};
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!g("hBg").hidden)g("hX").click();});
+new MutationObserver(render).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});
+render();
+})();
+</script>
+<script>
+/* TT_LOG: anonymous usage log (no client data) */
+(function(){
+let FLOWP=null;const getFlow=()=>{if(window.TT_FLOW)return Promise.resolve(window.TT_FLOW);if(FLOWP)return FLOWP;
+ let c=null;try{c=sessionStorage.getItem("tt-flow")}catch(e){}if(c)return FLOWP=Promise.resolve(c);
+ return FLOWP=fetch("tt-flow.txt",{cache:"no-store"}).then(r=>r.ok?r.text():"").then(t=>{t=(t||"").trim();try{if(t)sessionStorage.setItem("tt-flow",t)}catch(e){}return t;}).catch(()=>"");};
+const P=new URLSearchParams(location.search);
+let C=P.get("c")||"";try{if(C)sessionStorage.setItem("tt-c",C);else C=sessionStorage.getItem("tt-c")||"";}catch(e){}
+window.ttLog=function(event,extra){
+ const body=Object.assign({event,tool:'How am I today?',clinician:C,mode:"therapist",lang:document.documentElement.lang||"en",answer:"",comment:""},extra||{});
+ getFlow().then(FLOW=>{if(!FLOW||FLOW.indexOf("https://")!==0)return;try{fetch(FLOW,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body),keepalive:true}).catch(()=>{});}catch(e){}});};
+ttLog("open");
+})();
+</script>
+</body>
+</html>

@@ -155,7 +155,9 @@ const LINKS = {
   ba:       "kit-conducta-ba.html",
   anger:    "termometro-enojo.html",
   body:     "kit-cuerpo-teens.html",
-  home:     "tabla-casa.html"
+  home:     "tabla-casa.html",
+  checkin:  "como-llego-hoy.html",
+  dice:     "dado-conoceme.html"
 };
 
 const UI = {
@@ -193,7 +195,11 @@ const TOOLS = [
   {e:"🏠",link:"home",    needs:["parent","behave"],roles:["ba","pc"],age:"3–12",
    en:["Star chart at home","Open the weekly chart, show it to the family and share it with them."], es:["Tabla de estrellas en casa","Abra la tabla semanal, muéstresela a la familia y compártala con ellos."]},
   {e:"👨‍👧",link:"special",needs:["parent"],       roles:["pc"],       age:"2–8",
-   en:["Special time","5 minutes of child-led play, with parent coaching."],       es:["Tiempo especial","5 minutos de juego dirigido por el niño, con coaching al padre."]}
+   en:["Special time","5 minutes of child-led play, with parent coaching."],       es:["Tiempo especial","5 minutos de juego dirigido por el niño, con coaching al padre."]},
+  {e:"👋",link:"checkin", needs:["start","feel"], roles:["iic","ba"], age:"5+",
+   en:["How am I today?","Quick check-in and check-out: weather, battery and what's on their mind."], es:["¿Cómo llego hoy?","Check-in y check-out rápido: clima, batería y lo que tiene en la mente."]},
+  {e:"🎲",link:"dice",    needs:["start"],        roles:["iic","ba"], age:"5+",
+   en:["Get-to-know-me dice","Roll for a question and take turns answering. Kids and teens."], es:["Dado Conóceme","Tira el dado, sale una pregunta y se turnan para contestar. Niños y adolescentes."]}
 ];
 
 /* coming soon */
@@ -208,8 +214,6 @@ const SOON = [
   {e:"⏳",needs:["behave"],roles:["ba","pc"],       en:"Visual timer",         es:"Timer visual"},
   {e:"🚦",needs:["behave"],roles:["iic","ba"],      en:"Decision traffic light",es:"Semáforo de decisiones"},
   {e:"🤔",needs:["behave"],roles:["iic","ba"],      en:"What would you do?",   es:"¿Qué harías tú?"},
-  {e:"👋",needs:["start"], roles:["iic","ba"],      en:"How am I today?",      es:"¿Cómo llego hoy?"},
-  {e:"🎲",needs:["start"], roles:["iic","ba"],      en:"Get-to-know-me dice",  es:"Dado Conóceme"},
   {e:"🧱",needs:["start"], roles:["iic"],           en:"Question tower",       es:"Torre de preguntas"}
 ];
 
