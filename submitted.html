@@ -43,11 +43,12 @@
     <div class="quote" id="quote"></div>
     <div class="safe">
       <div class="safe-icon">&#10003;</div>
-      <div><b>It's safe to close this tab</b><span>Your hours will show in My Billing Hours in a few minutes.</span></div>
+      <div><b>It's safe to close this tab</b><span id="safeMsg">Your hours will show in My Billing Hours in a few minutes.</span></div>
     </div>
     <div class="brand">Aliado Community Health</div>
   </div>
 <script>
+  if (/[?&]t=tele(&|$)/.test(location.search)) { document.getElementById('safeMsg').textContent = 'The family will get an email to sign. Your hours will show in My Billing Hours once they sign. Until then, you will see it under Pending Encounters.'; }
   try { history.replaceState(null, '', location.pathname); } catch (e) {}
   var now = new Date();
   document.getElementById('stamp').textContent = '\uD83D\uDCC5 ' + now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) + ' \u00B7 ' + now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
