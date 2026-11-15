@@ -32,6 +32,13 @@ body{font-family:Lato,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:
 .wx span{width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:8px}
 .wx span.on{background:#fff;box-shadow:0 0 0 2px #1A3A8F}
 .art.d{background:#FFF3D6}
+.art.l{background:#EFE9FF}
+.lad{font-size:52px;line-height:1;transform:rotate(-6deg)}
+.steps{position:absolute;left:8px;bottom:8px;display:flex;gap:3px;align-items:flex-end}
+.steps i{width:8px;border-radius:3px;background:#8E6CF0}
+.steps i:nth-child(1){height:8px;opacity:.45}.steps i:nth-child(2){height:13px;opacity:.65}.steps i:nth-child(3){height:18px;opacity:.85}.steps i:nth-child(4){height:23px}
+.where{display:inline-block;margin-top:5px;font:700 11.5px Lato,sans-serif;color:#6A4FB8;background:#F3EEFF;border-radius:999px;padding:2px 8px}
+.where.s{color:#1A5FA8;background:#EAF3FF}
 .die{width:62px;height:62px;border-radius:16px;background:#FFC93C;box-shadow:0 6px 0 rgba(22,34,74,.18);
  display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);padding:9px;transform:rotate(-10deg)}
 .die i{width:9px;height:9px;border-radius:50%;background:#16224A;align-self:center;justify-self:center}
@@ -49,9 +56,22 @@ body{font-family:Lato,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:
   <div class="hero">
     <div class="puzzle" aria-hidden="true">🧩</div>
     <span class="badge">✨ NEW</span>
-    <h1>We've added 2 new tools to Therapeutic Tools</h1>
-    <p>Find them under <b>Start &amp; build trust</b>. Perfect for the first minutes of every visit.</p>
+    <h1>We've added 3 new tools to Therapeutic Tools</h1>
+    <p>Open them right here or find them in <b>Therapeutic Tools</b>.</p>
   </div>
+
+  <a class="card" id="t0" href="#" target="_blank" rel="noopener">
+    <div class="art l" aria-hidden="true">
+      <div class="lad">🪜</div>
+      <span class="chip">Share with family</span>
+    </div>
+    <div class="txt">
+      <b>Bravery ladder</b>
+      <p>Face a fear one small step at a time, with a 0–10 thermometer and prizes. The family keeps practicing at home.</p>
+      <span class="where">Worries &amp; anxiety</span><br>
+      <small>Try it →</small>
+    </div>
+  </a>
 
   <a class="card" id="t1" href="#" target="_blank" rel="noopener">
     <div class="art w" aria-hidden="true">
@@ -60,6 +80,7 @@ body{font-family:Lato,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:
     <div class="txt">
       <b>How am I today?</b>
       <p>A 2-minute check-in: weather inside, energy battery and what's on their mind. Copies a line for your note.</p>
+      <span class="where s">Start &amp; build trust</span><br>
       <small>Try it →</small>
     </div>
   </a>
@@ -72,6 +93,7 @@ body{font-family:Lato,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:
     <div class="txt">
       <b>Get-to-know-me dice</b>
       <p>Roll, get a question, take turns answering. Great for first visits and rebuilding trust.</p>
+      <span class="where s">Start &amp; build trust</span><br>
       <small>Try it →</small>
     </div>
   </a>
@@ -81,12 +103,13 @@ body{font-family:Lato,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:
 <script>
 const P=new URLSearchParams(location.search),C=P.get("c")||"";
 const q=C?"?c="+encodeURIComponent(C):"";
+document.getElementById("t0").href="escalera-valentia.html?t=1"+(C?"&c="+encodeURIComponent(C):"");
 document.getElementById("t1").href="como-llego-hoy.html"+q;
 document.getElementById("t2").href="dado-conoceme.html"+q;
 /* log one view per clinician per load (no client data) */
 if(C){fetch("tt-flow.txt",{cache:"no-store"}).then(r=>r.ok?r.text():"").then(F=>{F=(F||"").trim();if(F.indexOf("https://")!==0)return;
  fetch(F,{method:"POST",headers:{"Content-Type":"application/json"},keepalive:true,
-  body:JSON.stringify({event:"whatsnew_view",tool:"What's new: check-in + dice",clinician:C,mode:"therapist",lang:"en",answer:"",comment:""})}).catch(()=>{});}).catch(()=>{});}
+  body:JSON.stringify({event:"whatsnew_view",tool:"What's new: ladder + check-in + dice",clinician:C,mode:"therapist",lang:"en",answer:"",comment:""})}).catch(()=>{});}).catch(()=>{});}
 </script>
 </body>
 </html>
