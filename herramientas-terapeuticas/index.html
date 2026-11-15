@@ -304,7 +304,7 @@ function renderView(){
   $("vTools").innerHTML = list.length ? list.map(t=>toolCard(t)).join("") : `<p class="empty">${u.none}</p>`;
   $("vTools").querySelectorAll("[data-qr]").forEach(a=>a.onclick=e=>{e.preventDefault();openQR();});
 }
-const VER="6";
+const VER="7";
 let qLang="en";
 function renderQR(){const u=UI[lang];$("qT").textContent=u.qT;$("qShare").textContent=u.share;$("qNote").textContent="";$("qP").textContent=u.qP;$("qSteps").innerHTML=u.qSteps.map(x=>`<li>${x}</li>`).join("");
  $("qLangs").innerHTML="";[["en","English"],["es","Español"]].forEach(([k,l])=>{const b=document.createElement("button");b.className="chip";b.textContent=l;b.setAttribute("aria-pressed",qLang===k);b.onclick=()=>{qLang=k;renderQR();};$("qLangs").appendChild(b);});
