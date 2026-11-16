@@ -191,12 +191,12 @@
       referrerPolicy: "no-referrer",
       body: JSON.stringify({ clinician: clinician, passcode: code })
     })
-    .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
     .then(function (d) {
       if (!d || !d.ok) { btn.disabled = false; msg.textContent = "Incorrect passcode. Please try again."; msg.style.color = "#ef4444"; pass.value = ""; pass.focus(); return; }
       render(d);
     })
-    .catch(function () { btn.disabled = false; msg.textContent = "We couldn't connect right now. Please try again."; msg.style.color = "#ef4444"; });
+    .catch(function (e) { btn.disabled = false; msg.textContent = "We couldn't connect right now. Please try again. (Error: " + ((e && e.message) || e || "unknown") + (navigator.onLine === false ? " / offline" : "") + ")"; msg.style.color = "#ef4444"; });
   }
   btn.addEventListener("click", verify);
   pass.addEventListener("keydown", function (e) { if (e.key === "Enter") verify(); });
