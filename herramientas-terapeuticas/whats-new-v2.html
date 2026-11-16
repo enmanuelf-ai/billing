@@ -118,8 +118,14 @@ textarea{font-weight:400;font-size:14px;resize:none;height:46px}
 </head>
 <body>
 <div class="wrap">
+ <!-- loading while we check if this week is already answered -->
+ <div id="chk" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;min-height:300px;color:#6B7393;font:600 14px/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif">
+  <div style="width:34px;height:34px;border:3px solid #DDE3F1;border-top-color:#1A3A8F;border-radius:50%;animation:spin .8s linear infinite"></div>
+  Loading…
+ </div>
+ <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
  <!-- STEP 1: cases -->
- <section id="s1" class="s1">
+ <section id="s1" class="s1" hidden>
   <div class="stepbar"><div class="dots"><i class="on"></i><i></i></div>STEP 1 OF 2</div>
   <div>
     <div class="eyebrow" id="wk">Weekly case planning</div>
@@ -217,10 +223,14 @@ textarea{font-weight:400;font-size:14px;resize:none;height:46px}
  $("qD").oninput=()=>{st.d=$("qD").value;upd();};
  function ok(){if(st.n===null)return false;if(st.n==="0")return true;return !!st.w&&(st.w!=="date"||!!st.d)&&st.c.length>0;}
  function upd(){$("more").style.display=(st.n===null||st.n==="0")?"none":"flex";$("more").hidden=st.n===null||st.n==="0";$("qD").hidden=st.w!=="date";$("send").disabled=!ok();$("err").hidden=true;}
- function when(a){return a.w==="asap"?"as soon as possible":a.w==="next"?"next week":new Date(a.d+"T12:00").toLocaleDateString("en-US",{month:"short",day:"numeric"});}
+ function startLabel(a){return a.w==="asap"?"As soon as possible":a.w==="next"?"Next week":(a.d?new Date(a.d+"T12:00").toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"}):"");}
+ function when(a){const s=a.startTxt||startLabel(a);return s==="As soon as possible"||s==="Next week"?s.toLowerCase():s;}
  function summary(a){return a.n==="0"?"<b>Got it — you're full this week.</b> We won't send new cases.":`<b>Thanks! We'll look for ${a.n} new case${a.n==="1"?"":"s"} for you</b>, starting ${when(a)} · ${a.c.join(", ")}.`;}
- function step2(a){$("s1").hidden=true;$("s2").hidden=false;$("doneTxt").innerHTML=summary(a);window.scrollTo(0,0);}
- $("chg").onclick=()=>{$("s2").hidden=true;$("s1").hidden=false;window.scrollTo(0,0);};
+ function step2(a){$("chk").style.display="none";$("s1").hidden=true;$("s2").hidden=false;$("doneTxt").innerHTML=summary(a);window.scrollTo(0,0);}
+ function step1(){$("chk").style.display="none";$("s2").hidden=true;$("s1").hidden=false;}
+ $("chg").onclick=()=>{step1();window.scrollTo(0,0);};
+ const mailURL=fetch("cases-mail.txt",{cache:"no-store"}).then(r=>r.ok?r.text():"").then(M=>{M=(M||"").trim();return M.indexOf("https://")===0?M:"";}).catch(()=>"");
+ function remember(a){try{localStorage.setItem(KEY,JSON.stringify(a));}catch(e){}try{sessionStorage.setItem(KEY,JSON.stringify(a));}catch(e){}}
  $("send").onclick=()=>{
   if(!ok())return;$("send").disabled=true;$("send").textContent="Sending…";
   const a={week:WEEK,clinician:C,cases:st.n,start:st.n==="0"?"":(st.w==="date"?st.d:st.w),counties:st.n==="0"?"":st.c.join(", "),note:$("qT").value.trim(),n:st.n,w:st.w,d:st.d,c:st.c.slice()};
@@ -245,16 +255,21 @@ textarea{font-weight:400;font-size:14px;resize:none;height:46px}
 </div>
 <div style="padding:12px 26px 22px;color:#6B7393;font-size:12px;line-height:1.5">Sent automatically from the clinician app when they answered the weekly question. If they change their answer, you'll get a new email.</div>
 </div></div>`;
-   fetch("cases-mail.txt",{cache:"no-store"}).then(r=>r.ok?r.text():"").then(M=>{M=(M||"").trim();if(M.indexOf("https://")===0)fetch(M,{method:"POST",headers:{"Content-Type":"application/json"},keepalive:true,body:JSON.stringify({subject:subj,html})}).catch(()=>{});}).catch(()=>{});
+   a.subject=subj;a.html=html;
   }catch(e){}
+  /* 1) Case Requests Excel + email (main record) */
+  const main=mailURL.then(M=>{if(!M)return false;
+    return fetch(M,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"submit",week:a.week,clinician:a.clinician,cases:a.cases,status:a.cases==="0"?"Full":"Needs cases",start:a.cases==="0"?"":startLabel(a),counties:a.counties,note:a.note,subject:a.subject||"",html:a.html||""})}).then(r=>r.ok).catch(()=>false);});
+  /* 2) usage log (secondary) */
   const summ=a.cases==="0"?"Full — no new cases":(a.cases+" case"+(a.cases==="1"?"":"s")+" · start "+a.start+" · "+a.counties);
-  fetch("tt-flow.txt",{cache:"no-store"}).then(r=>r.ok?r.text():"").then(F=>{F=(F||"").trim();
+  const log=fetch("tt-flow.txt",{cache:"no-store"}).then(r=>r.ok?r.text():"").then(F=>{F=(F||"").trim();
     if(F.indexOf("https://")!==0)return false;
     return fetch(F,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({event:"case_request",tool:summ,clinician:a.clinician,mode:"week "+a.week,lang:"en",answer:a.cases,comment:[a.start?"start: "+a.start:"",a.counties?"counties: "+a.counties:"",a.note?"note: "+a.note:""].filter(Boolean).join(" | ")})}).then(r=>r.ok);
-  }).catch(()=>false).then(good=>{
+  }).catch(()=>false);
+  Promise.all([main,log]).then(([g1,g2])=>{
     $("send").textContent="Submit and continue";
-    if(!good){$("err").textContent="Couldn't send — check your connection and try again.";$("err").hidden=false;$("send").disabled=false;return;}
-    try{localStorage.setItem(KEY,JSON.stringify(a));}catch(e){}
+    if(!g1&&!g2){$("err").textContent="Couldn't send — check your connection and try again.";$("err").hidden=false;$("send").disabled=false;return;}
+    delete a.html;delete a.subject;remember(a);
     step2(a);
   });
  };
@@ -263,8 +278,21 @@ textarea{font-weight:400;font-size:14px;resize:none;height:46px}
   if(id){try{window.top.location.href="https://hipaa.jotform.com/app/"+id+"/page/0";ok=true;}catch(e){}}
   setTimeout(()=>{if(document.visibilityState==="visible"){$("toDash").textContent="Tap \u201cGo to my Dashboard\u201d below ↓";}},1500);};
  let saved=null;try{saved=JSON.parse(localStorage.getItem(KEY)||"null");}catch(e){}
+ if(!saved){try{saved=JSON.parse(sessionStorage.getItem(KEY)||"null");}catch(e){}}
  if(P.has("preview2"))saved={n:"2",w:"next",d:"",c:["Bergen","Hudson"]};
- if(saved)step2(saved);
+ if(saved){step2(saved);}
+ else if(!C){step1();}
+ else{
+  /* ask the Case Requests Excel whether this clinician already answered this week (works on any phone/computer) */
+  let done=false;const fin=f=>{if(done)return;done=true;f();};
+  setTimeout(()=>fin(step1),8000);
+  mailURL.then(M=>{if(!M)return fin(step1);
+   return fetch(M,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"check",week:WEEK,clinician:C})}).then(r=>r.json()).then(j=>{
+    if(j&&j.answered&&j.last){const r=j.last;const a={week:WEEK,clinician:C,n:String(r.Cases||"0"),cases:String(r.Cases||"0"),startTxt:r["Can start"]||"",c:String(r.Counties||"").split(",").map(s=>s.trim()).filter(Boolean),fromServer:1};remember(a);fin(()=>step2(a));}
+    else fin(step1);
+   });
+  }).catch(()=>fin(step1));
+ }
 })();
 </script>
 <script>
