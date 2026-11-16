@@ -224,6 +224,29 @@ textarea{font-weight:400;font-size:14px;resize:none;height:46px}
  $("send").onclick=()=>{
   if(!ok())return;$("send").disabled=true;$("send").textContent="Sending…";
   const a={week:WEEK,clinician:C,cases:st.n,start:st.n==="0"?"":(st.w==="date"?st.d:st.w),counties:st.n==="0"?"":st.c.join(", "),note:$("qT").value.trim(),n:st.n,w:st.w,d:st.d,c:st.c.slice()};
+  /* email copy to Enmanuel (fire-and-forget; Excel log below is the record) */
+  try{
+   const esc=x=>String(x||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+   const full=a.cases==="0";
+   const wk=new Date(a.week+"T12:00").toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});
+   const startTxt=full?"—":(a.w==="asap"?"Right away":a.w==="next"?"Next week":new Date(a.d+"T12:00").toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"}));
+   const row=(k,v)=>`<tr><td style="padding:9px 0;color:#6B7393;font-size:13px;width:130px;vertical-align:top">${k}</td><td style="padding:9px 0;color:#16224A;font-size:15px;font-weight:bold">${v}</td></tr>`;
+   const subj=full?`${a.clinician||"A clinician"} is full this week`:`Case request: ${a.clinician||"Clinician"} wants ${a.cases} new case${a.cases==="1"?"":"s"}`;
+   const pre=full?`${a.clinician} answered: caseload is full (week of ${wk}).`:`${a.clinician}: ${a.cases} case${a.cases==="1"?"":"s"} · ${startTxt} · ${a.counties}`;
+   const html=`<div style="display:none;max-height:0;overflow:hidden">${esc(pre)}</div>
+<div style="background:#F3F5FB;padding:24px 12px;font-family:Arial,Helvetica,sans-serif">
+<div style="max-width:560px;margin:0 auto;background:#fff;border-radius:14px;overflow:hidden;border:1px solid #DDE3F1">
+<div style="background:#fff;text-align:center;padding:22px 20px 8px"><img src="https://www.jotform.com/uploads/enmanuelf59/form_files/Captura%20de%20pantalla%202026-04-22%20160244.69fbcf54529891.59675446.jpg" alt="Aliado Community Health" width="200" style="width:200px;max-width:70%;height:auto;display:inline-block"></div>
+<div style="height:4px;background:${full?"#9AA6C6":"#1A3A8F"}"></div>
+<div style="padding:22px 26px 8px">
+<div style="font-size:11px;letter-spacing:1.5px;color:#6B7393;font-weight:bold">WEEKLY CASE PLANNING · WEEK OF ${esc(wk).toUpperCase()}</div>
+<div style="font-size:22px;color:#16224A;font-weight:bold;margin-top:6px">${full?"Caseload full this week":"New case request"}</div>
+<table style="width:100%;border-collapse:collapse;margin-top:12px">${row("Clinician",esc(a.clinician))}${row("Cases requested",full?"None — caseload is full":esc(a.cases))}${full?"":row("Can start",esc(startTxt))+row("Counties",esc(a.counties))}${a.note?row("Notes",esc(a.note)):""}</table>
+</div>
+<div style="padding:12px 26px 22px;color:#6B7393;font-size:12px;line-height:1.5">Sent automatically from the clinician app when they answered the weekly question. If they change their answer, you'll get a new email.</div>
+</div></div>`;
+   fetch("cases-mail.txt",{cache:"no-store"}).then(r=>r.ok?r.text():"").then(M=>{M=(M||"").trim();if(M.indexOf("https://")===0)fetch(M,{method:"POST",headers:{"Content-Type":"application/json"},keepalive:true,body:JSON.stringify({subject:subj,html})}).catch(()=>{});}).catch(()=>{});
+  }catch(e){}
   const summ=a.cases==="0"?"Full — no new cases":(a.cases+" case"+(a.cases==="1"?"":"s")+" · start "+a.start+" · "+a.counties);
   fetch("tt-flow.txt",{cache:"no-store"}).then(r=>r.ok?r.text():"").then(F=>{F=(F||"").trim();
     if(F.indexOf("https://")!==0)return false;
