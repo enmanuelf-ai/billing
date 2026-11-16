@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<script>/* pilot: case-availability step */(function(){var c=new URLSearchParams(location.search).get("c")||"";if(["Sakima Gonzalez"].indexOf(c)>-1)location.replace("whats-new-v2.html"+location.search);})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>What's new</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -50,10 +49,107 @@ body{font-family:Lato,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:
 .txt small{display:inline-block;margin-top:5px;margin-left:6px;font:700 13px Lato,sans-serif;color:#C2185B}
 .foot{display:flex;align-items:center;gap:10px;background:#F6F1FA;border-radius:18px;padding:9px 12px;font-size:13px;line-height:1.35;color:#4A3D5C}
 .foot span{font-size:22px;flex:none}
+
+/* ---- step bar ---- */
+.stepbar{display:flex;align-items:center;gap:8px;font:800 12px Lato,sans-serif;color:#6B7393;letter-spacing:.04em}
+.stepbar .dots{display:flex;gap:5px}
+.stepbar .dots i{width:26px;height:6px;border-radius:99px;background:#DDE3F1}
+.stepbar .dots i.on{background:#1A3A8F}
+/* ---- step 1: cases (professional) ---- */
+.s1{display:flex;flex-direction:column;gap:10px}
+.eyebrow{font:800 11.5px Lato,sans-serif;letter-spacing:.09em;color:#6B7393;text-transform:uppercase}
+.s1 h1{font:800 clamp(22px,6vw,27px)/1.15 Lato,system-ui,sans-serif;color:#16224A;margin-top:3px}
+.s1 .sub{font-size:14.5px;line-height:1.4;color:#4A5373;margin-top:4px}
+.info{display:flex;gap:9px;align-items:flex-start;background:#F3F5FB;border:1px solid #DDE3F1;border-radius:10px;padding:9px 11px;font-size:13px;line-height:1.4;color:#3A4466}
+.info svg{flex:none;width:16px;height:16px;margin-top:1px;color:#1A3A8F}
+.panel{border:1px solid #DDE3F1;border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:12px;background:#fff}
+.q{display:flex;flex-direction:column;gap:7px}
+.q > b{font:700 14px Lato,sans-serif;color:#16224A}
+.q > b span{font-weight:400;color:#6B7393;font-size:12.5px}
+.seg{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid #C9D1E6;border-radius:10px;overflow:hidden}
+.seg .opt{border:0;border-left:1px solid #C9D1E6;border-radius:0;background:#fff;padding:10px 0;font:700 15px Lato,sans-serif;color:#16224A;cursor:pointer;transition:background .15s,color .15s}
+.seg .opt:first-child{border-left:0}
+.seg .opt:hover{background:#EEF2FB}
+.seg .opt[aria-pressed="true"]{background:#1A3A8F;color:#fff}
+.seg3{grid-template-columns:repeat(3,1fr)}
+.seg3 .opt{font-size:13.5px;padding:10px 4px}
+.full{display:flex;align-items:center;gap:8px;border:1px solid #C9D1E6;border-radius:10px;background:#fff;padding:9px 12px;font:700 14px Lato,sans-serif;color:#16224A;cursor:pointer;text-align:left;transition:background .15s,border-color .15s}
+.full:hover{background:#EEF2FB}
+.full[aria-pressed="true"]{background:#1A3A8F;border-color:#1A3A8F;color:#fff}
+.full i{width:16px;height:16px;border-radius:50%;border:2px solid currentColor;flex:none;opacity:.7}
+.full[aria-pressed="true"] i{background:#fff;box-shadow:inset 0 0 0 3px #1A3A8F;opacity:1}
+.chk{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.chk .opt{display:flex;align-items:center;gap:6px;border:1px solid #C9D1E6;border-radius:10px;background:#fff;padding:9px 7px;font:700 13px Lato,sans-serif;color:#16224A;cursor:pointer;transition:background .15s,border-color .15s}
+.chk .opt:hover{background:#EEF2FB}
+.chk .opt::before{content:"";width:15px;height:15px;border:2px solid #9AA6C6;border-radius:4px;flex:none;background:#fff}
+.chk .opt[aria-pressed="true"]{border-color:#1A3A8F;background:#EEF2FB}
+.chk .opt[aria-pressed="true"]::before{background:#1A3A8F url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.5l3 3 6-7' fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/12px no-repeat;border-color:#1A3A8F}
+input[type=date],textarea{font:700 14.5px Lato,sans-serif;color:#16224A;border:1px solid #C9D1E6;border-radius:10px;padding:9px 11px;width:100%;background:#fff;outline:none}
+input[type=date]:focus,textarea:focus{border-color:#1A3A8F;box-shadow:0 0 0 3px rgba(26,58,143,.12)}
+textarea{font-weight:400;font-size:14px;resize:none;height:46px}
+.send{border:0;border-radius:10px;background:#1A3A8F;color:#fff;font:800 15.5px Lato,sans-serif;padding:13px;cursor:pointer;transition:background .15s}
+.send:hover{background:#13296A}
+.send:disabled{background:#C9CEDD;cursor:default}
+#toDash{margin-top:2px}
+.err{color:#C62828;font:700 13px Lato,sans-serif}
+.done{display:flex;align-items:center;gap:10px;background:#E9F7F0;border:2px solid #BFE6D2;border-radius:16px;padding:9px 12px;font-size:13.5px;line-height:1.35}
+.done b{color:#0E5E3A}
+.done button{margin-left:auto;flex:none;border:0;background:none;color:#1A3A8F;font:700 13px Lato,sans-serif;text-decoration:underline;cursor:pointer}
+[hidden]{display:none!important}
+
+/* compact step 2 so the Dashboard button sits right under the cards (iframe is 660px tall) */
+#s2{gap:8px}
+#s2 .hero{padding:12px 14px}
+#s2 .hero h1{font-size:clamp(20px,5.4vw,25px);margin-top:6px}
+#s2 .hero p{font-size:13px;margin-top:2px}
+#s2 .puzzle{font-size:26px}
+#s2 .badge{font-size:11px;padding:3px 9px}
+#s2 .card{padding:8px 10px;gap:10px}
+#s2 .art{width:62px;height:62px;border-radius:14px}
+#s2 .wx{font-size:14px}#s2 .wx span{width:18px;height:18px}
+#s2 .lad{font-size:32px}
+#s2 .die{width:40px;height:40px;padding:6px}#s2 .die i{width:6px;height:6px}
+#s2 .txt b{font-size:16.5px}
+#s2 .txt p{font-size:13px}
+#s2 .where{margin-top:3px}
+#s2 .done{padding:7px 11px;font-size:13px}
+#toDash{margin-top:2px;padding:12px}
 </style>
 </head>
 <body>
 <div class="wrap">
+ <!-- STEP 1: cases -->
+ <section id="s1" class="s1">
+  <div class="stepbar"><div class="dots"><i class="on"></i><i></i></div>STEP 1 OF 2</div>
+  <div>
+    <div class="eyebrow" id="wk">Weekly case planning</div>
+    <h1>Do you need new cases?</h1>
+    <p class="sub">Helps the office send new referrals to you first.</p>
+  </div>
+  <div class="info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v6M12 7.5v.01"/></svg>
+    <div>Answer once — after you submit, this question won't appear again until next Monday.</div></div>
+  <div class="panel">
+   <div class="q"><b>How many new cases can you take?</b>
+     <div class="seg" id="qN"><button class="opt" data-v="1">1</button><button class="opt" data-v="2">2</button><button class="opt" data-v="3">3</button><button class="opt" data-v="4">4</button><button class="opt" data-v="5+">5+</button></div>
+     <button class="full" id="qF" data-v="0"><i></i>None — my caseload is full</button></div>
+   <div id="more" hidden style="display:flex;flex-direction:column;gap:12px">
+    <div class="q"><b>When can you start?</b>
+      <div class="seg seg3" id="qW"><button class="opt" data-v="asap">Right away</button><button class="opt" data-v="next">Next week</button><button class="opt" data-v="date">Specific date</button></div>
+      <input type="date" id="qD" hidden></div>
+    <div class="q"><b>Counties <span>· select all that apply</span></b>
+      <div class="chk" id="qC"><button class="opt" data-v="Bergen">Bergen</button><button class="opt" data-v="Hudson">Hudson</button><button class="opt" data-v="Passaic">Passaic</button><button class="opt" data-v="Essex">Essex</button></div></div>
+   </div>
+   <div class="q"><b>Notes <span>· optional</span></b>
+     <textarea id="qT" maxlength="300" placeholder="e.g. afternoons only, Spanish-speaking families, open to virtual"></textarea></div>
+  </div>
+  <p class="err" id="err" hidden></p>
+  <button class="send" id="send" disabled>Submit and continue</button>
+ </section>
+
+ <!-- STEP 2: new tools -->
+ <section id="s2" class="wrap" style="padding:0" hidden>
+  <div class="stepbar"><div class="dots"><i class="on"></i><i class="on"></i></div>STEP 2 OF 2</div>
+  <div class="done" id="doneBox"><span aria-hidden="true">✅</span><div id="doneTxt"></div><button id="chg">Change</button></div>
   <div class="hero">
     <div class="puzzle" aria-hidden="true">🧩</div>
     <span class="badge">✨ NEW</span>
@@ -99,8 +195,55 @@ body{font-family:Lato,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:
     </div>
   </a>
 
-  <div class="foot"><span aria-hidden="true">💡</span><div>Each tool has a <b>Help</b> button, in English and Spanish.</div></div>
+  <button class="send" id="toDash">Go to my Dashboard →</button>
+ </section>
 </div>
+<script>
+/* ===== Step 1: case availability (weekly, resets every Monday NJ time) ===== */
+(function(){
+ const P=new URLSearchParams(location.search),C=P.get("c")||"";
+ const nj=new Date(new Date().toLocaleString("en-US",{timeZone:"America/New_York"}));
+ const mon=new Date(nj);mon.setDate(nj.getDate()-((nj.getDay()+6)%7));
+ const WEEK=mon.getFullYear()+"-"+String(mon.getMonth()+1).padStart(2,"0")+"-"+String(mon.getDate()).padStart(2,"0");
+ const KEY="aliado-cases-"+WEEK+"-"+C;
+ const $=id=>document.getElementById(id);
+ let st={n:null,w:null,d:"",c:[]};
+ function one(box,k){box.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{box.querySelectorAll(".opt").forEach(x=>x.setAttribute("aria-pressed",x===b));st[k]=b.dataset.v;upd();});}
+ function setN(v){st.n=v;$("qN").querySelectorAll(".opt").forEach(x=>x.setAttribute("aria-pressed",x.dataset.v===v));$("qF").setAttribute("aria-pressed",v==="0");upd();}
+ $("qN").querySelectorAll(".opt").forEach(b=>b.onclick=()=>setN(b.dataset.v));$("qF").onclick=()=>setN("0");
+ one($("qW"),"w");
+ $("wk").textContent="Weekly case planning · Week of "+mon.toLocaleDateString("en-US",{month:"short",day:"numeric"});
+ $("qC").querySelectorAll(".opt").forEach(b=>b.onclick=()=>{const v=b.dataset.v,i=st.c.indexOf(v);i<0?st.c.push(v):st.c.splice(i,1);b.setAttribute("aria-pressed",i<0);upd();});
+ $("qD").oninput=()=>{st.d=$("qD").value;upd();};
+ function ok(){if(st.n===null)return false;if(st.n==="0")return true;return !!st.w&&(st.w!=="date"||!!st.d)&&st.c.length>0;}
+ function upd(){$("more").style.display=(st.n===null||st.n==="0")?"none":"flex";$("more").hidden=st.n===null||st.n==="0";$("qD").hidden=st.w!=="date";$("send").disabled=!ok();$("err").hidden=true;}
+ function when(a){return a.w==="asap"?"as soon as possible":a.w==="next"?"next week":new Date(a.d+"T12:00").toLocaleDateString("en-US",{month:"short",day:"numeric"});}
+ function summary(a){return a.n==="0"?"<b>Got it — you're full this week.</b> We won't send new cases.":`<b>Thanks! We'll look for ${a.n} new case${a.n==="1"?"":"s"} for you</b>, starting ${when(a)} · ${a.c.join(", ")}.`;}
+ function step2(a){$("s1").hidden=true;$("s2").hidden=false;$("doneTxt").innerHTML=summary(a);window.scrollTo(0,0);}
+ $("chg").onclick=()=>{$("s2").hidden=true;$("s1").hidden=false;window.scrollTo(0,0);};
+ $("send").onclick=()=>{
+  if(!ok())return;$("send").disabled=true;$("send").textContent="Sending…";
+  const a={week:WEEK,clinician:C,cases:st.n,start:st.n==="0"?"":(st.w==="date"?st.d:st.w),counties:st.n==="0"?"":st.c.join(", "),note:$("qT").value.trim(),n:st.n,w:st.w,d:st.d,c:st.c.slice()};
+  const summ=a.cases==="0"?"Full — no new cases":(a.cases+" case"+(a.cases==="1"?"":"s")+" · start "+a.start+" · "+a.counties);
+  fetch("tt-flow.txt",{cache:"no-store"}).then(r=>r.ok?r.text():"").then(F=>{F=(F||"").trim();
+    if(F.indexOf("https://")!==0)return false;
+    return fetch(F,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({event:"case_request",tool:summ,clinician:a.clinician,mode:"week "+a.week,lang:"en",answer:a.cases,comment:[a.start?"start: "+a.start:"",a.counties?"counties: "+a.counties:"",a.note?"note: "+a.note:""].filter(Boolean).join(" | ")})}).then(r=>r.ok);
+  }).catch(()=>false).then(good=>{
+    $("send").textContent="Submit and continue";
+    if(!good){$("err").textContent="Couldn't send — check your connection and try again.";$("err").hidden=false;$("send").disabled=false;return;}
+    try{localStorage.setItem(KEY,JSON.stringify(a));}catch(e){}
+    step2(a);
+  });
+ };
+ const APPS={"Lydia Coronel":"263166338676165","Emily Besserer":"263166662937165","Ebony Jackson":"263144235824152","Shantal Vasquez":"263143664291155","Amy Mikalov":"263073676543160","Alexandra Saharig":"263055559234157","Abriana Carreno":"263055833582158","Emily Gum":"263055392088159","Jaymes Hernandez":"262884294505870","Garieka Godfrey":"262883208183866","Fiorella Gutti":"262883331476868","Amelia Washington":"262796954913171","Yitao Liu":"262795317431158","Jessica Felixbrod":"262774450169161","Yolanda Gonzalez":"262774133709159","Bria Miller":"262774439809169","Daisy Campoverde":"262564984258169","Sarah Zubair":"262526582717161","Alexa Pedulla":"262395824952872","Rose Daus":"262394974437875","Jennifer Loaiza":"262394526939875","Keyon Murray":"262305689954874","Natalie Arcello":"262305492846866","Rebecca Garcia":"262226373216150","Joseph Bae":"262183364888874","Susany Tran":"262114959199166","Flor Vasquez-Vallejo":"261966446516871","Ryan Thomas":"261863349288875","Stephanie Munoz":"261815323791156","Esther Chucaralao":"261594657416164","Deztiny Menyhart":"261526503908155","Chiemela Nwanosike":"261526763716160","Sakima Gonzalez":"261187075011147"};
+ $("toDash").onclick=()=>{const id=APPS[C];let ok=false;
+  if(id){try{window.top.location.href="https://hipaa.jotform.com/app/"+id+"/page/0";ok=true;}catch(e){}}
+  setTimeout(()=>{if(document.visibilityState==="visible"){$("toDash").textContent="Tap \u201cGo to my Dashboard\u201d below ↓";}},1500);};
+ let saved=null;try{saved=JSON.parse(localStorage.getItem(KEY)||"null");}catch(e){}
+ if(P.has("preview2"))saved={n:"2",w:"next",d:"",c:["Bergen","Hudson"]};
+ if(saved)step2(saved);
+})();
+</script>
 <script>
 const P=new URLSearchParams(location.search),C=P.get("c")||"";
 const q=C?"?c="+encodeURIComponent(C):"";
