@@ -281,7 +281,10 @@ textarea{font-weight:400;font-size:14px;resize:none;height:46px}
  let saved=null;try{saved=JSON.parse(localStorage.getItem(KEY)||"null");}catch(e){}
  if(!saved){try{saved=JSON.parse(sessionStorage.getItem(KEY)||"null");}catch(e){}}
  if(P.has("preview2"))saved={n:"2",w:"next",d:"",c:["Bergen","Hudson"]};
- if(saved){step2(saved);}
+ /* clinicians who don't get the weekly case question: straight to the tools page, no step bar / answer box */
+ const NO_CASE_Q=["Shantal Vasquez","Ebony Jackson"];
+ if(NO_CASE_Q.indexOf(C)>=0){$("chk").style.display="none";$("s1").hidden=true;$("s2").hidden=false;$("doneBox").style.display="none";const sb=$("s2").querySelector(".stepbar");if(sb)sb.style.display="none";}
+ else if(saved){step2(saved);}
  else if(!C){step1();}
  else{
   /* ask the Case Requests Excel whether this clinician already answered this week (works on any phone/computer) */
