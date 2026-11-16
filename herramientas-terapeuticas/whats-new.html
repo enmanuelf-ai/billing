@@ -133,7 +133,7 @@ textarea{font-weight:400;font-size:14px;resize:none;height:46px}
     <p class="sub">Helps the office send new referrals to you first.</p>
   </div>
   <div class="info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v6M12 7.5v.01"/></svg>
-    <div>Answer once — after you submit, this question won't appear again until next Monday.</div></div>
+    <div>Answer once — after you submit, this question won't appear again until next Sunday, when we ask about the coming week.</div></div>
   <div class="panel">
    <div class="q"><b>How many new cases can you take?</b>
      <div class="seg" id="qN"><button class="opt" data-v="1">1</button><button class="opt" data-v="2">2</button><button class="opt" data-v="3">3</button><button class="opt" data-v="4">4</button><button class="opt" data-v="5+">5+</button></div>
@@ -209,7 +209,8 @@ textarea{font-weight:400;font-size:14px;resize:none;height:46px}
 (function(){
  const P=new URLSearchParams(location.search),C=P.get("c")||"";
  const nj=new Date(new Date().toLocaleString("en-US",{timeZone:"America/New_York"}));
- const mon=new Date(nj);mon.setDate(nj.getDate()-((nj.getDay()+6)%7));
+ /* week = Monday; on Sunday it already shows the coming week (opens Sunday) */
+ const mon=new Date(nj);mon.setDate(nj.getDay()===0?nj.getDate()+1:nj.getDate()-((nj.getDay()+6)%7));
  const WEEK=mon.getFullYear()+"-"+String(mon.getMonth()+1).padStart(2,"0")+"-"+String(mon.getDate()).padStart(2,"0");
  const KEY="aliado-cases-"+WEEK+"-"+C;
  const $=id=>document.getElementById(id);
