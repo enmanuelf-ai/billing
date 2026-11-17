@@ -283,19 +283,23 @@ textarea{font-weight:400;font-size:14px;resize:none;height:46px}
  if(P.has("preview2"))saved={n:"2",w:"next",d:"",c:["Bergen","Hudson"]};
  /* clinicians who don't get the weekly case question: straight to the tools page, no step bar / answer box */
  const NO_CASE_Q=["Shantal Vasquez","Ebony Jackson"];
- if(NO_CASE_Q.indexOf(C)>=0){$("chk").style.display="none";$("s1").hidden=true;$("s2").hidden=false;$("doneBox").style.display="none";const sb=$("s2").querySelector(".stepbar");if(sb)sb.style.display="none";}
+ /* tools page only (no question, no answer box) */
+ function toolsOnly(){$("chk").style.display="none";$("s1").hidden=true;$("s2").hidden=false;$("doneBox").style.display="none";const sb=$("s2").querySelector(".stepbar");if(sb)sb.style.display="none";}
+ if(NO_CASE_Q.indexOf(C)>=0){toolsOnly();}
  else if(saved){step2(saved);}
  else if(!C){step1();}
  else{
   /* ask the Case Requests Excel whether this clinician already answered this week (works on any phone/computer) */
   let done=false;const fin=f=>{if(done)return;done=true;f();};
-  setTimeout(()=>fin(step1),8000);
-  mailURL.then(M=>{if(!M)return fin(step1);
+  /* if the check is slow or fails, do NOT ask again: show the tools page. The question only shows when the Excel confirms "not answered". */
+  setTimeout(()=>fin(toolsOnly),8000);
+  mailURL.then(M=>{if(!M)return fin(toolsOnly);
    return fetch(M,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"check",week:WEEK,clinician:C})}).then(r=>r.json()).then(j=>{
     if(j&&j.answered&&j.last){const r=j.last;const a={week:WEEK,clinician:C,n:String(r.Cases||"0"),cases:String(r.Cases||"0"),startTxt:r["Can start"]||"",c:String(r.Counties||"").split(",").map(s=>s.trim()).filter(Boolean),fromServer:1};remember(a);fin(()=>step2(a));}
-    else fin(step1);
+    else if(j&&j.answered===false&&!j.error)fin(step1);
+    else fin(toolsOnly);
    });
-  }).catch(()=>fin(step1));
+  }).catch(()=>fin(toolsOnly));
  }
 })();
 </script>
