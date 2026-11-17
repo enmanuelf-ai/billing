@@ -63,7 +63,7 @@ async function aliadoDecrypt(frag, pass, subtle) {
  try{history.replaceState(null,'',location.pathname);}catch(x){}
  var tries=0;
  f.addEventListener('submit',function(ev){ev.preventDefault();if(!p.value)return;b.disabled=true;e.textContent='';b.textContent='Opening…';
-  aliadoDecrypt(h,p.value.trim(),crypto.subtle).then(function(u){if(!/^https:\/\/([a-z0-9-]+\.)?jotform\.com\//.test(u))throw new Error('x');location.replace(u);})
+  aliadoDecrypt(h,p.value.trim(),crypto.subtle).then(function(u){if(!/^https:\/\/([a-z0-9-]+\.)?jotform\.com\//.test(u)&&!/^https:\/\/enmanuelf-ai\.github\.io\/billing\/enc\.html#https:\/\/([a-z0-9-]+\.)?jotform\.com\//.test(u))throw new Error('x');location.replace(u);})
   .catch(function(){tries++;b.disabled=false;b.textContent='Open';p.value='';p.focus();e.textContent=tries>2?'Incorrect passcode. Contact your supervisor if you need help.':'Incorrect passcode. Try again.';});
  });
 })();
