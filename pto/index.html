@@ -83,7 +83,7 @@ button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
 .sum{display:flex;justify-content:space-between;align-items:center;font-size:14px;padding:10px 0}
 .sum+.sum{border-top:1px solid var(--line)}
 .sum b{font-size:15px}
-.bk{display:flex;justify-content:space-between;font-size:12px;color:var(--mut);margin-top:8px}
+.bk{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:var(--mut);margin-top:8px}.bk span{flex:1 1 0;min-width:0}.bk span:last-child{text-align:right}
 .bk b{display:block;color:var(--ink);font-size:15px}
 .msg{border-radius:14px;padding:12px 14px;font-size:13.5px;margin-bottom:12px;line-height:1.4}
 .msg.e{background:var(--redbg);color:var(--red)}.msg.w{background:var(--ambbg);color:var(--amb)}
@@ -139,7 +139,7 @@ function load(){
   var l=[];try{l=JSON.parse(b.l||"[]")}catch(e){}
   var h=[];try{h=JSON.parse(b.h||"[]")}catch(e){}
   var m=me[0];
-  S.me=m&&String(m.Clinician||"").trim()?{name:String(m.Clinician).trim(),start:pd(m.StartDate),appr:String(m.Approver||"").trim(),apprEmail:String(m.ApproverEmail||"").trim()}:null;
+  S.me=m&&String(m.Clinician||"").trim()?{name:String(m.Clinician).trim(),start:pd(m.StartDate),appr:String(m.Approver||"").trim(),apprEmail:String(m.ApproverEmail||"").trim(),sup:/supervisor/i.test(String(m.Role||""))}:null;
   S.L=l.map(function(x){return {id:String(x.LedgerID||""),type:String(x.Type||"").toLowerCase(),status:String(x.Status||""),st:pd(x.StartDate),en:pd(x.EndDate),entry:pd(x.EntryDate),days:num(x.Days),hours:num(x.Hours),note:String(x.Note||""),by:String(x.DecidedBy||"")}});
   S.Hol={};h.forEach(function(x){var d=pd(x.Date);if(d){var k=iso(d);S.Hol[k]={f:Math.min(1,x.Fraction==null||x.Fraction===""?1:num(x.Fraction)),n:String(x.Holiday||"")}}});
   render();
@@ -147,12 +147,16 @@ function load(){
 }
 /* ---------- calculations ---------- */
 function sumL(f){return S.L.filter(f).reduce(function(a,x){return a+x.hours},0)}
+function PR(){return S.me&&S.me.sup?{goal:16,day:3.2,parts:[["Contact",.4,"var(--navy)"],["Supervision",.25,"#3f63c9"],["Leadership, paperwork & admin",.25,"#8aa2e8"],["Self-care",.1,"var(--light)"]]}:{goal:26,day:5.2,parts:[["Contact",.65,"var(--navy)"],["Paperwork",.25,"#5b7be0"],["Self-care",.1,"var(--light)"]]}}
+function dayTxt(){return "1 day = "+PR().parts.map(function(x){return nf(8*x[1],1)+" h "+(x[0]==="Contact"?"contact":x[0].charAt(0).toLowerCase()+x[0].slice(1))}).join(" · ")}
+function rate(k){return S.me&&S.me.sup?(15+Math.floor(k/12))*8/12:112/12}
+function yearDays(){var me=S.me,t=today(),mo=(t.getFullYear()*12+t.getMonth())-(me.start.getFullYear()*12+me.start.getMonth());return 15+Math.floor(Math.max(0,mo)/12)}
 function pto(){var me=S.me,t=today();var mo=(t.getFullYear()*12+t.getMonth())-(me.start.getFullYear()*12+me.start.getMonth());
- var earn=Math.round(112/12*Math.max(0,mo)*100)/100;
+ var earn=0;for(var k=0;k<Math.max(0,mo);k++)earn+=rate(k);earn=Math.round(earn*100)/100;
  var used=sumL(function(x){return x.type==="request"&&x.status==="Approved"});
  var exp=sumL(function(x){return x.type==="expire"});
  var pend=sumL(function(x){return x.type==="request"&&x.status==="Pending"});
- return {earn:earn,used:used,exp:exp,pend:pend,av:earn-used-exp,elig:addD(me.start,90)}}
+ return {earn:earn,used:used,exp:exp,pend:pend,av:earn-used-exp,elig:addD(me.start,90),next:rate(Math.max(0,mo))}}
 function sick(){var me=S.me,t=today(),ys=new Date(t.getFullYear(),0,1);var from=me.start>ys?me.start:ys;
  var off=sumL(function(x){return (x.type==="request"||x.type==="sick")&&x.status==="Approved"&&x.st&&x.st>=ys&&x.st<=t});
  var earn=Math.min(40,Math.round(Math.max(0,diffD(from,t)*40/7-off)/30*10)/10);
@@ -165,7 +169,7 @@ function weekGoal(a,days){var w0=addD(a,-wk(a)),w6=addD(w0,6),off=0;
  for(var i=0;i<7;i++){var d=addD(w0,i),k=iso(d);if(S.Hol[k])off+=S.Hol[k].f}
  days.forEach(function(x){if(x.h>0&&x.d>=w0&&x.d<=w6)off+=x.h/8});
  S.L.forEach(function(x){if((x.type==="request"||x.type==="sick")&&x.status==="Approved"&&x.st&&x.en&&x.st<=w6&&x.en>=w0){var s=x.st>w0?x.st:w0,e=x.en<w6?x.en:w6;off+=diffD(s,e)+1}});
- return Math.max(0,26-5.2*off)}
+ return Math.max(0,PR().goal-PR().day*off)}
 /* ---------- render ---------- */
 function hero(){var me=S.me,h=new Date().getHours();
  return '<div class="hero"><div class="hi">'+(h<12?"Good morning,":h<18?"Good afternoon,":"Good evening,")+'</div><div class="name">'+esc(me.name)+'</div><div class="av">'+esc(ini(me.name))+'</div>'+
@@ -185,14 +189,14 @@ function render(){
   '<div class="bar"><i style="width:'+Math.min(100,p.used/tot*100)+'%;background:var(--navy)"></i><i style="width:'+Math.min(100,p.pend/tot*100)+'%;background:#f0b23a"></i><i style="width:'+Math.max(0,(p.av-p.pend)/tot*100)+'%;background:var(--light)"></i></div>'+
   '<div class="leg"><span><i class="dot" style="background:var(--navy)"></i>Used <b>'+nf(p.used)+' h</b></span><span><i class="dot" style="background:#f0b23a"></i>Pending <b>'+nf(p.pend)+' h</b></span><span><i class="dot" style="background:var(--light)"></i>Available <b>'+nf(p.av-p.pend)+' h</b></span></div></div>'+
   '<button class="cta" data-go="req">+&nbsp; Request time off</button>'+
-  '<div class="tiles"><div class="tile"><div class="ic">📈</div><div><div class="v">'+nf(p.earn)+' h</div><div class="l">Earned so far</div></div></div><div class="tile"><div class="ic">＋</div><div><div class="v">+9.33 h</div><div class="l">'+MON[nx.getMonth()]+' '+nx.getDate()+'</div></div></div></div>'+
+  '<div class="tiles"><div class="tile"><div class="ic">📈</div><div><div class="v">'+nf(p.earn)+' h</div><div class="l">Earned so far</div></div></div><div class="tile"><div class="ic">＋</div><div><div class="v">+'+nf(p.next)+' h</div><div class="l">'+MON[nx.getMonth()]+' '+nx.getDate()+'</div></div></div></div>'+
   '<div class="card how"><h3>How PTO works</h3>'+
   rowH("👤","<b>For full-time staff.</b>")+
-  rowH("📅","<b>14 days per year</b> <span class='s'>(112 h · 9.33 h added each month)</span>.")+
+  (S.me.sup?rowH("📅","<b>15 days per year</b>, plus 1 more day for each year of service <span class='s'>(this year: "+yearDays()+" days · "+nf(yearDays()*8)+" h · "+nf(yearDays()*8/12)+" h added each month)</span>."):rowH("📅","<b>14 days per year</b> <span class='s'>(112 h · 9.33 h added each month)</span>."))+
   rowH("⏱","You can use it from <b>day 90</b> of your start date.")+
   rowH("☀️","<b>Full days (8 h)</b>, weekends included · company holidays don't count.")+
   rowH("✉️","Sent to your supervisor — you get an email with the decision.")+
-  rowH("🎯","Each PTO day lowers that week's goals in <b>My Billing Hours</b> <span class='s'>(1 day = 5.2 h contact · 2 h paperwork · 0.8 h self-care)</span>.")+'</div>';
+  rowH("🎯","Each PTO day lowers that week's goals in <b>My Billing Hours</b> <span class='s'>("+dayTxt()+")</span>.")+'</div>';
  } else if(S.tab==="sick"){var s=sick(),t2=today();var stot=Math.max(s.earn,0.0001);
   h+='<div class="card"><div class="kick">Sick time available</div><div class="big" style="color:var(--teal)">'+nf(Math.max(0,s.av-s.pend),1)+'<small>hours</small></div>'+
   '<span class="pill t">'+nf(s.earn,1)+' h earned this year · max 40 h</span>'+
@@ -206,7 +210,7 @@ function render(){
   rowH("📅","You can use it from <b>day 90</b> of your start date.",1)+
   rowH("🩺","For your own health, a family member's care or a medical appointment.",1)+
   rowH("☀️","Sick time is taken in <b>full days (8 h)</b>.",1)+
-  rowH("🎯","Each sick day lowers that week's goals in <b>My Billing Hours</b>, the same way as PTO <span class='s'>(1 day = 5.2 h contact · 2 h paperwork · 0.8 h self-care)</span>.",1)+
+  rowH("🎯","Each sick day lowers that week's goals in <b>My Billing Hours</b>, the same way as PTO <span class='s'>("+dayTxt()+")</span>.",1)+
   rowH("🔒","Sick time is <b>separate from your PTO</b>.",1)+'</div>';
  } else {var L=S.L.filter(function(x){return x.type==="request"||x.type==="sick"}).sort(function(a,b){return (b.st||0)-(a.st||0)});
   h+='<div class="card"><div class="kick" style="margin-bottom:8px">My requests</div>'+(L.length?L.map(function(x){var dt=x.st?(x.en&&diffD(x.st,x.en)>0?fmtS(x.st)+" – "+fmtS(x.en):fmtS(x.st)):"—";
@@ -235,14 +239,14 @@ function renderReq(isS){var me=S.me;
   else if(!F.note.trim())err="Write the reason.";
   if(!err){var w=[];if(a<s.elig)w.push("Your sick time is available from "+fmt(s.elig)+". You can still send this request — your supervisor will decide.");if(hr>s.av-s.pend)w.push("This is more than your available sick time ("+nf(Math.max(0,s.av-s.pend),1)+" h). Your supervisor will decide.");warn=w.join("<br>")}
  }
- var g=a&&days.length?weekGoal(a,days):26, p2=isS?null:pto();
+ var g=a&&days.length?weekGoal(a,days):PR().goal, p2=isS?null:pto();
  var h='<div class="fhead'+(isS?" sick":"")+'"><button class="back" data-go="home">‹</button><div><h2>'+(isS?"Request sick time":"Request time off")+'</h2><p>Full days only · 8 h per day</p></div></div>'+
  '<div class="body'+(isS?" sick":"")+'" style="margin-top:-44px"><div class="card"><div class="dates"><div class="fld"><label>First day</label><input type="date" id="fS" value="'+esc(F.s)+'"></div><div class="fld"><label>Last day</label><input type="date" id="fE" value="'+esc(F.e)+'"></div></div>'+
  (days.length?'<div class="days">'+days.map(function(x){return '<span class="dchip'+(x.h===0?" h":"")+'" title="'+esc(x.hol)+'">'+WD[x.d.getDay()]+" "+x.d.getDate()+(x.hol?" · "+esc(x.hol):"")+'</span>'}).join("")+'</div>':'')+'</div>'+
  '<div class="card"><div class="sum"><span>Days requested</span><b>'+nf(hr/8,1)+' day'+(hr===8?"":"s")+' · '+nf(hr,1)+' h</b></div>'+
- '<div style="padding:10px 0"><div class="kick">How your '+nf(hr,1)+' h count this week</div><div class="bar" style="margin-top:10px"><i style="width:65%;background:var(--navy)"></i><i style="width:25%;background:#5b7be0"></i><i style="width:10%;background:var(--light)"></i></div>'+
- '<div class="bk"><span>Contact<b>'+nf(hr*.65)+' h</b></span><span>Paperwork<b>'+nf(hr*.25)+' h</b></span><span>Self-care<b>'+nf(hr*.1)+' h</b></span></div></div>'+
- '<div class="sum"><span>Contact goal that week</span><b>26 h → '+nf(g,1)+' h</b></div>'+
+ '<div style="padding:10px 0"><div class="kick">How your '+nf(hr,1)+' h count this week</div><div class="bar" style="margin-top:10px">'+PR().parts.map(function(x){return '<i style="width:'+(x[1]*100)+'%;background:'+x[2]+'"></i>'}).join("")+'</div>'+
+ '<div class="bk">'+PR().parts.map(function(x){return '<span>'+x[0]+'<b>'+nf(hr*x[1])+' h</b></span>'}).join("")+'</div></div>'+
+ '<div class="sum"><span>Contact goal that week</span><b>'+PR().goal+' h → '+nf(g,1)+' h</b></div>'+
  (isS?'<div class="sum"><span>Sick time after approval</span><b style="color:var(--teal)">'+nf(Math.max(0,sick().av-sick().pend-hr),1)+' h</b></div>':'<div class="sum"><span>Balance after approval</span><b style="color:var(--grn)">'+nf(p2.av-p2.pend-hr)+' h</b></div>')+'</div>'+
  '<div class="card"><div class="fld'+(isS?" sk":"")+'"><label>'+(isS?"Reason":"Note for your supervisor (optional)")+'</label><textarea id="fN" placeholder="'+(isS?"e.g. Fever, doctor appointment":"e.g. Family trip")+'">'+esc(F.note)+'</textarea></div>'+
  '<div class="appr"><div class="av2">'+esc(ini(me.appr))+'</div><div><b>'+esc(me.appr||"Your supervisor")+'</b><small>Will get an email to approve</small></div></div></div>'+
