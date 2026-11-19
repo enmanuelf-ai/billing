@@ -67,6 +67,9 @@ h2{font-family:"Baloo 2",system-ui,sans-serif;font-weight:800;font-size:clamp(26
 .feel button span{font-size:40px;line-height:1}
 .feel button.sel{border-color:var(--navy);background:var(--soft);box-shadow:0 0 0 3px rgba(26,58,143,.15)}
 .row{display:grid;gap:10px}
+.share{border:2px dashed #C2185B;background:#FFF7FA;color:#C2185B;border-radius:999px;padding:12px 16px;font:700 16px Lato,sans-serif;cursor:pointer;transition:background .15s;width:100%}
+.share:hover{background:#FCE4EF}
+.fam{background:var(--soft);border-radius:16px;padding:10px 14px;font-size:15px;color:var(--muted);margin:0}
 .toast{min-height:22px;text-align:center;color:#2FA77A;font-weight:700;margin:0}
 
 :root{--hc:#1A3A8F}
@@ -102,6 +105,9 @@ h2{font-family:"Baloo 2",system-ui,sans-serif;font-weight:800;font-size:clamp(26
     <p class="lead" data-t="lead"></p>
     <div class="modes" id="modes"></div>
     <div class="rounds"><span data-t="roundsL"></span><span id="rbtns" style="display:flex;gap:8px"></span></div>
+    <p class="fam" id="famNote" hidden data-t="fam"></p>
+    <button class="share" id="share" data-t="share"></button>
+    <p class="toast" id="stoast" aria-live="polite"></p>
   </section>
 
   <section class="play" id="play" hidden>
@@ -131,10 +137,12 @@ h2{font-family:"Baloo 2",system-ui,sans-serif;font-weight:800;font-size:clamp(26
 const UI={
  en:{title:"Guided breathing",lead:"Breathe with the balloon. When it grows, breathe in. When it shrinks, breathe out.",
   roundsL:"Rounds:",pause:"Pause",resume:"Resume",finish:"Finish",ready:"Get ready…",round:(n,t)=>`Round ${n} of ${t}`,
-  endT:"Nice breathing! 🎉",endP:"How does your body feel now?",copy:"📋 Copy for my note",copied:"Copied. Paste it into the progress note.",again:"Breathe again"},
+  endT:"Nice breathing! 🎉",endP:"How does your body feel now?",copy:"📋 Copy for my note",copied:"Copied. Paste it into the progress note.",again:"Breathe again",share:"📤 Share with the family",shared:"Link copied. Paste it in a text or WhatsApp to the parent.",
+  fam:"Your therapist shared this with you. Pick a breathing type and breathe together with your child — at bedtime or when they get upset."},
  es:{title:"Respiración guiada",lead:"Respira con el globo. Cuando crece, toma aire. Cuando se encoge, suelta el aire.",
   roundsL:"Rondas:",pause:"Pausa",resume:"Seguir",finish:"Terminar",ready:"Prepárate…",round:(n,t)=>`Ronda ${n} de ${t}`,
-  endT:"¡Muy bien respirado! 🎉",endP:"¿Cómo se siente tu cuerpo ahora?",copy:"📋 Copiar para mi nota",copied:"Copiado. Pégalo en la nota de progreso.",again:"Respirar otra vez"}
+  endT:"¡Muy bien respirado! 🎉",endP:"¿Cómo se siente tu cuerpo ahora?",copy:"📋 Copiar para mi nota",copied:"Copiado. Pégalo en la nota de progreso.",again:"Respirar otra vez",share:"📤 Compartir con la familia",shared:"Link copiado. Pégalo en un texto o WhatsApp al padre.",
+  fam:"Su terapeuta le compartió esto. Escoja un tipo de respiración y respiren juntos con su hijo — antes de dormir o cuando se altere."}
 };
 const PATTERNS=[
  {id:"balloon",e:"🎈",steps:[["in",4],["out",4]],
@@ -148,7 +156,8 @@ const PH={in:{en:"Breathe in",es:"Toma aire",big:true,ico:"👃"},out:{en:"Breat
  hold:{en:"Hold",es:"Aguanta",ico:"✋"},smell:{en:"Smell the flower",es:"Huele la flor",big:true,ico:"🌸"},blow:{en:"Blow the candle",es:"Sopla la vela",big:false,ico:"🕯️"}};
 const FEEL=[{id:"calm",e:"😌",en:"Calmer",es:"Más calmado",note:"feeling calmer"},{id:"same",e:"😐",en:"About the same",es:"Igual",note:"feeling about the same"},{id:"up",e:"😣",en:"Still upset",es:"Todavía molesto",note:"still feeling upset"}];
 const $=id=>document.getElementById(id);
-let lang="en",pat=PATTERNS[0],rounds=5,run=null,feel=null,done=0;
+const QP=new URLSearchParams(location.search);const FAMILY=QP.get("f")==="1";
+let lang=QP.get("lang")==="es"?"es":"en",pat=PATTERNS[0],rounds=5,run=null,feel=null,done=0;
 const U=()=>UI[lang];
 function paint(){
   document.documentElement.lang=lang;document.title=U().title;
@@ -160,6 +169,7 @@ function paint(){
   $("rbtns").innerHTML="";[3,5,10].forEach(n=>{const b=document.createElement("button");b.textContent=n;b.setAttribute("aria-pressed",n===rounds);
     b.onclick=()=>{rounds=n;paint();};$("rbtns").appendChild(b);});
   if(run&&run.paused)$("pause").textContent=U().resume;
+  $("famNote").hidden=!FAMILY;$("share").hidden=FAMILY;$("copy").hidden=FAMILY;
   renderFeel();
 }
 document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{lang=b.dataset.lang;paint();if(run)showPhase();});
@@ -206,6 +216,13 @@ $("copy").onclick=async()=>{
   const t=`Practiced ${pat.note} with youth for ${done||1} round${(done||1)===1?"":"s"} as a coping skill to regulate emotions`+(f?`; youth reported ${f.note} afterward.`:".");
   try{await navigator.clipboard.writeText(t);}catch(e){const a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();try{document.execCommand("copy")}catch(_){}a.remove();}
   $("toast").textContent=U().copied;};
+$("share").onclick=async()=>{
+  const url=location.origin+location.pathname+"?f=1&lang="+lang;
+  const text=(lang==="es"?"¡Hola! Aquí tiene la respiración guiada para practicar en casa con su hijo (antes de dormir o cuando se altere): ":"Hi! Here is the guided breathing to practice at home with your child (at bedtime or when they get upset): ")+url;
+  if(window.ttLog)ttLog("share_link");
+  try{if(navigator.share){await navigator.share({text});return;}}catch(e){}
+  try{await navigator.clipboard.writeText(text);}catch(e){const a=document.createElement("textarea");a.value=text;document.body.appendChild(a);a.select();try{document.execCommand("copy")}catch(_){}a.remove();}
+  $("stoast").textContent=U().shared;};
 $("again").onclick=()=>{paint();show("start");};
 paint();
 </script>
@@ -214,10 +231,10 @@ paint();
 <script>
 (function(){
 const H={es:{title:"¿Cómo funciona?",goal:"Enseña una técnica de respiración que el niño puede usar solo cuando se siente enojado, ansioso o desregulado. Ver el globo crecer y encogerse le marca el ritmo sin tener que contar.",
- how:["Escoge el tipo: <b>Globo</b> (los más pequeños), <b>Flor y vela</b> (la exhalación más larga calma más) o <b>Cuadrada</b> (adolescentes).","Escoge cuántas rondas: 3 para un momento rápido, 5 normal, 10 si está muy activado.","Respiren juntos siguiendo el globo. Puedes pausar en cualquier momento.","Al final, el niño marca cómo se siente su cuerpo.","Toca <b>Copiar para mi nota</b>: queda escrito el skill practicado y cómo respondió."],
+ how:["Escoge el tipo: <b>Globo</b> (los más pequeños), <b>Flor y vela</b> (la exhalación más larga calma más) o <b>Cuadrada</b> (adolescentes).","Escoge cuántas rondas: 3 para un momento rápido, 5 normal, 10 si está muy activado.","Respiren juntos siguiendo el globo. Puedes pausar en cualquier momento.","Al final, el niño marca cómo se siente su cuerpo.","Toca <b>Copiar para mi nota</b>: queda escrito el skill practicado y cómo respondió.","Toca <b>Compartir con la familia</b> para mandarle la respiración al padre por texto o WhatsApp y que practiquen en casa."],
  tips:["Practícala primero cuando el niño está tranquilo. Así, en el momento difícil ya la conoce.","Respira tú también en voz alta: el niño copia tu ritmo.","Si marca \"Todavía molesto\", prueba otra ronda o combínala con el Termómetro del enojo."]},
  en:{title:"How does it work?",goal:"Teaches a breathing skill the child can use on their own when angry, anxious or dysregulated. Watching the balloon grow and shrink sets the pace without counting.",
- how:["Pick the type: <b>Balloon</b> (little ones), <b>Flower &amp; candle</b> (a longer exhale calms more) or <b>Square</b> (teens).","Pick the rounds: 3 for a quick moment, 5 normal, 10 if they are very activated.","Breathe together following the balloon. You can pause anytime.","At the end, the child marks how their body feels.","Tap <b>Copy for my note</b>: it records the skill practiced and how they responded."],
+ how:["Pick the type: <b>Balloon</b> (little ones), <b>Flower &amp; candle</b> (a longer exhale calms more) or <b>Square</b> (teens).","Pick the rounds: 3 for a quick moment, 5 normal, 10 if they are very activated.","Breathe together following the balloon. You can pause anytime.","At the end, the child marks how their body feels.","Tap <b>Copy for my note</b>: it records the skill practiced and how they responded.","Tap <b>Share with the family</b> to send the breathing to the parent by text or WhatsApp so they practice at home."],
  tips:["Practice it first when the child is calm, so they already know it in the hard moment.","Breathe out loud with them: children copy your rhythm.","If they pick \"Still upset\", try another round or pair it with the Anger thermometer."]}};
 const L={es:{btn:"Ayuda",goal:"Para qué sirve",how:"Cómo usarlo",close:"Cerrar"},en:{btn:"Help",goal:"What it's for",how:"How to use it",close:"Close"}};
 const g=id=>document.getElementById(id),lg=()=>document.documentElement.lang==="es"?"es":"en";
@@ -241,7 +258,7 @@ let FLOWP=null;const getFlow=()=>{if(window.TT_FLOW)return Promise.resolve(windo
 const P=new URLSearchParams(location.search);
 let C=P.get("c")||"";try{if(C)sessionStorage.setItem("tt-c",C);else C=sessionStorage.getItem("tt-c")||"";}catch(e){}
 window.ttLog=function(event,extra){
- const body=Object.assign({event,tool:'Guided breathing',clinician:C,mode:"therapist",lang:document.documentElement.lang||"en",answer:"",comment:""},extra||{});
+ const body=Object.assign({event,tool:'Guided breathing',clinician:C,mode:P.get("f")==="1"?"family":"therapist",lang:document.documentElement.lang||"en",answer:"",comment:""},extra||{});
  getFlow().then(FLOW=>{if(!FLOW||FLOW.indexOf("https://")!==0)return;try{fetch(FLOW,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body),keepalive:true}).catch(()=>{});}catch(e){}});};
 ttLog("open");
 })();
