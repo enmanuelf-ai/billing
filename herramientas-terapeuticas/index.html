@@ -182,7 +182,9 @@ const LINKS = {
   home:     "tabla-casa.html",
   checkin:  "como-llego-hoy.html",
   dice:     "dado-conoceme.html",
-  ladder:   "escalera-valentia.html"
+  ladder:   "escalera-valentia.html",
+  breath:   "respiracion-guiada.html",
+  timer:    "timer-visual.html"
 };
 
 const UI = {
@@ -228,6 +230,17 @@ const TOOLS = [
   {e:"🪜",link:"ladder",  needs:["worry"],        roles:["iic","ba","pc"], age:"5+",
    en:["Bravery ladder","Face a fear one small step at a time. Share it with the family."], es:["Escalera de valentía","Enfrentar un miedo un pasito a la vez. Compártela con la familia."]}
 ];
+/* PILOT: new tools shown only to these clinicians until approved for everyone */
+const PILOT_C=["Sakima Gonzalez"];
+const PILOT_TOOLS=[
+  {e:"🎈",link:"breath",  needs:["calm"],         roles:["iic","ba","pc"], age:"4+",
+   en:["Guided breathing","Breathe with the balloon: balloon, flower & candle, or square breathing."], es:["Respiración guiada","Respira con el globo: globo, flor y vela, o respiración cuadrada."]},
+  {e:"⏳",link:"timer",   needs:["behave","parent"],roles:["ba","pc"],      age:"3–12",
+   en:["Visual timer","Make time visible for transitions. Share it with the parent."], es:["Timer visual","Hace visible el tiempo en las transiciones. Compártelo con el padre."]}
+];
+const _pc=(function(){let c=new URLSearchParams(location.search).get("c")||"";if(!c){try{c=sessionStorage.getItem("tt-c")||"";}catch(e){}}return c;})();
+const IS_PILOT=PILOT_C.indexOf(_pc)>=0;
+if(IS_PILOT)PILOT_TOOLS.forEach(t=>TOOLS.push(t));
 
 /* coming soon */
 const SOON = [
@@ -243,6 +256,7 @@ const SOON = [
   {e:"🤔",needs:["behave"],roles:["iic","ba"],      en:"What would you do?",   es:"¿Qué harías tú?"},
   {e:"🧱",needs:["start"], roles:["iic"],           en:"Question tower",       es:"Torre de preguntas"}
 ];
+if(IS_PILOT){for(let i=SOON.length-1;i>=0;i--){if(SOON[i].en==="Guided breathing"||SOON[i].en==="Visual timer")SOON.splice(i,1);}}
 
 let lang = "en", open = null;
 let role = ["iic","ba","pc"].includes(location.hash.slice(1)) ? location.hash.slice(1) : "all";
@@ -278,7 +292,7 @@ function toolCard(t,withNeed){
       <span class="go" aria-hidden="true">›</span></a>`;
 }
 /* ---- search ---- */
-const KW={anger:"angry mad rage tantrum meltdown enojo ira coraje rabia berrinche bravo",body:"tipp dbt stress panic teen estres panico adolescente cuerpo",emotions:"feelings faces emotions sentimientos emociones caras",monster:"worry anxious anxiety fear ansiedad preocupacion miedo nervios",ba:"token reward first then abc behavior fichas premio conducta primero despues",home:"star chart reward parent home estrellas premio padres casa tabla",special:"play parent bonding pcit juego padres conexion",checkin:"check in check out mood weather battery animo clima bateria como estas",dice:"icebreaker rapport first visit questions game rompehielo conocer preguntas primera visita",ladder:"fear phobia exposure brave scared anxiety dark dogs miedo fobia exposicion valiente valentia ansiedad oscuridad perros escalera"};
+const KW={anger:"angry mad rage tantrum meltdown enojo ira coraje rabia berrinche bravo",body:"tipp dbt stress panic teen estres panico adolescente cuerpo",emotions:"feelings faces emotions sentimientos emociones caras",monster:"worry anxious anxiety fear ansiedad preocupacion miedo nervios",ba:"token reward first then abc behavior fichas premio conducta primero despues",home:"star chart reward parent home estrellas premio padres casa tabla",special:"play parent bonding pcit juego padres conexion",checkin:"check in check out mood weather battery animo clima bateria como estas",dice:"icebreaker rapport first visit questions game rompehielo conocer preguntas primera visita",breath:"breathe breathing calm anxiety balloon square respirar respiracion calma globo ansiedad",timer:"timer time transition clean up screen routine tiempo transicion recoger pantalla rutina reloj",ladder:"fear phobia exposure brave scared anxiety dark dogs miedo fobia exposicion valiente valentia ansiedad oscuridad perros escalera"};
 const norm=x=>(x||"").toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
 const hay=t=>norm([t.en.join(" "),t.es.join(" "),KW[t.link]||"",t.needs.map(id=>{const n=NEEDS.find(x=>x.id===id);return n.en.join(" ")+" "+n.es.join(" ")}).join(" ")].join(" "));
 function runSearch(){

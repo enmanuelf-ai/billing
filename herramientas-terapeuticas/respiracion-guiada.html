@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Guided breathing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF3FF; --surface:#FFFFFF; --ink:#16224A; --muted:#5A6688;
+  --navy:#1A3A8F; --line:#D5DEF5; --soft:#E3EAFB; --acc:#5FB3E8; --ball:#7CC6F2;
+  box-sizing:border-box;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){--bg:#0F1530;--surface:#1A2246;--ink:#EEF2FF;--muted:#A8B3D6;--navy:#8FA9FF;--line:#2C3766;--soft:#232D58;color-scheme:dark}
+}
+:root[data-theme="dark"]{--bg:#0F1530;--surface:#1A2246;--ink:#EEF2FF;--muted:#A8B3D6;--navy:#8FA9FF;--line:#2C3766;--soft:#232D58;color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:Lato,"Helvetica Neue",Arial,sans-serif;font-size:17px;line-height:1.45;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:520px;margin:0 auto;padding:14px 18px 28px;display:flex;flex-direction:column;min-height:100vh}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.alogo{display:block;height:44px;width:auto;border-radius:10px;background:#fff;padding:2px 6px}
+.lang{display:flex;background:var(--soft);border-radius:999px;padding:3px}
+.lang button{border:0;background:transparent;color:var(--muted);font:700 14px Lato,sans-serif;padding:6px 14px;border-radius:999px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--surface);color:var(--navy);box-shadow:0 1px 3px rgba(22,34,74,.15)}
+button{font-family:inherit}
+button:focus-visible{outline:3px solid var(--navy);outline-offset:2px}
+h1{font-family:"Baloo 2",system-ui,sans-serif;font-weight:800;font-size:clamp(38px,10.5vw,54px);line-height:.98;margin:0}
+h2{font-family:"Baloo 2",system-ui,sans-serif;font-weight:800;font-size:clamp(26px,7vw,32px);line-height:1.05;margin:0}
+.lead{color:var(--muted);margin:0;max-width:34ch}
+.start{flex:1;display:flex;flex-direction:column;justify-content:center;gap:18px;padding-top:10px}
+.big-ico{font-size:52px;line-height:1}
+.modes{display:grid;gap:12px}
+.mode{display:flex;align-items:center;gap:16px;text-align:left;cursor:pointer;background:var(--surface);border:2px solid var(--line);border-radius:22px;padding:14px 18px;color:var(--ink);transition:border-color .15s,background .15s,transform .1s}
+.mode:hover{border-color:var(--acc);background:var(--soft)}
+.mode:active{transform:scale(.98)}
+.mode .ico{font-size:38px;line-height:1}
+.mode b{display:block;font-family:"Baloo 2",system-ui,sans-serif;font-size:21px;line-height:1.1}
+.mode span{color:var(--muted);font-size:15px}
+.rounds{display:flex;align-items:center;gap:10px;flex-wrap:wrap;color:var(--muted);font-weight:700;font-size:15px}
+.rounds button{border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:7px 15px;font:700 15px Lato,sans-serif;cursor:pointer;transition:border-color .15s,background .15s}
+.rounds button:hover{border-color:var(--acc);background:var(--soft)}
+.rounds button[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+
+.play{flex:1;display:flex;flex-direction:column;align-items:center;gap:14px;padding-top:12px}
+.count{color:var(--muted);font-weight:700;font-size:15px}
+.stage{position:relative;width:min(300px,78vw);aspect-ratio:1;display:flex;align-items:center;justify-content:center}
+.ring{position:absolute;inset:0;border-radius:50%;border:3px dashed var(--line)}
+.ball{width:38%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0 8%,var(--ball) 9% 100%);
+  box-shadow:0 18px 40px rgba(60,140,210,.35);transition:width 4s ease-in-out;display:flex;align-items:center;justify-content:center;font-size:clamp(30px,10vw,44px)}
+.ball.big{width:96%}
+.phase{font:800 clamp(30px,9vw,40px)/1 "Baloo 2",system-ui,sans-serif;text-align:center;min-height:42px}
+.sec{font:800 22px "Baloo 2",sans-serif;color:var(--muted);min-height:28px}
+.ctrl{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;margin-top:auto}
+.next{border:0;background:#1A3A8F;color:#fff;border-radius:999px;padding:15px 22px;font:700 18px Lato,sans-serif;cursor:pointer;transition:background .15s}
+.next:hover{background:#244BB0}
+.ghost{border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:13px 16px;font:700 16px Lato,sans-serif;cursor:pointer;transition:border-color .15s,background .15s}
+.ghost:hover{border-color:var(--acc);background:var(--soft)}
+
+.end{flex:1;display:flex;flex-direction:column;gap:16px;padding-top:14px}
+.feel{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.feel button{border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:20px;padding:14px 6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;font:700 14.5px/1.15 Lato,sans-serif;text-align:center;transition:border-color .15s,background .15s}
+.feel button:hover{border-color:var(--acc);background:var(--soft)}
+.feel button span{font-size:40px;line-height:1}
+.feel button.sel{border-color:var(--navy);background:var(--soft);box-shadow:0 0 0 3px rgba(26,58,143,.15)}
+.row{display:grid;gap:10px}
+.toast{min-height:22px;text-align:center;color:#2FA77A;font-weight:700;margin:0}
+
+:root{--hc:#1A3A8F}
+.hbtn{border:2px solid var(--line);background:var(--surface);color:var(--hc);border-radius:999px;padding:5px 11px 5px 6px;font:700 13.5px Lato,sans-serif;cursor:pointer;display:flex;align-items:center;gap:6px}
+.hbtn:hover{background:var(--soft)}
+.hbtn i{font-style:normal;width:20px;height:20px;border-radius:50%;background:var(--hc);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:13px}
+.hsheet-bg{position:fixed;inset:0;z-index:50;background:rgba(10,15,30,.45);display:flex;align-items:flex-end;justify-content:center}
+.hsheet{background:var(--bg);color:var(--ink);width:100%;max-width:560px;max-height:88vh;overflow-y:auto;border-radius:26px 26px 0 0;padding:18px 18px calc(24px + env(safe-area-inset-bottom,0px))}
+.hsheet-head{display:flex;justify-content:space-between;align-items:center;gap:10px;position:sticky;top:-18px;background:var(--bg);padding:6px 0 10px}
+.hsheet-head h2{font:800 24px/1.1 "Baloo 2",sans-serif;margin:0}
+.hsheet-head button{border:0;background:var(--soft);color:var(--ink);width:38px;height:38px;border-radius:50%;font-size:18px;cursor:pointer;flex:none}
+.hsec{background:var(--surface);border:2px solid var(--line);border-radius:20px;padding:14px 16px;margin-bottom:12px;font-size:16px;line-height:1.5}
+.hsec h3{margin:0 0 6px;font:700 19px/1.15 "Baloo 2",sans-serif;color:var(--hc)}
+.hsec p{margin:0}.hsec ol{margin:0;padding-left:20px;display:grid;gap:5px}
+.hsec.tip{background:var(--soft);border-color:transparent}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion: reduce){.ball{transition-duration:.01s!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div style="display:flex;align-items:center;gap:10px"><img class="alogo" src="https://www.jotform.com/uploads/enmanuelf59/form_files/Captura%20de%20pantalla%202026-04-22%20160244.69fbcf54529891.59675446.jpg" alt="Aliado Community Health"><button class="hbtn" id="helpBtn" aria-haspopup="dialog"><i aria-hidden="true">?</i><span id="helpLbl">Help</span></button></div>
+    <div class="lang" role="group" aria-label="Language">
+      <button data-lang="en" aria-pressed="true">EN</button>
+      <button data-lang="es" aria-pressed="false">ES</button>
+    </div>
+  </div>
+
+  <section class="start" id="start">
+    <div class="big-ico" aria-hidden="true">🎈</div>
+    <h1 data-t="title"></h1>
+    <p class="lead" data-t="lead"></p>
+    <div class="modes" id="modes"></div>
+    <div class="rounds"><span data-t="roundsL"></span><span id="rbtns" style="display:flex;gap:8px"></span></div>
+  </section>
+
+  <section class="play" id="play" hidden>
+    <div class="count" id="count"></div>
+    <div class="stage"><div class="ring"></div><div class="ball" id="ball"></div></div>
+    <div class="phase" id="phase" aria-live="polite"></div>
+    <div class="sec" id="sec"></div>
+    <div class="ctrl">
+      <button class="ghost" id="pause" data-t="pause"></button>
+      <button class="next" id="stop" data-t="finish"></button>
+    </div>
+  </section>
+
+  <section class="end" id="end" hidden>
+    <h2 data-t="endT"></h2>
+    <p class="lead" data-t="endP"></p>
+    <div class="feel" id="feel"></div>
+    <div class="row">
+      <button class="next" id="copy" data-t="copy"></button>
+      <p class="toast" id="toast" aria-live="polite"></p>
+      <button class="ghost" id="again" data-t="again"></button>
+    </div>
+  </section>
+</div>
+
+<script>
+const UI={
+ en:{title:"Guided breathing",lead:"Breathe with the balloon. When it grows, breathe in. When it shrinks, breathe out.",
+  roundsL:"Rounds:",pause:"Pause",resume:"Resume",finish:"Finish",ready:"Get ready…",round:(n,t)=>`Round ${n} of ${t}`,
+  endT:"Nice breathing! 🎉",endP:"How does your body feel now?",copy:"📋 Copy for my note",copied:"Copied. Paste it into the progress note.",again:"Breathe again"},
+ es:{title:"Respiración guiada",lead:"Respira con el globo. Cuando crece, toma aire. Cuando se encoge, suelta el aire.",
+  roundsL:"Rondas:",pause:"Pausa",resume:"Seguir",finish:"Terminar",ready:"Prepárate…",round:(n,t)=>`Ronda ${n} de ${t}`,
+  endT:"¡Muy bien respirado! 🎉",endP:"¿Cómo se siente tu cuerpo ahora?",copy:"📋 Copiar para mi nota",copied:"Copiado. Pégalo en la nota de progreso.",again:"Respirar otra vez"}
+};
+const PATTERNS=[
+ {id:"balloon",e:"🎈",steps:[["in",4],["out",4]],
+  en:["Balloon","In 4 · Out 4 · Ages 4+"],es:["Globo","Toma aire 4 · Suelta 4 · Desde 4 años"],note:"balloon breathing (in 4, out 4)"},
+ {id:"flower",e:"🌸",steps:[["smell",4],["blow",6]],
+  en:["Flower & candle","Smell the flower 4 · Blow the candle 6"],es:["Flor y vela","Huele la flor 4 · Sopla la vela 6"],note:"flower & candle breathing (in 4, out 6)"},
+ {id:"square",e:"⬜",steps:[["in",4],["hold",4],["out",4],["hold",4]],
+  en:["Square breathing","In 4 · Hold 4 · Out 4 · Hold 4 · Teens"],es:["Respiración cuadrada","Toma 4 · Aguanta 4 · Suelta 4 · Aguanta 4 · Adolescentes"],note:"square/box breathing (4-4-4-4)"}
+];
+const PH={in:{en:"Breathe in",es:"Toma aire",big:true,ico:"👃"},out:{en:"Breathe out",es:"Suelta el aire",big:false,ico:"💨"},
+ hold:{en:"Hold",es:"Aguanta",ico:"✋"},smell:{en:"Smell the flower",es:"Huele la flor",big:true,ico:"🌸"},blow:{en:"Blow the candle",es:"Sopla la vela",big:false,ico:"🕯️"}};
+const FEEL=[{id:"calm",e:"😌",en:"Calmer",es:"Más calmado",note:"feeling calmer"},{id:"same",e:"😐",en:"About the same",es:"Igual",note:"feeling about the same"},{id:"up",e:"😣",en:"Still upset",es:"Todavía molesto",note:"still feeling upset"}];
+const $=id=>document.getElementById(id);
+let lang="en",pat=PATTERNS[0],rounds=5,run=null,feel=null,done=0;
+const U=()=>UI[lang];
+function paint(){
+  document.documentElement.lang=lang;document.title=U().title;
+  document.querySelectorAll("[data-t]").forEach(el=>{const v=U()[el.dataset.t];if(typeof v==="string")el.textContent=v;});
+  document.querySelectorAll(".lang button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.lang===lang));
+  $("modes").innerHTML="";PATTERNS.forEach(p=>{const b=document.createElement("button");b.className="mode";
+    b.innerHTML=`<span class="ico" aria-hidden="true">${p.e}</span><div><b>${p[lang][0]}</b><span>${p[lang][1]}</span></div>`;
+    b.onclick=()=>start(p);$("modes").appendChild(b);});
+  $("rbtns").innerHTML="";[3,5,10].forEach(n=>{const b=document.createElement("button");b.textContent=n;b.setAttribute("aria-pressed",n===rounds);
+    b.onclick=()=>{rounds=n;paint();};$("rbtns").appendChild(b);});
+  if(run&&run.paused)$("pause").textContent=U().resume;
+  renderFeel();
+}
+document.querySelectorAll(".lang button").forEach(b=>b.onclick=()=>{lang=b.dataset.lang;paint();if(run)showPhase();});
+function show(id){["start","play","end"].forEach(s=>$(s).hidden=s!==id);window.scrollTo(0,0);}
+
+function start(p){pat=p;feel=null;done=0;show("play");
+  run={r:1,i:0,left:3,phase:"ready",paused:false};
+  $("ball").classList.remove("big");$("ball").textContent="";$("count").textContent=U().round(1,rounds);
+  $("phase").textContent=U().ready;$("sec").textContent="3";
+  clearInterval(window._t);window._t=setInterval(tick,1000);
+}
+function showPhase(){
+  if(!run)return;
+  if(run.phase==="ready"){$("phase").textContent=U().ready;return;}
+  const [k]=pat.steps[run.i];$("phase").textContent=PH[k][lang];$("ball").textContent=PH[k].ico;
+  $("count").textContent=U().round(run.r,rounds);
+}
+function enter(){
+  const [k,s]=pat.steps[run.i];run.phase=k;run.left=s;
+  const b=$("ball");b.style.transitionDuration=s+"s";
+  if(PH[k].big===true)b.classList.add("big");else if(PH[k].big===false)b.classList.remove("big");
+  showPhase();$("sec").textContent=s;
+}
+function tick(){
+  if(!run||run.paused)return;
+  run.left--;
+  if(run.left>0){$("sec").textContent=run.left;return;}
+  if(run.phase==="ready"){run.i=0;enter();return;}
+  run.i++;
+  if(run.i>=pat.steps.length){done=run.r;run.r++;run.i=0;
+    if(run.r>rounds){finish();return;}}
+  enter();
+}
+function finish(){clearInterval(window._t);if(run&&run.phase!=="ready"&&!done)done=run.r;run=null;
+  $("toast").textContent="";renderFeel();show("end");
+  if(window.ttLog)ttLog("complete",{answer:pat.id+" x"+done});}
+$("pause").onclick=()=>{if(!run)return;run.paused=!run.paused;$("pause").textContent=run.paused?U().resume:U().pause;
+  $("ball").style.transitionDuration=run.paused?"0s":"";};
+$("stop").onclick=finish;
+function renderFeel(){$("feel").innerHTML="";FEEL.forEach(f=>{const b=document.createElement("button");b.className=feel===f.id?"sel":"";
+  b.innerHTML=`<span aria-hidden="true">${f.e}</span>${f[lang]}`;b.onclick=()=>{feel=f.id;renderFeel();};$("feel").appendChild(b);});}
+$("copy").onclick=async()=>{
+  const f=FEEL.find(x=>x.id===feel);
+  const t=`Practiced ${pat.note} with youth for ${done||1} round${(done||1)===1?"":"s"} as a coping skill to regulate emotions`+(f?`; youth reported ${f.note} afterward.`:".");
+  try{await navigator.clipboard.writeText(t);}catch(e){const a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();try{document.execCommand("copy")}catch(_){}a.remove();}
+  $("toast").textContent=U().copied;};
+$("again").onclick=()=>{paint();show("start");};
+paint();
+</script>
+
+<div class="hsheet-bg" id="hBg" hidden><div class="hsheet" role="dialog" aria-modal="true" aria-labelledby="hT2"><div class="hsheet-head"><h2 id="hT2"></h2><button id="hX" aria-label="Close">✕</button></div><div id="hB2"></div></div></div>
+<script>
+(function(){
+const H={es:{title:"¿Cómo funciona?",goal:"Enseña una técnica de respiración que el niño puede usar solo cuando se siente enojado, ansioso o desregulado. Ver el globo crecer y encogerse le marca el ritmo sin tener que contar.",
+ how:["Escoge el tipo: <b>Globo</b> (los más pequeños), <b>Flor y vela</b> (la exhalación más larga calma más) o <b>Cuadrada</b> (adolescentes).","Escoge cuántas rondas: 3 para un momento rápido, 5 normal, 10 si está muy activado.","Respiren juntos siguiendo el globo. Puedes pausar en cualquier momento.","Al final, el niño marca cómo se siente su cuerpo.","Toca <b>Copiar para mi nota</b>: queda escrito el skill practicado y cómo respondió."],
+ tips:["Practícala primero cuando el niño está tranquilo. Así, en el momento difícil ya la conoce.","Respira tú también en voz alta: el niño copia tu ritmo.","Si marca \"Todavía molesto\", prueba otra ronda o combínala con el Termómetro del enojo."]},
+ en:{title:"How does it work?",goal:"Teaches a breathing skill the child can use on their own when angry, anxious or dysregulated. Watching the balloon grow and shrink sets the pace without counting.",
+ how:["Pick the type: <b>Balloon</b> (little ones), <b>Flower &amp; candle</b> (a longer exhale calms more) or <b>Square</b> (teens).","Pick the rounds: 3 for a quick moment, 5 normal, 10 if they are very activated.","Breathe together following the balloon. You can pause anytime.","At the end, the child marks how their body feels.","Tap <b>Copy for my note</b>: it records the skill practiced and how they responded."],
+ tips:["Practice it first when the child is calm, so they already know it in the hard moment.","Breathe out loud with them: children copy your rhythm.","If they pick \"Still upset\", try another round or pair it with the Anger thermometer."]}};
+const L={es:{btn:"Ayuda",goal:"Para qué sirve",how:"Cómo usarlo",close:"Cerrar"},en:{btn:"Help",goal:"What it's for",how:"How to use it",close:"Close"}};
+const g=id=>document.getElementById(id),lg=()=>document.documentElement.lang==="es"?"es":"en";
+function render(){const l=lg(),d=H[l],u=L[l];g("helpLbl").textContent=u.btn;g("hT2").textContent=d.title;g("hX").setAttribute("aria-label",u.close);
+ let h=`<div class="hsec"><h3>${u.goal}</h3><p>${d.goal}</p></div><div class="hsec"><h3>${u.how}</h3><ol>${d.how.map(x=>`<li>${x}</li>`).join("")}</ol></div>`;
+ d.tips.forEach(t=>h+=`<div class="hsec tip"><p>💡 ${t}</p></div>`);g("hB2").innerHTML=h;}
+g("helpBtn").onclick=()=>{render();g("hBg").hidden=false;g("hX").focus();};
+g("hX").onclick=()=>{g("hBg").hidden=true;g("helpBtn").focus();};
+g("hBg").onclick=e=>{if(e.target.id==="hBg")g("hX").click();};
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!g("hBg").hidden)g("hX").click();});
+new MutationObserver(render).observe(document.documentElement,{attributes:true,attributeFilter:["lang"]});
+render();
+})();
+</script>
+<script>
+/* TT_LOG: anonymous usage log (no client data) */
+(function(){
+let FLOWP=null;const getFlow=()=>{if(window.TT_FLOW)return Promise.resolve(window.TT_FLOW);if(FLOWP)return FLOWP;
+ let c=null;try{c=sessionStorage.getItem("tt-flow")}catch(e){}if(c)return FLOWP=Promise.resolve(c);
+ return FLOWP=fetch("tt-flow.txt",{cache:"no-store"}).then(r=>r.ok?r.text():"").then(t=>{t=(t||"").trim();try{if(t)sessionStorage.setItem("tt-flow",t)}catch(e){}return t;}).catch(()=>"");};
+const P=new URLSearchParams(location.search);
+let C=P.get("c")||"";try{if(C)sessionStorage.setItem("tt-c",C);else C=sessionStorage.getItem("tt-c")||"";}catch(e){}
+window.ttLog=function(event,extra){
+ const body=Object.assign({event,tool:'Guided breathing',clinician:C,mode:"therapist",lang:document.documentElement.lang||"en",answer:"",comment:""},extra||{});
+ getFlow().then(FLOW=>{if(!FLOW||FLOW.indexOf("https://")!==0)return;try{fetch(FLOW,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body),keepalive:true}).catch(()=>{});}catch(e){}});};
+ttLog("open");
+})();
+</script>
+</body>
+</html>
