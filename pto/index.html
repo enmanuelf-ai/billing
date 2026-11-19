@@ -29,6 +29,17 @@ button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
 .tab.on{background:#fff;color:var(--navy)}
 .tab.on.sick{color:var(--teal)}
 .body{padding:0 14px;margin-top:-52px;position:relative;z-index:2}
+.hol{display:flex;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid #eef1f8}
+.hol:last-child{border-bottom:0}
+.hol.past{opacity:.45}
+.hol.nx{background:var(--soft);border-radius:14px;padding:11px 10px;margin:0 -10px;border-bottom-color:transparent}
+.hd{width:46px;flex:none;text-align:center;border-radius:12px;background:#fff;box-shadow:0 2px 8px rgba(27,39,102,.10);padding:5px 0}
+.hd b{display:block;font-size:18px;color:var(--navy);line-height:1.1}
+.hd span{font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mut)}
+.hn{font-size:14.5px;font-weight:600;color:#1f2a44;line-height:1.3}
+.hm{font-size:12.5px;color:var(--mut);margin-top:2px}
+.hh{margin-left:auto;flex:none;font-size:12px;font-weight:700;color:var(--navy);background:var(--soft);border-radius:999px;padding:4px 10px}
+.hol.nx .hh{background:#fff}
 .card{background:#fff;border-radius:22px;box-shadow:0 8px 24px rgba(27,39,102,.10);padding:20px;margin-bottom:14px}
 .kick{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
 .big{font-size:44px;font-weight:800;line-height:1.1;margin-top:6px}
@@ -174,7 +185,7 @@ function weekGoal(a,days){var w0=addD(a,-wk(a)),w6=addD(w0,6),off=0;
 function hero(){var me=S.me,h=new Date().getHours();
  return '<div class="hero"><div class="hi">'+(h<12?"Good morning,":h<18?"Good afternoon,":"Good evening,")+'</div><div class="name">'+esc(me.name)+'</div><div class="av">'+esc(ini(me.name))+'</div>'+
  '<div class="chips"><span class="chip">Started '+(me.start?fmt(me.start):"—")+'</span><span class="chip">Approver: '+esc(me.appr||"—")+'</span></div>'+
- '<div class="tabs">'+tabB("pto","PTO")+tabB("sick","Sick days")+tabB("reqs","My requests")+'</div></div>'}
+ '<div class="tabs">'+tabB("pto","PTO")+tabB("sick","Sick days")+tabB("hol","Holidays")+tabB("reqs","My requests")+'</div></div>'}
 function tabB(k,t){return '<button class="tab'+(S.tab===k?" on":"")+(k==="sick"?" sick":"")+'" data-tab="'+k+'">'+t+'</button>'}
 function rowH(ic,html,t){return '<div class="row"><div class="ic'+(t?" t":"")+'">'+ic+'</div><div>'+html+'</div></div>'}
 function render(){
@@ -212,6 +223,25 @@ function render(){
   rowH("☀️","Sick time is taken in <b>full days (8 h)</b>.",1)+
   rowH("🎯","Each sick day lowers that week's goals in <b>My Billing Hours</b>, the same way as PTO <span class='s'>("+dayTxt()+")</span>.",1)+
   rowH("🔒","Sick time is <b>separate from your PTO</b>.",1)+'</div>';
+ } else if(S.tab==="hol"){var t=today(),tk=iso(t),P=PR(),ks=Object.keys(S.Hol).sort(),yr=t.getFullYear();
+  var yrs=[yr];if(t.getMonth()>=10&&ks.some(function(k){return +k.slice(0,4)===yr+1}))yrs.push(yr+1);
+  var dk=function(k){var a=k.split("-");return new Date(+a[0],+a[1]-1,+a[2])};
+  var hrs=function(f){return nf(P.day*f,1)+" h"};
+  var nk=ks.filter(function(k){return k>=tk})[0];
+  if(nk){var nd=dk(nk),nh=S.Hol[nk],dd=diffD(t,nd);
+   h+='<div class="card"><div class="kick">Next holiday</div><div class="big" style="font-size:24px;line-height:1.25">'+esc(nh.n)+'</div>'+
+   '<div style="color:var(--mut);margin-top:4px">'+nd.toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric",year:"numeric"})+'</div>'+
+   '<span class="pill g">'+(dd===0?"Today":dd===1?"Tomorrow":"In "+dd+" days")+'</span> <span class="pill t">'+(nh.f<1?"Half day":"Full day")+' · '+hrs(nh.f)+' credited</span></div>';}
+  yrs.forEach(function(y){var yk=ks.filter(function(k){return +k.slice(0,4)===y});if(!yk.length)return;
+   h+='<div class="card"><div class="kick" style="margin-bottom:6px">'+y+' holidays Aliado observes</div>'+yk.map(function(k){var d=dk(k),x=S.Hol[k];
+    return '<div class="hol'+(k<tk?" past":"")+(k===nk?" nx":"")+'"><div class="hd"><span>'+d.toLocaleDateString("en-US",{month:"short"})+'</span><b>'+d.getDate()+'</b></div>'+
+    '<div><div class="hn">'+esc(x.n)+'</div><div class="hm">'+d.toLocaleDateString("en-US",{weekday:"long"})+' · '+(x.f<1?"Half day":"Full day")+'</div></div><div class="hh">'+hrs(x.f)+'</div></div>'}).join("")+'</div>'});
+  if(!ks.length)h+='<div class="card"><div class="empty">Holidays will appear here soon.</div></div>';
+  h+='<div class="card how"><h3>How holidays work</h3>'+
+  rowH("🎉","Holidays are <b>paid</b> and <b>don't use your PTO</b>.")+
+  rowH("🎯","Each holiday lowers that week's goal in <b>My Billing Hours</b>: <b>"+hrs(1)+"</b> for a full day, <b>"+hrs(.5)+"</b> for a half day.")+
+  rowH("🗓","If you take PTO around a holiday, the holiday itself is not counted as a PTO day.")+
+  rowH("ℹ️","<span class='s'>Holiday dates may change based on the agency's operational needs.</span>")+'</div>';
  } else {var L=S.L.filter(function(x){return x.type==="request"||x.type==="sick"}).sort(function(a,b){return (b.st||0)-(a.st||0)});
   h+='<div class="card"><div class="kick" style="margin-bottom:8px">My requests</div>'+(L.length?L.map(function(x){var dt=x.st?(x.en&&diffD(x.st,x.en)>0?fmtS(x.st)+" – "+fmtS(x.en):fmtS(x.st)):"—";
    return '<div class="req"><span class="badge '+(x.type==="sick"?"s":"p")+'">'+(x.type==="sick"?"SICK":"PTO")+'</span><div><div class="d">'+dt+'</div><div class="m">'+nf(x.days||x.hours/8,1)+' day'+((x.days||x.hours/8)===1?"":"s")+' · '+nf(x.hours,1)+' h'+(x.by&&x.status!=="Pending"?' · '+(x.status==="Approved"?"approved":"decided")+' by '+esc(x.by):'')+'</div></div><span class="st '+esc(x.status)+'">'+esc(x.status||"—")+'</span></div>'}).join(""):'<div class="empty">No requests yet.</div>')+'</div>';
