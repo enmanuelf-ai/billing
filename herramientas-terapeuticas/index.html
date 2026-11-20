@@ -58,6 +58,15 @@ h1{font:800 clamp(34px,9vw,48px)/1 "Baloo 2",system-ui,sans-serif;margin:22px 0 
 .need-head h2{font:800 28px/1.05 "Baloo 2",system-ui,sans-serif;margin:0}
 .need-head p{margin:2px 0 0;color:var(--muted);font-size:15px}
 .tools{display:grid;gap:10px;margin-top:16px}
+/* WHAT'S NEW */
+.wn{background:linear-gradient(135deg,#FFF4D6,#FFE3EE);border-radius:24px;padding:14px 14px 12px;margin:0 0 14px}
+.wn h2{font:800 20px/1.1 "Baloo 2",system-ui,sans-serif;margin:0 0 2px;display:flex;align-items:center;gap:8px}
+.wn>p{margin:0 0 10px;font-size:14px;color:var(--muted)}
+.wn .tools{margin-top:0}
+.wn .tool{border-color:#F3C6D8}
+.wn .tool:hover{border-color:#C2185B;background:#FFF7FA}
+.newp{display:inline-block;font:800 11px/1 Lato,sans-serif;letter-spacing:.06em;color:#fff;background:#C2185B;border-radius:999px;padding:4px 8px;vertical-align:middle;margin-left:6px}
+.need .newp{position:absolute;top:10px;right:10px;margin:0;box-shadow:0 2px 6px rgba(194,24,91,.35)}
 .search{position:relative;margin:0 0 14px}
 .search input{width:100%;font:700 16px Lato,sans-serif;color:var(--ink);background:var(--surface);border:2px solid var(--line);border-radius:999px;padding:13px 44px 13px 46px;outline:none;-webkit-appearance:none;appearance:none;transition:border-color .15s,box-shadow .15s}
 .search input::placeholder{color:var(--muted);font-weight:400}
@@ -148,6 +157,7 @@ h1{font:800 clamp(34px,9vw,48px)/1 "Baloo 2",system-ui,sans-serif;margin:22px 0 
     </div>
     <div class="rf" id="rf" role="group"></div>
     <div class="tools" id="results" hidden></div>
+    <div class="wn" id="wn" hidden></div>
     <div class="needs" id="needs"></div>
     <div class="soon" id="soon"></div>
   </section>
@@ -188,11 +198,11 @@ const LINKS = {
 };
 
 const UI = {
-  en:{title:"Therapeutic tools", q:"What do you need right now?", tools:n=>n===1?"1 tool":`${n} tools`, soonTile:"Coming soon",
+  en:{title:"Therapeutic tools", q:"What do you need right now?", tools:n=>n===1?"1 tool":`${n} tools`, soonTile:"Coming soon", wnT:"✨ What's new", wnP:"New tools for you. They stay here until you open them.", newL:"NEW",
       back:"← All needs", ages:"Ages", soonT:"Coming soon", soonP:"Tools we're preparing. They'll appear above when ready.",
       showing:"Showing tools for", showAll:"Show all", roles:{iic:"IIC clinicians",ba:"BA",pc:"Parent Coaching"},
       none:"No tools for your role in this area yet.",search:"Search: fear, anger, play…",forLbl:"For:",forRole:(n,r)=>`${n} ${n===1?"tool":"tools"} for ${r}`,allR:"All",clear:"Clear search",results:n=>n===1?"1 tool found":`${n} tools found`,noRes:"No tools match that search yet.",soonMatch:"Coming soon:",fbT:"Quick question 🙂",fbP:"We're building these tools for you and want to know if we should keep developing them.",fbQ:"Do you find Therapeutic Tools helpful?",fbYes:"👍 Yes",fbNo:"👎 No",fbPh:"Anything you'd like us to add or change? (optional)",fbSend:"Send",fbLater:"Not now",fbTy:"Thank you!",fbTy2:"Your answer helps us decide what to build next.",qT:"Star chart for home",share:"📤 Send the link to the parent",copied:"Link copied. Paste it in a text or WhatsApp to the parent.",qP:"The parent scans this code with their phone camera and the star chart opens, ready to use at home during the week.",qSteps:["Ask the parent to open their phone camera and point it at the code.","Have them tap the link that appears on the screen.","Set up the chart together with the child before the session ends."]},
-  es:{title:"Herramientas terapéuticas", q:"¿Qué necesitas ahora mismo?", tools:n=>n===1?"1 herramienta":`${n} herramientas`, soonTile:"Próximamente",
+  es:{title:"Herramientas terapéuticas", q:"¿Qué necesitas ahora mismo?", tools:n=>n===1?"1 herramienta":`${n} herramientas`, soonTile:"Próximamente", wnT:"✨ Lo nuevo", wnP:"Herramientas nuevas para ti. Se quedan aquí hasta que las abras.", newL:"NUEVO",
       back:"← Todas las necesidades", ages:"Edades", soonT:"Próximamente", soonP:"Herramientas que estamos preparando. Aparecerán arriba cuando estén listas.",
       showing:"Mostrando herramientas para", showAll:"Ver todas", roles:{iic:"Clínicos IIC",ba:"BA",pc:"Parent Coaching"},
       none:"Todavía no hay herramientas para tu rol en esta área.",search:"Buscar: miedo, enojo, juego…",forLbl:"Para:",forRole:(n,r)=>`${n} ${n===1?"herramienta":"herramientas"} para ${r}`,allR:"Todas",clear:"Borrar búsqueda",results:n=>n===1?"1 herramienta encontrada":`${n} herramientas encontradas`,noRes:"Todavía no hay herramientas con esa búsqueda.",soonMatch:"Próximamente:",fbT:"Una pregunta rápida 🙂",fbP:"Estamos creando estas herramientas para ustedes y queremos saber si debemos seguir desarrollándolas.",fbQ:"¿Te parecen útiles las Therapeutic Tools?",fbYes:"👍 Sí",fbNo:"👎 No",fbPh:"¿Algo que te gustaría que agreguemos o cambiemos? (opcional)",fbSend:"Enviar",fbLater:"Ahora no",fbTy:"¡Gracias!",fbTy2:"Tu respuesta nos ayuda a decidir qué construir.",qT:"Tabla de estrellas para casa",share:"📤 Enviar el enlace al padre",copied:"Enlace copiado. Péguelo en un mensaje de texto o WhatsApp al padre.",qP:"El padre escanea este código con la cámara de su celular y se le abre la tabla de estrellas para usar en casa durante la semana.",qSteps:["Pídale al padre que abra la cámara de su celular y apunte al código.","Que toque el enlace que aparece en la pantalla.","Configuren la tabla juntos con el niño antes de terminar la sesión."]}
@@ -258,6 +268,15 @@ const SOON = [
 ];
 if(IS_PILOT){for(let i=SOON.length-1;i>=0;i--){if(SOON[i].en==="Guided breathing"||SOON[i].en==="Visual timer")SOON.splice(i,1);}}
 
+/* WHAT'S NEW: tool link -> date it went live. Shows for NEW_DAYS days or until the clinician opens it. */
+const NEW_TOOLS={breath:"2026-11-19",timer:"2026-11-19"};
+const NEW_DAYS=21;
+const seenKey="tt-seen";
+const seen=(function(){try{return JSON.parse(localStorage.getItem(seenKey)||"{}")}catch(e){return {}}})();
+const isNew=t=>{const d=NEW_TOOLS[t.link];if(!d||seen[t.link])return false;return (Date.now()-new Date(d+"T12:00:00").getTime())/864e5<NEW_DAYS;};
+function markSeen(link){seen[link]=1;try{localStorage.setItem(seenKey,JSON.stringify(seen))}catch(e){}}
+document.addEventListener("click",e=>{const a=e.target.closest&&e.target.closest("a.tool[data-l]");if(a)markSeen(a.dataset.l);},true);
+
 let lang = "en", open = null;
 let role = ["iic","ba","pc"].includes(location.hash.slice(1)) ? location.hash.slice(1) : "all";
 const $ = id => document.getElementById(id);
@@ -274,10 +293,15 @@ function renderHome(){
   NEEDS.forEach(n=>{
     const k = toolsFor(n.id).length, b = document.createElement("button");
     b.className = "need" + (k?"":" off"); b.style.setProperty("--c", n.c); b.disabled = !k;
-    b.innerHTML = `<span class="e" aria-hidden="true">${n.e}</span><div><b>${n[lang][0]}</b><small>${k?u.tools(k):u.soonTile}</small></div>`;
+    const hasNew = toolsFor(n.id).some(isNew);
+    b.innerHTML = (hasNew?`<span class="newp">${u.newL}</span>`:"")+`<span class="e" aria-hidden="true">${n.e}</span><div><b>${n[lang][0]}</b><small>${k?u.tools(k):u.soonTile}</small></div>`;
     if(k) b.onclick = ()=>{ open=n.id; renderView(); show("view"); };
     $("needs").appendChild(b);
   });
+
+  const fresh = TOOLS.filter(t=>forRole(t)&&isNew(t));
+  $("wn").innerHTML = fresh.length ? `<h2>${u.wnT}</h2><p>${u.wnP}</p><div class="tools">${fresh.map(t=>toolCard(t,true)).join("")}</div>` : "";
+  $("wn").hidden = !fresh.length;
 
   const soon = SOON.filter(forRole);
   $("soon").hidden = !soon.length;
@@ -286,9 +310,9 @@ function renderHome(){
 
 function toolCard(t,withNeed){
   const u=UI[lang], n=withNeed&&NEEDS.find(x=>x.id===t.needs[0]);
-  return `<a class="tool" href="${LINKS[t.link]+"?v="+VER+(["home","anger","body","special","ladder"].includes(t.link)?"&t=1":"")+(window.ttClin&&ttClin()?"&c="+encodeURIComponent(ttClin()):"")}">
+  return `<a class="tool" data-l="${t.link}" href="${LINKS[t.link]+"?v="+VER+(["home","anger","body","special","ladder"].includes(t.link)?"&t=1":"")+(window.ttClin&&ttClin()?"&c="+encodeURIComponent(ttClin()):"")}">
       <span class="e" aria-hidden="true">${t.e}</span>
-      <div><h3>${t[lang][0]}</h3><p>${t[lang][1]}</p><span class="age">${u.ages} ${t.age}</span>${n?`<span class="in" style="--c:${n.c}">${n[lang][0]}</span>`:""}</div>
+      <div><h3>${t[lang][0]}${isNew(t)?`<span class="newp">${u.newL}</span>`:""}</h3><p>${t[lang][1]}</p><span class="age">${u.ages} ${t.age}</span>${n?`<span class="in" style="--c:${n.c}">${n[lang][0]}</span>`:""}</div>
       <span class="go" aria-hidden="true">›</span></a>`;
 }
 /* ---- search ---- */
@@ -297,7 +321,7 @@ const norm=x=>(x||"").toString().toLowerCase().normalize("NFD").replace(/[\u0300
 const hay=t=>norm([t.en.join(" "),t.es.join(" "),KW[t.link]||"",t.needs.map(id=>{const n=NEEDS.find(x=>x.id===id);return n.en.join(" ")+" "+n.es.join(" ")}).join(" ")].join(" "));
 function runSearch(){
   const u=UI[lang], raw=$("q").value, q=norm(raw).trim(), roleOn=role!=="all", on=!!q||roleOn;
-  $("qClr").hidden=!q; $("needs").hidden=on; $("results").hidden=!on;
+  $("qClr").hidden=!q; $("needs").hidden=on; $("wn").hidden=on||!$("wn").innerHTML; $("results").hidden=!on;
   $("soon").hidden=!!q||!SOON.filter(forRole).length;
   if(!on){$("results").innerHTML="";return;}
   const words=q?q.split(/\s+/).map(w=>w.length>5?w.slice(0,Math.max(5,w.length-2)):w):[];
