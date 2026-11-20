@@ -114,6 +114,15 @@ textarea{font-weight:400;font-size:14px;resize:none;height:46px}
 #s2 .where{margin-top:3px}
 #s2 .done{padding:7px 11px;font-size:13px}
 #toDash{margin-top:2px;padding:12px}
+/* HOME (from Sun Nov 22): this screen is only for the weekly case question — no tool promos */
+.allset{display:none;text-align:center;background:linear-gradient(135deg,#EEF2FB,#E9F7F0);border-radius:22px;padding:26px 18px 22px}
+.allset .big{font-size:44px;line-height:1}
+.allset h1{font:800 clamp(22px,6vw,28px)/1.1 "Baloo 2",system-ui,sans-serif;color:#16224A;margin:10px 0 6px}
+.allset p{margin:0 auto;color:#4A5478;font-size:14.5px;line-height:1.45;max-width:34ch}
+body.home .allset{display:block}
+body.home #s2 .hero,body.home #s2 .card,body.home .stepbar{display:none!important}
+body.home #s2{gap:12px}
+body.home #toDash{padding:14px}
 </style>
 </head>
 <body>
@@ -156,6 +165,7 @@ textarea{font-weight:400;font-size:14px;resize:none;height:46px}
  <section id="s2" class="wrap" style="padding:0" hidden>
   <div class="stepbar"><div class="dots"><i class="on"></i><i class="on"></i></div>STEP 2 OF 2</div>
   <div class="done" id="doneBox"><span aria-hidden="true">✅</span><div id="doneTxt"></div><button id="chg">Change</button></div>
+  <div class="allset" id="allset"><div class="big" id="asE" aria-hidden="true">✅</div><h1 id="asH"></h1><p id="asP"></p></div>
   <div class="hero">
     <div class="puzzle" aria-hidden="true">🧩</div>
     <span class="badge">✨ NEW</span>
@@ -209,6 +219,11 @@ textarea{font-weight:400;font-size:14px;resize:none;height:46px}
 (function(){
  const P=new URLSearchParams(location.search),C=P.get("c")||"";
  const nj=new Date(new Date().toLocaleString("en-US",{timeZone:"America/New_York"}));
+ /* From Sunday Nov 22 (NJ) this screen is only for cases. ?home=1 previews it before that date. */
+ const NJD=nj.getFullYear()+"-"+String(nj.getMonth()+1).padStart(2,"0")+"-"+String(nj.getDate()).padStart(2,"0");
+ const HOME=NJD>="2026-11-22"||P.has("home");window.__HOME=HOME;
+ if(HOME)document.body.classList.add("home");
+ const FIRST=(C.split(" ")[0]||"");
  /* week = Monday; on Sunday it already shows the coming week (opens Sunday) */
  const mon=new Date(nj);mon.setDate(nj.getDay()===0?nj.getDate()+1:nj.getDate()-((nj.getDay()+6)%7));
  const WEEK=mon.getFullYear()+"-"+String(mon.getMonth()+1).padStart(2,"0")+"-"+String(mon.getDate()).padStart(2,"0");
@@ -227,7 +242,7 @@ textarea{font-weight:400;font-size:14px;resize:none;height:46px}
  function startLabel(a){return a.w==="asap"?"As soon as possible":a.w==="next"?"Next week":(a.d?new Date(a.d+"T12:00").toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"}):"");}
  function when(a){const s=a.startTxt||startLabel(a);return s==="As soon as possible"||s==="Next week"?s.toLowerCase():s;}
  function summary(a){return a.n==="0"?"<b>Got it — you're full this week.</b> We won't send new cases.":`<b>Thanks! We'll look for ${a.n} new case${a.n==="1"?"":"s"} for you</b>, starting ${when(a)} · ${a.c.join(", ")}.`;}
- function step2(a){$("chk").style.display="none";$("s1").hidden=true;$("s2").hidden=false;$("doneTxt").innerHTML=summary(a);window.scrollTo(0,0);}
+ function step2(a){if(HOME){$("asE").textContent="🗓️";$("asH").textContent="You're all set for this week";$("asP").textContent="We'll keep this in mind when new referrals come in. Need to change it? Tap Change.";}$("chk").style.display="none";$("s1").hidden=true;$("s2").hidden=false;$("doneTxt").innerHTML=summary(a);window.scrollTo(0,0);}
  function step1(){$("chk").style.display="none";$("s2").hidden=true;$("s1").hidden=false;}
  $("chg").onclick=()=>{step1();window.scrollTo(0,0);};
  const mailURL=fetch("cases-mail.txt",{cache:"no-store"}).then(r=>r.ok?r.text():"").then(M=>{M=(M||"").trim();return M.indexOf("https://")===0?M:"";}).catch(()=>"");
@@ -284,7 +299,7 @@ textarea{font-weight:400;font-size:14px;resize:none;height:46px}
  /* clinicians who don't get the weekly case question: straight to the tools page, no step bar / answer box */
  const NO_CASE_Q=["Shantal Vasquez","Ebony Jackson"];
  /* tools page only (no question, no answer box) */
- function toolsOnly(){$("chk").style.display="none";$("s1").hidden=true;$("s2").hidden=false;$("doneBox").style.display="none";const sb=$("s2").querySelector(".stepbar");if(sb)sb.style.display="none";}
+ function toolsOnly(){if(HOME){$("asE").textContent="👋";$("asH").textContent="Welcome back"+(FIRST?", "+FIRST:"")+"!";$("asP").textContent="Tap below to open your Dashboard.";}$("chk").style.display="none";$("s1").hidden=true;$("s2").hidden=false;$("doneBox").style.display="none";const sb=$("s2").querySelector(".stepbar");if(sb)sb.style.display="none";}
  if(NO_CASE_Q.indexOf(C)>=0){toolsOnly();}
  else if(saved){step2(saved);}
  else if(!C){step1();}
@@ -312,7 +327,7 @@ document.getElementById("t2").href="dado-conoceme.html"+q;
 /* log one view per clinician per load (no client data) */
 if(C){fetch("tt-flow.txt",{cache:"no-store"}).then(r=>r.ok?r.text():"").then(F=>{F=(F||"").trim();if(F.indexOf("https://")!==0)return;
  fetch(F,{method:"POST",headers:{"Content-Type":"application/json"},keepalive:true,
-  body:JSON.stringify({event:"whatsnew_view",tool:"What's new: ladder + check-in + dice",clinician:C,mode:"therapist",lang:"en",answer:"",comment:""})}).catch(()=>{});}).catch(()=>{});}
+  body:JSON.stringify({event:window.__HOME?"home_view":"whatsnew_view",tool:window.__HOME?"Home screen":"What's new: ladder + check-in + dice",clinician:C,mode:"therapist",lang:"en",answer:"",comment:""})}).catch(()=>{});}).catch(()=>{});}
 </script>
 </body>
 </html>

@@ -249,7 +249,9 @@ const PILOT_TOOLS=[
    en:["Visual timer","Make time visible for transitions. Share it with the parent."], es:["Timer visual","Hace visible el tiempo en las transiciones. Compártelo con el padre."]}
 ];
 const _pc=(function(){let c=new URLSearchParams(location.search).get("c")||"";if(!c){try{c=sessionStorage.getItem("tt-c")||"";}catch(e){}}return c;})();
-const IS_PILOT=PILOT_C.indexOf(_pc)>=0;
+/* Goes live for everyone on Sunday Nov 22 (NJ time); ?all=1 previews it */
+const _njd=(function(){const d=new Date(new Date().toLocaleString("en-US",{timeZone:"America/New_York"}));return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");})();
+const IS_PILOT=PILOT_C.indexOf(_pc)>=0||_njd>="2026-11-22"||new URLSearchParams(location.search).has("all");
 if(IS_PILOT)PILOT_TOOLS.forEach(t=>TOOLS.push(t));
 
 /* coming soon */
@@ -269,7 +271,7 @@ const SOON = [
 if(IS_PILOT){for(let i=SOON.length-1;i>=0;i--){if(SOON[i].en==="Guided breathing"||SOON[i].en==="Visual timer")SOON.splice(i,1);}}
 
 /* WHAT'S NEW: tool link -> date it went live. Shows for NEW_DAYS days or until the clinician opens it. */
-const NEW_TOOLS={breath:"2026-11-19",timer:"2026-11-19"};
+const NEW_TOOLS={breath:"2026-11-22",timer:"2026-11-22"};
 const NEW_DAYS=21;
 const seenKey="tt-seen";
 const seen=(function(){try{return JSON.parse(localStorage.getItem(seenKey)||"{}")}catch(e){return {}}})();
