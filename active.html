@@ -4,334 +4,312 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex,nofollow">
 <title>My Active Youth</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'Inter', sans-serif; background: #F0F2F8; color: #0f1729; min-height: 100vh; }
-  .login-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
-  .login-card { background: #fff; border-radius: 16px; padding: 32px 28px; width: 100%; max-width: 320px; text-align: center; box-shadow: 0 4px 20px rgba(15,23,41,0.08); }
-  .login-card svg { width: 38px; height: 38px; margin-bottom: 10px; }
-  .login-title { font-size: 1.2rem; font-weight: 800; }
-  .login-sub { font-family: 'Playfair Display', serif; font-style: italic; font-size: 0.85rem; color: #7a86a0; margin: 4px 0 22px; }
-  .login-label { text-align: left; font-size: 0.65rem; font-weight: 700; color: #7a86a0; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
-  .login-input { width: 100%; padding: 12px; border: 1px solid #e4e8f0; border-radius: 8px; background: #f8f9fc; font-size: 1.1rem; text-align: center; letter-spacing: 0.3em; font-family: 'Inter', sans-serif; outline: none; margin-bottom: 14px; }
-  .login-input:focus { border-color: #1a3a8f; }
-  .login-btn { width: 100%; padding: 12px; border: none; border-radius: 8px; background: #1a3a8f; color: #fff; font-weight: 700; font-size: 0.9rem; cursor: pointer; font-family: 'Inter', sans-serif; }
-  .login-btn:disabled { opacity: 0.6; cursor: default; }
-  .login-msg { font-size: 0.8rem; margin-top: 12px; min-height: 1em; font-weight: 600; }
-  .header { background: #fff; border-bottom: 1px solid #e4e8f0; padding: 18px 32px; display: flex; align-items: center; justify-content: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
-  .header-center { text-align: center; }
-  .header-brand { font-size: 0.75rem; font-weight: 800; color: #1a3a8f; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 6px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-  .header-brand svg { width: 20px; height: 20px; }
-  .header-greeting { font-size: 1.6rem; font-weight: 800; color: #0f1729; letter-spacing: -0.02em; }
-  .header-quote { font-family: 'Playfair Display', serif; font-style: italic; font-size: 0.95rem; color: #7a86a0; margin-top: 4px; }
-  .kpi-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; padding: 20px 32px 0; max-width: 1400px; margin: 0 auto; }
-  .kpi-card { background: #fff; border-radius: 14px; padding: 18px 20px 14px; border: 1px solid #e4e8f0; }
-  .kpi-top { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
-  .kpi-icon { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
-  .kpi-icon.blue { background: #EEF2FF; } .kpi-icon.green { background: #EDFCF2; } .kpi-icon.purple { background: #F5F0FF; } .kpi-icon.orange { background: #FFF7ED; }
-  .kpi-text { flex: 1; min-width: 0; }
-  .kpi-label { font-size: 0.68rem; font-weight: 700; color: #7a86a0; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 4px; }
-  .kpi-value { font-size: 1.8rem; font-weight: 800; color: #0f1729; line-height: 1; }
-  .kpi-value.orange { color: #ea580c; }
-  .kpi-sub { font-size: 0.7rem; color: #a0aab8; margin-top: 3px; }
-  .kpi-bar-bg { height: 3px; border-radius: 2px; width: 100%; }
-  .kpi-bar-fg { height: 3px; border-radius: 2px; }
-  .kpi-card.blue .kpi-bar-bg { background: #EEF2FF; } .kpi-card.blue .kpi-bar-fg { background: #1a3a8f; width: 70%; }
-  .kpi-card.green .kpi-bar-bg { background: #EDFCF2; } .kpi-card.green .kpi-bar-fg { background: #16a34a; width: 60%; }
-  .kpi-card.purple .kpi-bar-bg { background: #F5F0FF; } .kpi-card.purple .kpi-bar-fg { background: #7c3aed; width: 35%; }
-  .kpi-card.orange .kpi-bar-bg { background: #FFF7ED; } .kpi-card.orange .kpi-bar-fg { background: #ea580c; width: 25%; }
-  .cards-list { padding: 16px 32px 40px; max-width: 1400px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
-  .empty { text-align: center; color: #7a86a0; padding: 40px 0; font-size: 0.9rem; }
-  .youth-card { background: #fff; border-radius: 14px; border: 1px solid #e4e8f0; border-left: 4px solid #1a3a8f; overflow: hidden; }
-  .card-main { display: grid; grid-template-columns: 1fr 1fr 1fr 200px; }
-  .card-middle-row { display: contents; }
-  .card-left { padding: 20px 24px; border-right: 1px solid #f0f3f8; min-width: 0; }
-  .card-auth { padding: 20px 24px; border-right: 1px solid #f0f3f8; min-width: 0; }
-  .card-cm { padding: 20px 24px; border-right: 1px solid #f0f3f8; min-width: 0; }
-  .card-actions { padding: 16px 14px; display: flex; flex-direction: column; gap: 7px; justify-content: center; background: #fafbff; min-width: 0; }
-  .status-badge { display: inline-block; background: #EDFCF2; color: #16a34a; font-size: 0.68rem; font-weight: 700; padding: 3px 10px; border-radius: 20px; margin-bottom: 10px; }
-  .youth-name { font-size: 1.2rem; font-weight: 800; color: #0f1729; line-height: 1.2; margin-bottom: 6px; }
-  .youth-parent { font-size: 0.78rem; color: #4a5568; margin-bottom: 6px; font-weight: 500; }
-  .youth-meta { font-size: 0.8rem; color: #7a86a0; margin-bottom: 8px; font-weight: 500; }
-  .youth-address { font-size: 0.8rem; color: #4a5568; margin-bottom: 8px; line-height: 1.5; }
-  .youth-caseid { font-size: 0.76rem; color: #7a86a0; }
-  .youth-caseid strong { color: #0f1729; }
-  .section-label { font-size: 0.7rem; font-weight: 800; letter-spacing: 0.1em; color: #1a3a8f; text-transform: uppercase; margin-bottom: 14px; }
-  .auth-top { display: flex; align-items: center; gap: 20px; }
-  .auth-circle-wrap { position: relative; width: 90px; height: 90px; flex-shrink: 0; }
-  .auth-ring { width: 90px; height: 90px; transform: rotate(-90deg); }
-  .ring-bg { fill: none; stroke: #f0f3f8; stroke-width: 7; }
-  .ring-fg { fill: none; stroke: #16a34a; stroke-width: 7; stroke-linecap: round; transition: stroke-dashoffset 0.8s ease, stroke 0.5s ease; }
-  .auth-days-inner { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
-  .days-num { font-size: 1.5rem; font-weight: 800; color: #16a34a; display: block; line-height: 1; }
-  .days-label { font-size: 0.48rem; font-weight: 700; color: #7a86a0; letter-spacing: 0.06em; text-transform: uppercase; }
-  .auth-details { display: flex; flex-direction: column; gap: 9px; flex: 1; min-width: 0; }
-  .auth-row { display: flex; flex-direction: column; }
-  .auth-row-label { font-size: 0.62rem; color: #a0aab8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
-  .auth-row-value { font-size: 0.95rem; font-weight: 700; color: #0f1729; }
-  .auth-row-value.green { color: #16a34a; }
-  .cm-row { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; min-width: 0; }
-  .cm-avatar { width: 38px; height: 38px; border-radius: 50%; background: #e0e7f7; color: #1a3a8f; font-size: 0.8rem; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .cm-name { font-size: 0.9rem; font-weight: 700; color: #0f1729; word-break: break-word; }
-  .cm-agency { font-size: 0.74rem; color: #7a86a0; }
-  .cm-contact { font-size: 0.78rem; color: #4a5568; display: flex; align-items: flex-start; gap: 6px; margin-bottom: 6px; min-width: 0; }
-  .cm-contact span { flex-shrink: 0; }
-  .cm-contact a { color: #4a5568; text-decoration: none; word-break: break-all; overflow-wrap: anywhere; flex: 1; min-width: 0; }
-  .btn { display: block; text-align: center; padding: 10px 8px; border-radius: 8px; font-size: 0.78rem; font-weight: 700; text-decoration: none; cursor: pointer; border: none; font-family: 'Inter', sans-serif; transition: opacity .15s; }
-  .btn:hover { opacity: 0.85; }
-  .btn-primary { background: #1a3a8f; color: #fff; }
-  .btn-schedule { background: #16a34a; color: #fff; }
-  .btn-nav { background: #f0f4ff; color: #1a3a8f; border: 1px solid #c7d2f0; }
-  .btn-family { background: #edfcf2; color: #15803d; border: 1px solid #bbf7d0; }
-  .btn-cm { background: #faf0ff; color: #7c3aed; border: 1px solid #ddd6fe; }
-  .btn-confirm { background: #16a34a; color: #fff; width: 100%; margin-bottom: 8px; padding: 12px; font-size: 0.9rem; }
-  .btn-cancel-schedule { background: #f0f3f8; color: #6b7a9a; width: 100%; padding: 10px; font-size: 0.82rem; font-weight: 600; }
-  .btn-cal { width: 100%; margin-bottom: 8px; padding: 11px; font-size: 0.85rem; background: #fff; color: #15803d; border: 1px solid #bbf7d0; }
-  .schedule-form { border-top: 1px solid #f0f3f8; background: #f8fff8; display: none; }
-  .schedule-form-inner { padding: 20px 24px; }
-  .schedule-title { font-size: 0.9rem; font-weight: 800; color: #16a34a; margin-bottom: 4px; }
-  .schedule-youth { font-size: 0.8rem; color: #6b7a9a; margin-bottom: 16px; }
-  .schedule-fields { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px; }
-  .schedule-field label { display: block; font-size: 0.68rem; font-weight: 700; color: #9aa5bc; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
-  .schedule-field input, .schedule-field select { width: 100%; padding: 10px 12px; border: 1px solid #e4e8f0; border-radius: 8px; font-size: 0.88rem; font-family: 'Inter', sans-serif; color: #0f1729; outline: none; background: #fff; }
-  .schedule-status { font-size: 0.82rem; margin-top: 10px; text-align: center; font-weight: 600; }
-  .cal-links { display: none; margin-top: 8px; }
-  .card-referral-bar { border-top: 1px solid #f0f3f8; }
-  .referral-toggle { width: 100%; background: none; border: none; padding: 11px 24px; text-align: left; font-size: 0.78rem; font-weight: 600; color: #1a3a8f; cursor: pointer; display: flex; align-items: center; gap: 8px; font-family: 'Inter', sans-serif; }
-  .ref-arrow { display: inline-block; transition: transform .2s; font-size: 0.65rem; }
-  .referral-body { padding: 16px 24px 20px; display: none; background: #fafbff; border-top: 1px solid #f0f3f8; }
-  .ref-title { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; color: #a0aab8; text-transform: uppercase; margin-bottom: 8px; }
-  .ref-content { font-size: 0.82rem; color: #4a5568; line-height: 1.7; white-space: pre-wrap; }
-  @media (max-width: 1024px) {
-    .kpi-strip { grid-template-columns: repeat(2,1fr); padding: 16px 20px 0; }
-    .cards-list { padding: 16px 20px 40px; }
-    .card-main { grid-template-columns: 1fr 1fr; }
-    .card-left { border-bottom: 1px solid #f0f3f8; }
-    .card-auth { border-right: none; border-bottom: 1px solid #f0f3f8; }
-  }
-  @media (max-width: 600px) {
-    .header { padding: 14px 16px; }
-    .header-greeting { font-size: 1.2rem; }
-    .header-quote { font-size: 0.82rem; }
-    .kpi-strip { grid-template-columns: repeat(2,1fr); padding: 12px 12px 0; gap: 8px; }
-    .cards-list { padding: 12px 12px 40px; }
-    .card-main { grid-template-columns: 1fr; }
-    .card-middle-row { display: grid; grid-template-columns: 1fr 1fr; min-width: 0; }
-    .card-left { border-right: none; border-bottom: 1px solid #f0f3f8; }
-    .card-auth { border-right: 1px solid #f0f3f8; border-bottom: 1px solid #f0f3f8; padding: 14px; }
-    .card-cm { border-right: none; border-bottom: 1px solid #f0f3f8; padding: 14px; }
-    .card-actions { flex-direction: row; flex-wrap: wrap; gap: 8px; padding: 14px; }
-    .btn-primary, .btn-schedule { flex: 0 0 100%; }
-    .btn-nav, .btn-family, .btn-cm { flex: 1 1 45%; }
-    .auth-circle-wrap, .auth-ring { width: 65px; height: 65px; }
-    .days-num { font-size: 1.1rem; }
-    .auth-top { gap: 10px; }
-    .cm-contact { font-size: 0.68rem; }
-    .cm-name { font-size: 0.82rem; }
-    .section-label { font-size: 0.6rem; }
-    .auth-row-value { font-size: 0.82rem; }
-    .schedule-fields { grid-template-columns: 1fr; }
-  }
+:root{--navy:#1f3a5f;--blue:#1f5fa8;--dblue:#17305a;--lblue:#c9d8ef;--green:#4f8a4b;--cta:#6aa84f;--ctah:#5c9643;--bg:#eef2f8;--line:#e3e8f0;--mut:#6b7785;--ink:#1e2a3a;
+--red:#a5281b;--redbg:#fdecea;--org:#9a3412;--orgbg:#fff4ec;--grn:#2f5e17;--grnbg:#eef7e8}
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+input,select{font:inherit}
+a{color:inherit;text-decoration:none}
+/* login */
+.login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.lcard{background:#fff;border-radius:22px;padding:30px 26px;width:100%;max-width:340px;text-align:center;box-shadow:0 8px 28px rgba(31,58,95,.12)}
+.lcard .logo{width:64px;height:64px;border-radius:50%;background:var(--navy);color:#9fd39a;font:700 12px Georgia,serif;display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+.lcard h1{font-size:21px;color:var(--navy)}
+.lcard p{font-size:14px;color:var(--mut);margin:6px 0 18px}
+.pin{width:100%;font-size:26px;letter-spacing:12px;text-align:center;border:1.5px solid #c9d4de;border-radius:14px;padding:12px;outline:none}
+.pin:focus{border-color:var(--blue)}
+.go{width:100%;margin-top:14px;background:var(--blue);color:#fff;font-weight:700;font-size:16px;border-radius:14px;padding:13px;transition:background .15s}
+.go:hover{background:#174d8a}.go:disabled{background:#9aa8b5}
+.lmsg{min-height:20px;margin-top:12px;font-size:13.5px;color:var(--mut)}
+.lmsg.e{color:var(--red);font-weight:600}
+/* header */
+.top{background:linear-gradient(135deg,#1f3a5f,#1f5fa8);color:#fff;padding:20px 18px 18px}
+.wrap{max-width:1180px;margin:0 auto}
+.hrow{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.date{font-size:12.5px;color:#c9d8ef;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.hello{font-size:23px;font-weight:800;margin-top:4px}
+.rbtn{background:rgba(255,255,255,.16);border-radius:999px;padding:8px 14px;font-size:13px;font-weight:600;color:#fff;white-space:nowrap;transition:background .15s}
+.rbtn:hover{background:rgba(255,255,255,.28)}
+.quote{background:#fff;color:var(--ink);border-radius:16px;padding:12px 16px 12px 18px;margin-top:14px;border-left:5px solid var(--green);font-size:14.5px;line-height:1.45}
+.quote b{display:block;font-size:10.5px;letter-spacing:.12em;color:var(--green);margin-bottom:3px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);background:var(--dblue);color:#fff;text-align:center;padding:9px 0;border-bottom:4px solid var(--green)}
+.stats b{display:block;font-size:20px}.stats span{font-size:11.5px;color:var(--lblue)}
+.stats b.warn{color:#ffd2cc}
+.search{max-width:1180px;margin:14px auto 4px;padding:0 14px}
+.search input{width:100%;border:1.5px solid #c9d4de;border-radius:14px;padding:12px 14px 12px 40px;font-size:15px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' fill='none' stroke='%236b7785' stroke-width='2'%3E%3Ccircle cx='8' cy='8' r='6'/%3E%3Cpath d='M13 13l4 4'/%3E%3C/svg%3E") no-repeat 13px center;outline:none}
+.search input:focus{border-color:var(--blue)}
+.msg{text-align:center;color:var(--mut);font-weight:600;padding:22px 14px}
+.msg.e{color:var(--red)}
+/* cards */
+.grid{max-width:1180px;margin:0 auto;padding:10px 14px 40px;display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px;align-items:stretch}
+.card{background:#fff;border-radius:20px;box-shadow:0 4px 18px rgba(31,58,95,.10);overflow:hidden;display:flex;flex-direction:column}
+.ch{display:flex;justify-content:space-between;align-items:flex-start;padding:16px 16px 10px;gap:10px}
+.ch>div{min-width:0}.ch h2{font-size:20px;color:var(--ink);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ch .sub{font-size:13px;color:var(--mut);margin-top:3px}
+.svc{background:var(--blue);color:#fff;font-size:12px;font-weight:700;border-radius:6px;padding:4px 9px;flex:none}
+.todo{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 16px;font-size:13.5px;font-weight:700;cursor:pointer;height:54px;flex:none}
+.todo>span:first-child{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.3}
+.todo.l1{background:var(--redbg);color:var(--red)}.todo.l2{background:var(--orgbg);color:var(--org)}.todo.l0{background:var(--grnbg);color:var(--grn);cursor:default}
+.todo .n{font-size:12px;opacity:.85;flex:none}
+.cells{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:184px 118px}
+.cell{padding:11px 16px;border-top:1px solid var(--line);font-size:13.5px;line-height:1.4;min-width:0;overflow:hidden}
+.one{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.two{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cell:nth-child(odd){border-right:1px solid var(--line)}
+.k{font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--green);text-transform:uppercase;margin-bottom:3px}
+.v{font-weight:700;color:var(--ink);overflow-wrap:anywhere}
+.lnk{color:var(--blue);font-weight:500}
+.lnk:hover{text-decoration:underline}
+.mut{color:var(--mut)}
+.dot{font-weight:700;font-size:12.5px;margin-top:4px}
+.dot.ok{color:var(--grn)}.dot.no{color:var(--org)}
+.addem{margin-top:7px;background:var(--blue);color:#fff;font-weight:700;font-size:12.5px;border-radius:9px;padding:6px 11px;transition:background .15s}
+.addem:hover{background:#174d8a}
+.hrs{font-weight:700;margin-top:2px}.hrs.low{color:var(--red)}
+.bar{height:6px;background:#e4ebf3;border-radius:4px;margin:6px 0 4px;overflow:hidden}.bar i{display:block;height:100%;background:var(--blue)}
+.bar.low i{background:#c0392b}
+.notes{border-top:1px solid var(--line)}
+.notes.none summary{color:#9aa8b5;cursor:default}.notes.none summary:hover{background:none}
+.notes summary{list-style:none;padding:11px 16px;font-weight:700;color:var(--blue);font-size:13.5px;cursor:pointer}
+.notes summary::-webkit-details-marker{display:none}
+.notes summary:hover{background:#f6f9fc}
+.notes div{padding:0 16px 12px;font-size:13px;color:#3c4a5c;white-space:pre-wrap;line-height:1.5}
+.acts{border-top:1px solid var(--line);padding:12px 14px 14px;margin-top:auto}
+.start{display:block;text-align:center;background:var(--cta);color:#fff;font-weight:800;font-size:17px;border-radius:12px;padding:13px;transition:background .15s}
+.start:hover{background:var(--ctah)}
+.row4{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
+.b{text-align:center;border:1.5px solid #d5dde8;border-radius:9px;padding:9px 2px;font-size:12.5px;font-weight:600;color:var(--blue);background:#fff;transition:background .15s,border-color .15s}
+.b:hover{background:#eef4fc;border-color:#9bb8e0}
+.b.p{background:var(--blue);border-color:var(--blue);color:#fff}.b.p:hover{background:#174d8a}
+.b.off{opacity:.45;pointer-events:none}
+/* modal */
+.ov{position:fixed;inset:0;background:rgba(15,23,41,.45);display:none;align-items:flex-end;justify-content:center;z-index:50}
+.ov.on{display:flex}
+.sheet{background:#fff;width:100%;max-width:460px;border-radius:22px 22px 0 0;padding:20px 18px 22px;max-height:92vh;overflow:auto}
+@media(min-width:700px){.ov{align-items:center}.sheet{border-radius:22px}}
+.sheet h3{font-size:19px;color:var(--navy)}
+.sheet .who{font-size:13.5px;color:var(--mut);margin:3px 0 14px}
+.fl{font-size:12px;font-weight:700;color:#4a5568;margin:10px 0 5px}
+.in{width:100%;border:1.5px solid #c9d4de;border-radius:11px;padding:11px 12px;font-size:15px;outline:none;background:#fff}
+.in:focus{border-color:var(--blue)}
+.tri{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.famx{border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.45;margin-top:12px}
+.famx.ok{background:var(--grnbg);color:var(--grn)}.famx.no{background:var(--orgbg);color:var(--org)}
+.sbtn{display:block;width:100%;margin-top:16px;background:var(--cta);color:#fff;font-weight:800;font-size:16px;border-radius:12px;padding:13px;transition:background .15s}
+.sbtn:hover{background:var(--ctah)}.sbtn:disabled{background:#9aa8b5}
+.cbtn{display:block;width:100%;margin-top:8px;color:var(--mut);font-weight:600;padding:10px;border-radius:12px}
+.cbtn:hover{background:#f1f4f8}
+.err{color:var(--red);font-weight:600;font-size:13.5px;margin-top:10px;display:none}
+.done{text-align:center;padding:10px 0}
+.done .ok{width:62px;height:62px;border-radius:50%;background:var(--grnbg);color:var(--grn);font-size:32px;line-height:62px;margin:0 auto 10px}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--navy);color:#fff;border-radius:999px;padding:11px 18px;font-weight:600;font-size:14px;box-shadow:0 6px 20px rgba(0,0,0,.2);display:none;z-index:60;max-width:92vw;text-align:center}
+.foot{text-align:center;color:#8a95a5;font-size:12px;padding:0 0 26px}
+@media(max-width:420px){.grid{grid-template-columns:1fr;padding:10px 10px 34px}.hello{font-size:21px}.b{font-size:11.5px}}
 </style>
 </head>
 <body>
-<div id="login" class="login-wrap">
-  <div class="login-card">
-    <svg viewBox="0 0 40 40" fill="none"><circle cx="14" cy="14" r="7" fill="#1a3a8f"/><circle cx="26" cy="14" r="7" fill="#3b5fc0"/><path d="M4 36c0-5.523 4.477-10 10-10h12c5.523 0 10 4.477 10 10" stroke="#1a3a8f" stroke-width="3" stroke-linecap="round"/></svg>
-    <div class="login-title">My Active Youth</div>
-    <div class="login-sub">Aliado Community Health</div>
-    <div class="login-label">Passcode</div>
-    <input id="pass" class="login-input" type="password" inputmode="numeric" autocomplete="off" placeholder="&#8226;&#8226;&#8226;&#8226;">
-    <button id="verify" class="login-btn">Verify &rarr;</button>
-    <div id="loginMsg" class="login-msg"></div>
-  </div>
-</div>
-<div id="app" style="display:none">
-  <div class="header">
-    <div class="header-center">
-      <div class="header-brand">
-        <svg viewBox="0 0 40 40" fill="none"><circle cx="14" cy="14" r="7" fill="#1a3a8f"/><circle cx="26" cy="14" r="7" fill="#3b5fc0"/><path d="M4 36c0-5.523 4.477-10 10-10h12c5.523 0 10 4.477 10 10" stroke="#1a3a8f" stroke-width="3" stroke-linecap="round"/></svg>
-        My Active Youth
-      </div>
-      <div class="header-greeting" id="greeting"></div>
-      <div class="header-quote" id="quote"></div>
-    </div>
-  </div>
-  <div class="kpi-strip">
-    <div class="kpi-card blue"><div class="kpi-top"><div class="kpi-icon blue">&#128101;</div><div class="kpi-text"><div class="kpi-label">Active Youth</div><div class="kpi-value" id="k1">0</div><div class="kpi-sub">In your caseload</div></div></div><div class="kpi-bar-bg"><div class="kpi-bar-fg"></div></div></div>
-    <div class="kpi-card green"><div class="kpi-top"><div class="kpi-icon green">&#128188;</div><div class="kpi-text"><div class="kpi-label">IIC Cases</div><div class="kpi-value" id="k2">0</div><div class="kpi-sub">Currently active</div></div></div><div class="kpi-bar-bg"><div class="kpi-bar-fg"></div></div></div>
-    <div class="kpi-card purple"><div class="kpi-top"><div class="kpi-icon purple">&#128106;</div><div class="kpi-text"><div class="kpi-label">Parent Coaching</div><div class="kpi-value" id="k3">0</div><div class="kpi-sub">Currently active</div></div></div><div class="kpi-bar-bg"><div class="kpi-bar-fg"></div></div></div>
-    <div class="kpi-card orange"><div class="kpi-top"><div class="kpi-icon orange">&#9200;</div><div class="kpi-text"><div class="kpi-label">Expiring Soon</div><div class="kpi-value orange" id="k4">0</div><div class="kpi-sub">Next 14 days</div></div></div><div class="kpi-bar-bg"><div class="kpi-bar-fg"></div></div></div>
-  </div>
-  <div class="cards-list" id="cards"></div>
-</div>
+<div id="app"></div>
+<div class="ov" id="ov"><div class="sheet" id="sheet"></div></div>
+<div class="toast" id="toast"></div>
 <script>
-(function () {
-  var BASE = "https://default5c737bedc35d48c39a6d89e766c7c7.03.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/10/workflows/f67696d78b464714b9fe7dd30f9766e3/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0";
-  var p = new URLSearchParams((location.hash || "").replace(/^#/, ""));
-  var clinician = (p.get("c") || "").trim();
-  var key = p.get("k") || "";
-  var msg = document.getElementById("loginMsg");
-  var btn = document.getElementById("verify");
-  var pass = document.getElementById("pass");
-  if (!clinician || !key) { msg.textContent = "This link is incomplete. Please contact Aliado support."; msg.style.color = "#ef4444"; btn.disabled = true; }
+(function(){
+var BASE="https://default5c737bedc35d48c39a6d89e766c7c7.03.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/10/workflows/f67696d78b464714b9fe7dd30f9766e3/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0";
+var p=new URLSearchParams((location.hash||"").replace(/^#/,""));
+var CLIN=(p.get("c")||"").trim(), KEY=p.get("k")||"";
+try{history.replaceState(null,"",location.pathname)}catch(e){}
+var app=document.getElementById("app"), ov=document.getElementById("ov"), sheet=document.getElementById("sheet");
+var S={pass:"",cases:[],x:null,q:"",tick:0,last:Date.now()};
+var QUOTES=["Every visit is an opportunity to change a life.","Small moments create lasting change.","Compassion makes every encounter meaningful.","Every family deserves to feel supported.","Your presence today can be someone's turning point.","Progress, not perfection.","Hope grows when someone believes in you.","Listening is the first step to healing.","Consistency builds trust, and trust builds change.","You are part of every family's success story."];
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function d0(d){return new Date(d.getFullYear(),d.getMonth(),d.getDate())}
+function today(){return d0(new Date())}
+function fromSerial(n){n=parseFloat(n);if(!isFinite(n)||n<20000)return null;var d=new Date(Date.UTC(1899,11,30)+Math.floor(n)*864e5);return new Date(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate())}
+function pdate(s){if(s==null||s==="")return null;if(/^\d+(\.\d+)?$/.test(String(s)))return fromSerial(s);var m=String(s).match(/^(\d{4})-(\d{2})-(\d{2})/);if(m)return new Date(+m[1],+m[2]-1,+m[3]);var d=new Date(s);return isNaN(d)?null:d0(d)}
+function days(a,b){return Math.round((d0(b)-d0(a))/864e5)}
+function fmt(d,o){return d?d.toLocaleDateString("en-US",o||{month:"short",day:"numeric"}):""}
+function nf(n){n=Math.round(n*2)/2;return (n%1?n.toFixed(1):String(n))}
+function t12(hm){var m=String(hm||"").match(/(\d{1,2}):(\d{2})/);if(!m)return hm||"";var h=+m[1],ap=h>=12?"PM":"AM";h=h%12||12;return h+":"+m[2]+" "+ap}
+function toast(t){var e=document.getElementById("toast");e.textContent=t;e.style.display="block";clearTimeout(toast.t);toast.t=setTimeout(function(){e.style.display="none"},3200)}
 
-  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (ch) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]; }); }
-  function v(o, k) { return o && o[k] != null ? o[k] : ""; }
+/* ---------- login ---------- */
+function login(m,err){
+ app.innerHTML='<div class="login"><div class="lcard"><div class="logo">ALIADO</div><h1>My Active Youth</h1><p>'+(CLIN?'Hi '+esc(CLIN.split(" ")[0])+', enter your 4-digit passcode':'')+'</p>'+
+ '<input class="pin" id="pin" type="password" inputmode="numeric" autocomplete="off" maxlength="8"><button class="go" id="go">Sign in</button><div class="lmsg'+(err?" e":"")+'" id="lm">'+esc(m||"")+'</div></div></div>';
+ var pin=document.getElementById("pin"),go=document.getElementById("go");
+ if(!CLIN||!KEY){document.getElementById("lm").className="lmsg e";document.getElementById("lm").textContent="This link is incomplete. Please open My Active Youth from your Aliado app.";go.disabled=true;return}
+ pin.focus();
+ function sub(){var c=pin.value.trim();if(!c){lm("Please enter your passcode.",1);return}go.disabled=true;lm("Signing in…");
+  call({}, c).then(function(d){if(!d||!d.ok){go.disabled=false;pin.value="";pin.focus();lm("Incorrect passcode. Please try again.",1);return}S.pass=c;take(d);render()})
+  .catch(function(e){go.disabled=false;lm("We couldn't connect right now. Please try again. ("+(e&&e.message||e)+(navigator.onLine===false?" / offline":"")+")",1)})}
+ function lm(t,e){var x=document.getElementById("lm");x.textContent=t;x.className="lmsg"+(e?" e":"")}
+ go.onclick=sub;pin.onkeydown=function(e){if(e.key==="Enter")sub()};
+}
+function call(extra,pass){
+ var body={clinician:CLIN,passcode:pass||S.pass};for(var k in extra)body[k]=extra[k];
+ return fetch(BASE+"&sig="+encodeURIComponent(KEY),{method:"POST",headers:{"Content-Type":"text/plain"},referrerPolicy:"no-referrer",body:JSON.stringify(body)})
+  .then(function(r){if(!r.ok)throw new Error("HTTP "+r.status);return r.json()});
+}
 
-  function verify() {
-    var code = pass.value.trim();
-    if (!code) { msg.textContent = "Please enter your passcode."; msg.style.color = "#ef4444"; return; }
-    btn.disabled = true; msg.textContent = "Verifying..."; msg.style.color = "#7a86a0";
-    fetch(BASE + "&sig=" + encodeURIComponent(key), {
-      method: "POST",
-      headers: { "Content-Type": "text/plain" },
-      referrerPolicy: "no-referrer",
-      body: JSON.stringify({ clinician: clinician, passcode: code })
-    })
-    .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
-    .then(function (d) {
-      if (!d || !d.ok) { btn.disabled = false; msg.textContent = "Incorrect passcode. Please try again."; msg.style.color = "#ef4444"; pass.value = ""; pass.focus(); return; }
-      render(d);
-    })
-    .catch(function (e) { btn.disabled = false; msg.textContent = "We couldn't connect right now. Please try again. (Error: " + ((e && e.message) || e || "unknown") + (navigator.onLine === false ? " / offline" : "") + ")"; msg.style.color = "#ef4444"; });
-  }
-  btn.addEventListener("click", verify);
-  pass.addEventListener("keydown", function (e) { if (e.key === "Enter") verify(); });
+/* ---------- data ---------- */
+function take(d){
+ var x=d.x||{t:"",s:[],pc:[],sc:[],ps:[],hu:[]};
+ var t=today();
+ S.cases=(d.cases||[]).map(function(c){
+  var y=String(c.caseId||"").trim(), as=pdate(c.authStart), ae=pdate(c.authEnd);
+  var units=parseFloat(String(c.units||"").replace(/[^\d.]/g,""))||0, tot=units/4;
+  var used=0;(x.hu||[]).forEach(function(h){if(String(h.y)===y){var hd=pdate(h.d);if(hd&&(!as||hd>=as)&&(!ae||hd<=ae))used+=parseFloat(h.h)||0}});
+  var wk=(tot&&as&&ae)?tot/((days(as,ae)+1)/7):0;
+  var ses=(x.s||[]).filter(function(s){return String(s.y)===y}).map(function(s){return{f:pdate(s.f),i:s.i,e:s.e}}).filter(function(s){return s.f&&s.f>=t}).sort(function(a,b){return a.f-b.f||String(a.i).localeCompare(String(b.i))});
+  var em=/@/.test(c.email||"")||(x.pc||[]).some(function(r){return String(r.y)===y});
+  var sc=(x.sc||[]).filter(function(r){return String(r.y)===y&&/^(Started|In-Home)$/i.test(String(r.st))})[0];
+  var ps=(x.ps||[]).filter(function(r){return String(r.y)===y})[0];
+  var tx=String(c.tx||"").trim().toUpperCase()==="YES";
+  var dl=ae?days(t,ae):999;
+  var todo=[];
+  if(ae&&dl<0)todo.push({lv:1,tx:"Authorization expired "+fmt(ae)+" — ask the care manager"});
+  if(ae&&dl>=0&&dl<=14)todo.push({lv:1,tx:"Authorization ends "+fmt(ae)+" — "+dl+(dl===1?" day":" days")+" left"});
+  if(sc)todo.push({lv:1,tx:/in-home/i.test(sc.st)?"Initial forms: ROI / acknowledgment pending":"Initial forms not completed"});
+  if(ps){var pd2=pdate(ps.d);todo.push({lv:1,tx:"Guardian signature pending · visit "+(pd2?(pd2.getMonth()+1)+"/"+pd2.getDate():esc(ps.d))})}
+  if(!tx&&!/BA|PC|PARENT/i.test(String(c.service||"")))todo.push({lv:2,tx:"TX plan pending"});
+  if(!em)todo.push({lv:2,tx:"No family email on file"});
+  if(!ses.length)todo.push({lv:2,tx:"No session scheduled"});
+  return {c:c,y:y,as:as,ae:ae,tot:tot,used:used,left:Math.max(0,tot-used),wk:wk,dl:dl,ses:ses,em:em,tx:tx,todo:todo};
+ }).sort(function(a,b){return String(a.c.name).localeCompare(String(b.c.name))});
+ S.x=x;
+}
 
-  function render(d) {
-    var quotes = ["Every visit is an opportunity to change a life.", "Small moments create lasting change.", "Compassion makes every encounter meaningful.", "Every family deserves to feel supported.", "Your work changes lives one visit at a time.", "Hope grows through every connection.", "Consistency creates trust.", "Today's visit can change tomorrow."];
-    var hour = new Date().getHours();
-    var greet = hour < 12 ? "Good Morning" : hour < 18 ? "Good Afternoon" : "Good Evening";
-    var emoji = hour < 12 ? "\u2600\uFE0F" : hour < 18 ? "\uD83D\uDC4B" : "\uD83C\uDF19";
-    document.getElementById("greeting").textContent = greet + ", " + clinician.split(/\s+/)[0] + " " + emoji;
-    document.getElementById("quote").textContent = quotes[Math.floor(Math.random() * quotes.length)];
-    var k = d.kpi || {};
-    var cases = d.cases || [];
-    document.getElementById("k1").textContent = v(k, "Active Youth") || cases.length;
-    document.getElementById("k2").textContent = v(k, "IIC Cases") || 0;
-    document.getElementById("k3").textContent = v(k, "Parent Coaching") || 0;
-    document.getElementById("k4").textContent = v(k, "Expiring Soon") || 0;
-    var out = "";
-    cases.forEach(function (c, i) {
-      out += '<div class="youth-card" data-i="' + i + '">' +
-        '<div class="card-main">' +
-          '<div class="card-left">' +
-            '<span class="status-badge">Active</span>' +
-            '<h2 class="youth-name">' + esc(c.name) + '</h2>' +
-            '<div class="youth-parent">&#128106; ' + esc(c.parent) + '</div>' +
-            '<div class="youth-meta">&#127760; ' + esc(c.lang) + ' &nbsp;&bull;&nbsp; &#128101; ' + esc(c.service) + '</div>' +
-            '<div class="youth-address">&#128205; ' + esc(c.address) + '</div>' +
-            '<div class="youth-caseid">&#129706; Case ID: <strong>' + esc(c.caseId) + '</strong></div>' +
-          '</div>' +
-          '<div class="card-middle-row">' +
-            '<div class="card-auth">' +
-              '<div class="section-label">Authorization</div>' +
-              '<div class="auth-top">' +
-                '<div class="auth-circle-wrap"><svg class="auth-ring" viewBox="0 0 80 80"><circle class="ring-bg" cx="40" cy="40" r="34"/><circle class="ring-fg" cx="40" cy="40" r="34" stroke-dasharray="213.6" stroke-dashoffset="213.6"/></svg>' +
-                '<div class="auth-days-inner"><span class="days-num">' + esc(c.days) + '</span><span class="days-label">DAYS<br>LEFT</span></div></div>' +
-                '<div class="auth-details">' +
-                  '<div class="auth-row"><span class="auth-row-label">Start Date</span><span class="auth-row-value auth-start" data-serial="' + esc(c.authStart) + '">' + esc(c.authStartDisp) + '</span></div>' +
-                  '<div class="auth-row"><span class="auth-row-label">End Date</span><span class="auth-row-value auth-end" data-serial="' + esc(c.authEnd) + '">' + esc(c.authEndDisp) + '</span></div>' +
-                  '<div class="auth-row"><span class="auth-row-label">Total Units</span><span class="auth-row-value">' + esc(c.units) + '</span></div>' +
-                  '<div class="auth-row"><span class="auth-row-label">Status</span><span class="auth-row-value green">' + esc(c.authStatus) + '</span></div>' +
-                '</div>' +
-              '</div>' +
-            '</div>' +
-            '<div class="card-cm">' +
-              '<div class="section-label">Care Manager</div>' +
-              '<div class="cm-row"><div class="cm-avatar">CM</div><div><div class="cm-name">' + esc(c.cmName) + '</div><div class="cm-agency">' + esc(c.cmAgency) + '</div></div></div>' +
-              '<div class="cm-contact"><span>&#128222;</span><a href="' + esc(c.callCM) + '">' + esc(c.cmPhone) + '</a></div>' +
-              '<div class="cm-contact"><span>&#9993;&#65039;</span><a href="mailto:' + esc(c.cmEmail) + '">' + esc(c.cmEmail) + '</a></div>' +
-            '</div>' +
-          '</div>' +
-          '<div class="card-actions">' +
-            '<a href="' + esc(c.encounter) + '" target="_blank" rel="noopener" class="btn btn-primary">&#9654; Start Encounter</a>' +
-            '<button class="btn btn-schedule" data-act="sched">&#128197; Schedule Appointment</button>' +
-            '<a href="' + esc(c.maps) + '" target="_blank" rel="noopener" class="btn btn-nav">&#128205; Navigate</a>' +
-            '<a href="' + esc(c.callFamily) + '" class="btn btn-family">&#128101; Call Family</a>' +
-            '<a href="' + esc(c.callCM) + '" class="btn btn-cm">&#128100; Care Manager</a>' +
-          '</div>' +
-        '</div>' +
-        '<div class="schedule-form"><div class="schedule-form-inner">' +
-          '<div class="schedule-title">&#128197; Schedule Appointment</div>' +
-          '<div class="schedule-youth">' + esc(c.name) + ' &mdash; ' + esc(c.parent) + '</div>' +
-          '<div class="schedule-fields">' +
-            '<div class="schedule-field"><label>Date</label><input type="date" class="schedule-date"></div>' +
-            '<div class="schedule-field"><label>Time</label><input type="time" class="schedule-time"></div>' +
-            '<div class="schedule-field"><label>Duration</label><select class="schedule-duration"><option value="60">1 hour</option><option value="90">1.5 hours</option><option value="120" selected>2 hours</option><option value="150">2.5 hours</option><option value="180">3 hours</option></select></div>' +
-          '</div>' +
-          '<button class="btn btn-confirm" data-act="confirm">&#9989; Confirm Appointment</button>' +
-          '<div class="cal-links">' +
-            '<a class="btn btn-cal cal-google" target="_blank" rel="noopener">&#128197; Add to Google Calendar</a>' +
-            '<a class="btn btn-cal cal-ics">&#128241; Add to iPhone / Outlook Calendar</a>' +
-          '</div>' +
-          '<button class="btn btn-cancel-schedule" data-act="sched">Cancel</button>' +
-          '<div class="schedule-status"></div>' +
-        '</div></div>' +
-        '<div class="card-referral-bar">' +
-          '<button class="referral-toggle" data-act="ref"><span class="ref-arrow">&#9654;</span> View Full Referral Information</button>' +
-          '<div class="referral-body"><div class="ref-title">Administrative Notes</div><div class="ref-content">' + esc(c.notes) + '</div></div>' +
-        '</div>' +
-      '</div>';
-    });
-    if (!cases.length) out = '<div class="empty">You have no active youth assigned right now.</div>';
-    var list = document.getElementById("cards");
-    list.innerHTML = out;
-    window.__cases = cases;
-    list.querySelectorAll(".youth-card").forEach(function (card) {
-      var startEl = card.querySelector(".auth-start"), endEl = card.querySelector(".auth-end"), ring = card.querySelector(".ring-fg"), daysNum = card.querySelector(".days-num");
-      var s = parseFloat(startEl.dataset.serial), e = parseFloat(endEl.dataset.serial);
-      if (isNaN(s) || isNaN(e) || e <= s) return;
-      var start = new Date((s - 25569) * 86400000), end = new Date((e - 25569) * 86400000), today = new Date();
-      var total = (end - start) / 86400000, elapsed = (today - start) / 86400000;
-      var pct = Math.min(Math.max((total - elapsed) / total, 0), 1);
-      ring.setAttribute("stroke-dashoffset", (213.6 * (1 - pct)).toFixed(1));
-      var col = pct > 0.5 ? "#16a34a" : pct > 0.25 ? "#f59e0b" : "#ef4444";
-      ring.setAttribute("stroke", col); daysNum.style.color = col;
-    });
-    document.getElementById("login").style.display = "none";
-    document.getElementById("app").style.display = "block";
-  }
+/* ---------- render ---------- */
+function render(){
+ var t=new Date(),h=t.getHours(),first=CLIN.split(" ")[0];
+ var q=QUOTES[(t.getFullYear()*372+t.getMonth()*31+t.getDate())%QUOTES.length];
+ var mon=today();mon.setDate(mon.getDate()-((mon.getDay()+6)%7));var sun=new Date(mon);sun.setDate(sun.getDate()+7);
+ var wkS=(S.x.s||[]).filter(function(s){var f=pdate(s.f);return f&&f>=mon&&f<sun}).length;
+ var aEnd=S.cases.filter(function(k){return k.dl<=14}).length;
+ app.innerHTML='<div class="top"><div class="wrap"><div class="hrow"><div><div class="date">'+t.toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric"})+'</div>'+
+  '<div class="hello">'+(h<12?"Good morning":h<18?"Good afternoon":"Good evening")+', '+esc(first)+'</div></div><button class="rbtn" id="rf">↻ Refresh</button></div>'+
+  '<div class="quote"><b>✦ QUOTE OF THE DAY</b>'+esc(q)+'</div></div></div>'+
+  '<div class="stats"><div><b>'+S.cases.length+'</b><span>active youth</span></div><div><b>'+wkS+'</b><span>sessions this week</span></div><div><b class="'+(aEnd?"warn":"")+'">'+aEnd+'</b><span>auth ending</span></div></div>'+
+  '<div class="search"><input id="q" type="search" placeholder="Search by name or case ID" value="'+esc(S.q)+'"></div><div id="list"></div><div class="foot">Aliado Community Health · (201) 620-6440</div>';
+ document.getElementById("rf").onclick=refresh;
+ var qi=document.getElementById("q");qi.oninput=function(){S.q=qi.value;list()};
+ list();
+}
+function list(){
+ var q=S.q.trim().toLowerCase(), L=S.cases.filter(function(k){return !q||(String(k.c.name)+" "+k.y).toLowerCase().indexOf(q)>=0});
+ var el=document.getElementById("list");
+ if(!S.cases.length){el.innerHTML='<div class="msg">No active youth assigned to you right now.</div>';return}
+ if(!L.length){el.innerHTML='<div class="msg">No youth match “'+esc(S.q)+'”.</div>';return}
+ el.innerHTML='<div class="grid">'+L.map(card).join("")+'</div>';
+ el.querySelectorAll("[data-a]").forEach(function(b){b.onclick=function(e){var k=S.cases[+b.getAttribute("data-i")];var a=b.getAttribute("data-a");if(a==="sch")openSched(k);else if(a==="em")openEmail(k);else if(a==="todo")rot(b,k);else if(a==="notes")openNotes(k)}});
+}
+function todoHtml(k,i){var n=k.todo.length;if(!n)return '<div class="todo l0">✓ All set — nothing pending</div>';var j=(k.ti||0)%n,t=k.todo[j];
+ return '<div class="todo l'+t.lv+'" data-a="todo" data-i="'+i+'"><span>'+(t.lv===1?"! ":"• ")+esc(t.tx)+'</span><span class="n">'+(n>1?(j+1)+"/"+n+" ›":"")+'</span></div>'}
+function rot(b,k){k.ti=((k.ti||0)+1);var i=S.cases.indexOf(k);b.outerHTML=todoHtml(k,i);list()}
+function card(k){
+ var i=S.cases.indexOf(k),c=k.c,svc=String(c.service||"").trim();
+ var low=(k.tot&&k.left<=Math.max(2,k.tot/5))||k.dl<0, pct=k.tot?Math.min(100,k.left/k.tot*100):0;
+ var auth=(k.as||k.ae)?fmt(k.as)+" – "+fmt(k.ae):"—";
+ var ns=k.ses[0];
+ return '<div class="card"><div class="ch"><div><h2>'+esc(c.name)+'</h2><div class="sub">Case ID '+esc(k.y)+(c.lang?" · "+esc(c.lang):"")+'</div></div>'+(svc?'<span class="svc">'+esc(svc)+'</span>':'')+'</div>'+
+ todoHtml(k,i)+
+ '<div class="cells">'+
+ '<div class="cell"><div class="k">Family</div><div class="v one">'+esc(c.parent||"—")+'</div>'+(c.phone?'<a class="lnk one" style="display:block" href="'+esc(c.callFamily||("tel:"+c.phone))+'">'+esc(c.phone)+'</a>':'')+(c.address?'<div class="mut two">'+esc(c.address)+'</div>':'')+
+  (k.em?'<div class="dot ok">● Reminders on</div>':'<div class="dot no">● No family email</div><button class="addem" data-a="em" data-i="'+i+'">+ Add email</button>')+'</div>'+
+ '<div class="cell"><div class="k">Authorization</div><div class="v">'+auth+'</div>'+
+  (k.tot?'<div class="hrs'+(low?" low":"")+'">'+nf(k.left)+' h left of '+nf(k.tot)+' h</div>':'')+
+  (k.wk?'<div class="mut">'+nf(k.wk)+' h / week approved</div>':'')+
+  (k.ae?'<div class="bar'+(low?" low":"")+'"><i style="width:'+pct+'%"></i></div><div class="v" style="font-size:13px'+(k.dl<=14?';color:var(--red)':'')+'">'+(k.dl<0?"Expired "+(-k.dl)+" days ago":k.dl+" days left")+'</div>':'')+
+  (/BA|PC|PARENT/i.test(svc)?'':'<div class="dot '+(k.tx?"ok":"no")+'">TX plan: '+(k.tx?"done":"pending")+'</div>')+'</div>'+
+ '<div class="cell"><div class="k">Care manager</div><div class="v one">'+esc(c.cmName||"—")+'</div>'+(c.cmAgency?'<div class="mut one">'+esc(c.cmAgency)+'</div>':'')+(c.cmPhone?'<a class="lnk" href="'+esc(c.callCM||("tel:"+c.cmPhone))+'">'+esc(c.cmPhone)+'</a>':'')+'</div>'+
+ '<div class="cell"><div class="k">Next session</div>'+(ns?'<div class="v">'+fmt(ns.f,{weekday:"short",month:"short",day:"numeric"})+'</div><div class="mut">'+t12(ns.i)+' – '+t12(ns.e)+(k.ses.length>1?' · '+(k.ses.length-1)+' more':'')+'</div>':'<div class="v mut">Not scheduled</div><a class="lnk" href="javascript:void 0" data-a="sch" data-i="'+i+'">Schedule now →</a>')+'</div>'+
+ '</div>'+
+ '<div class="notes'+(c.notes?'':' none')+'"><summary'+(c.notes?' data-a="notes" data-i="'+i+'"':'')+'>'+(c.notes?'Referral notes ›':'No referral notes')+'</summary></div>'+
+ '<div class="acts">'+(c.encounter?'<a class="start" href="'+esc(c.encounter)+'" target="_blank" rel="noopener">Start Encounter</a>':'')+
+ '<div class="row4"><button class="b p" data-a="sch" data-i="'+i+'">Schedule</button>'+
+ '<a class="b'+(c.phone?'':' off')+'" href="'+esc(c.callFamily||("tel:"+(c.phone||"")))+'">Call family</a>'+
+ '<a class="b'+(c.maps?'':' off')+'" href="'+esc(c.maps||"#")+'" target="_blank" rel="noopener">Navigate</a>'+
+ '<a class="b'+(c.cmPhone?'':' off')+'" href="'+esc(c.callCM||("tel:"+(c.cmPhone||"")))+'">Call CM</a></div></div></div>';
+}
+function refresh(){var b=document.getElementById("rf");if(b){b.disabled=true;b.textContent="Loading…"}
+ call({}).then(function(d){if(!d.ok){login("Please sign in again.",1);return}take(d);render();toast("Updated")}).catch(function(e){if(b){b.disabled=false;b.textContent="↻ Refresh"}toast("Couldn't refresh. Try again.")})}
 
-  function pad(n) { return (n < 10 ? "0" : "") + n; }
-  function stamp(dt) { return dt.getFullYear() + pad(dt.getMonth() + 1) + pad(dt.getDate()) + "T" + pad(dt.getHours()) + pad(dt.getMinutes()) + "00"; }
-
-  document.addEventListener("click", function (ev) {
-    var b = ev.target.closest("[data-act]");
-    if (!b) return;
-    var card = b.closest(".youth-card");
-    var act = b.getAttribute("data-act");
-    if (act === "ref") {
-      var body = card.querySelector(".referral-body"), arrow = b.querySelector(".ref-arrow");
-      var open = body.style.display === "block";
-      body.style.display = open ? "none" : "block";
-      arrow.style.transform = open ? "" : "rotate(90deg)";
-    } else if (act === "sched") {
-      var f = card.querySelector(".schedule-form");
-      f.style.display = f.style.display === "block" ? "none" : "block";
-    } else if (act === "confirm") {
-      var c = window.__cases[parseInt(card.getAttribute("data-i"), 10)];
-      var date = card.querySelector(".schedule-date").value, time = card.querySelector(".schedule-time").value;
-      var dur = parseInt(card.querySelector(".schedule-duration").value, 10);
-      var status = card.querySelector(".schedule-status");
-      if (!date || !time) { status.textContent = "\u26A0\uFE0F Please select date and time."; status.style.color = "#ef4444"; return; }
-      var start = new Date(date + "T" + time + ":00"), end = new Date(start.getTime() + dur * 60000);
-      var title = "Appointment with " + c.name;
-      var details = "Parent/Guardian: " + c.parent + (c.phone ? "\nPhone: " + c.phone : "");
-      var g = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=" + encodeURIComponent(title) + "&dates=" + stamp(start) + "/" + stamp(end) + "&details=" + encodeURIComponent(details) + "&location=" + encodeURIComponent(c.address || "");
-      var ics = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Aliado Community Health//My Active Youth//EN", "BEGIN:VEVENT", "UID:" + Date.now() + "@aliado", "DTSTAMP:" + stamp(new Date()), "DTSTART:" + stamp(start), "DTEND:" + stamp(end), "SUMMARY:" + title, "LOCATION:" + String(c.address || "").replace(/[,;]/g, " "), "DESCRIPTION:" + details.replace(/\n/g, "\\n"), "END:VEVENT", "END:VCALENDAR"].join("\r\n");
-      card.querySelector(".cal-google").href = g;
-      var icsLink = card.querySelector(".cal-ics");
-      icsLink.href = "data:text/calendar;charset=utf-8," + encodeURIComponent(ics);
-      icsLink.setAttribute("download", "appointment.ics");
-      card.querySelector(".cal-links").style.display = "block";
-      status.textContent = "\u2705 Ready! Tap one of the buttons above to save it to your calendar.";
-      status.style.color = "#16a34a";
-    }
-  });
+/* ---------- modals ---------- */
+function close(){ov.classList.remove("on");sheet.innerHTML=""}
+ov.onclick=function(e){if(e.target===ov)close()};
+function openEmail(k){
+ var c=k.c;
+ sheet.innerHTML='<h3>Add family email</h3><div class="who">'+esc(c.name)+' · '+esc(c.parent||"")+'</div>'+
+ '<div class="fl">Parent / guardian email</div><input class="in" id="em" type="email" inputmode="email" autocomplete="off" placeholder="name@email.com">'+
+ '<div class="famx ok">We use it to send session reminders and documents to sign. Never promotions.</div><div class="err" id="er"></div>'+
+ '<button class="sbtn" id="sv">Save email</button><button class="cbtn" id="cx">Cancel</button>';
+ ov.classList.add("on");document.getElementById("em").focus();
+ document.getElementById("cx").onclick=close;
+ document.getElementById("sv").onclick=function(){var v=document.getElementById("em").value.trim(),er=document.getElementById("er");
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)){er.textContent="Please enter a valid email address.";er.style.display="block";return}
+  var b=this;b.disabled=true;b.textContent="Saving…";
+  call({action:"email",caseKey:c.caseKey,email:v,youthId:k.y,youthName:c.name,guardian:c.parent,relationship:"",phone:c.phone,lang:c.lang})
+  .then(function(d){if(!d.ok)throw new Error("Not saved");c.email=v;k.em=true;k.todo=k.todo.filter(function(t){return t.tx!=="No family email on file"});close();list();toast("Family email saved ✓")})
+  .catch(function(e){b.disabled=false;b.textContent="Save email";er.textContent="We couldn't save it. Please try again.";er.style.display="block"})};
+}
+function openNotes(k){var c=k.c;
+ sheet.innerHTML='<h3>Referral notes</h3><div class="who">'+esc(c.name)+' · Case ID '+esc(k.y)+'</div><div style="white-space:pre-wrap;font-size:14px;line-height:1.55;color:#3c4a5c">'+esc(c.notes)+'</div><button class="cbtn" id="cx" style="margin-top:14px">Close</button>';
+ ov.classList.add("on");document.getElementById("cx").onclick=close;}
+function opt(a,sel){return a.map(function(x){return '<option value="'+x[0]+'"'+(x[0]===sel?" selected":"")+'>'+x[1]+'</option>'}).join("")}
+function openSched(k){
+ var c=k.c,t=today(),iso=t.getFullYear()+"-"+String(t.getMonth()+1).padStart(2,"0")+"-"+String(t.getDate()).padStart(2,"0");
+ var hrs=[];for(var h=1;h<=12;h++)hrs.push([String(h),String(h)]);
+ var mins=[];for(var m=0;m<60;m+=5)mins.push([String(m).padStart(2,"0"),String(m).padStart(2,"0")]);
+ var lens=[];for(var l=30;l<=240;l+=15)lens.push([String(l),(l>=60?Math.floor(l/60)+" h":"")+(l%60?" "+(l%60)+" min":"")]);
+ var reps=[["1","Just this once"]];for(var r=2;r<=12;r++)reps.push([String(r),"Weekly · "+r+" sessions"]);
+ sheet.innerHTML='<h3>Schedule a session</h3><div class="who">'+esc(c.name)+' · Case ID '+esc(k.y)+'</div>'+
+ '<div class="fl">Date</div><input class="in" id="sd" type="date" min="'+iso+'" value="'+iso+'">'+
+ '<div class="fl">Start time</div><div class="tri"><select class="in" id="sh">'+opt(hrs,"3")+'</select><select class="in" id="sm">'+opt(mins,"00")+'</select><select class="in" id="sa">'+opt([["AM","AM"],["PM","PM"]],"PM")+'</select></div>'+
+ '<div class="fl">Length</div><select class="in" id="sl">'+opt(lens,"120")+'</select>'+
+ '<div class="fl">Repeat</div><select class="in" id="sr">'+opt(reps,"1")+'</select>'+
+ '<div class="famx '+(k.em?"ok":"no")+'">'+(k.em?"Family reminders on. "+esc(String(c.parent||"The family").split(" ")[0])+" gets a confirmation and a reminder the day before each session.":"No family email on file — the family won't get reminders. You can add the email on the card.")+'</div>'+
+ '<div class="err" id="er"></div><button class="sbtn" id="sv">Save &amp; add to my calendar</button><button class="cbtn" id="cx">Cancel</button>';
+ ov.classList.add("on");
+ document.getElementById("cx").onclick=close;
+ document.getElementById("sv").onclick=function(){
+  var er=document.getElementById("er"),dv=document.getElementById("sd").value;
+  if(!dv||dv<iso){er.textContent="Please choose today or a future date.";er.style.display="block";return}
+  var H=+document.getElementById("sh").value%12+(document.getElementById("sa").value==="PM"?12:0),M=+document.getElementById("sm").value,len=+document.getElementById("sl").value,n=+document.getElementById("sr").value;
+  var st=H*60+M,en=st+len;if(en>=24*60){er.textContent="The session must end before midnight.";er.style.display="block";return}
+  var hm=function(x){return String(Math.floor(x/60)).padStart(2,"0")+":"+String(x%60).padStart(2,"0")};
+  var b=this;b.disabled=true;b.textContent="Saving…";
+  call({action:"sched",k:c.caseKey,f:dv,i:hm(st),e:hm(en),n:n})
+  .then(function(d){if(!d.ok)throw new Error("Not saved");
+   var a=dv.split("-");for(var w=0;w<n;w++){var f=new Date(+a[0],+a[1]-1,+a[2]+7*w);k.ses.push({f:f,i:hm(st),e:hm(en)})}
+   k.ses.sort(function(x,y){return x.f-y.f});k.todo=k.todo.filter(function(t){return t.tx!=="No session scheduled"});
+   ics(c,dv,st,en,n);
+   sheet.innerHTML='<div class="done"><div class="ok">✓</div><h3>Session saved</h3><div class="who" style="margin:8px 0 0">'+esc(c.name)+' · '+fmt(new Date(+a[0],+a[1]-1,+a[2]),{weekday:"long",month:"long",day:"numeric"})+' · '+t12(hm(st))+(n>1?' · weekly, '+n+' sessions':'')+'</div>'+
+    '<div class="famx '+(k.em?"ok":"no")+'" style="text-align:left">'+(k.em?"The family will get a confirmation and reminders.":"No family email on file, so no reminders will go out.")+'<br>Open the calendar file that just downloaded to add it to your phone\'s calendar.</div>'+
+    '<button class="sbtn" id="dn">Done</button></div>';
+   document.getElementById("dn").onclick=function(){close();list()};
+  }).catch(function(e){b.disabled=false;b.textContent="Save & add to my calendar";er.textContent="We couldn't save the session. Please try again.";er.style.display="block"})};
+}
+function ics(c,dv,st,en,n){
+ var a=dv.replace(/-/g,""),p2=function(x){return String(x).padStart(2,"0")},hm=function(x){return p2(Math.floor(x/60))+p2(x%60)+"00"};
+ var stamp=new Date().toISOString().replace(/[-:]/g,"").replace(/\.\d+Z$/,"Z");
+ var L=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Aliado Community Health//My Active Youth//EN","CALSCALE:GREGORIAN","BEGIN:VEVENT",
+  "UID:"+stamp+"-"+Math.random().toString(36).slice(2)+"@aliado","DTSTAMP:"+stamp,
+  "DTSTART;TZID=America/New_York:"+a+"T"+hm(st),"DTEND;TZID=America/New_York:"+a+"T"+hm(en)];
+ if(n>1)L.push("RRULE:FREQ=WEEKLY;COUNT="+n);
+ L.push("SUMMARY:Session · "+String(c.name).replace(/[,;]/g," "),"LOCATION:"+String(c.address||"").replace(/[,;]/g," "),"DESCRIPTION:Aliado session · Case ID "+c.caseId,
+  "BEGIN:VALARM","TRIGGER:-PT30M","ACTION:DISPLAY","DESCRIPTION:Session reminder","END:VALARM","END:VEVENT","END:VCALENDAR");
+ var blob=new Blob([L.join("\r\n")],{type:"text/calendar"}),u=URL.createObjectURL(blob),el=document.createElement("a");
+ el.href=u;el.download="session-"+dv+".ics";document.body.appendChild(el);el.click();setTimeout(function(){URL.revokeObjectURL(u);el.remove()},1500);
+}
+/* auto-lock after 10 min idle */
+["click","keydown","touchstart","scroll"].forEach(function(e){document.addEventListener(e,function(){S.last=Date.now()},{passive:true})});
+setInterval(function(){if(S.pass&&Date.now()-S.last>600000){S.pass="";S.cases=[];close();login("You were signed out after 10 minutes of inactivity.")}},30000);
+login();
 })();
 </script>
 </body>
