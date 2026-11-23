@@ -39,7 +39,7 @@ canvas{display:block;width:100%;height:150px;border-radius:12px;cursor:crosshair
 </style></head><body><div class="box">
 <div class="logo"><img src="https://www.jotform.com/uploads/enmanuelf59/form_files/Aliado%20Logo.6a445020d28805.86370275.png" alt="Aliado Community Health"></div>
 <div class="slogan">PARTNERING WITH FAMILIES TO BUILD RESILIENCE AND HOPE</div>
-<div id="app"><div class="spin"></div><p style="text-align:center;color:#6b7785">Loading your offer&hellip;</p></div>
+<div id="app"><div class="spin"></div><p style="text-align:center;color:#6b7785">Loading&hellip;</p></div>
 <div class="foot"><i>Together, we make a difference.</i><br>Aliado Community Health, LLC &middot; 116 Terrace Ave, Lodi, NJ 07644<br>info@aliadocommunityhealth.com &middot; (201) 620-6440</div>
 </div>
 <script>
@@ -57,21 +57,21 @@ call({t:T,a:'load'}).then(function(d){
  if(!d||!d.ok){msg('#b42318','!','Offer not found','<p>We couldn&rsquo;t find this offer. The link may be incomplete or no longer active.</p>'+CONTACT);return;}
  var sak=d.role==='sak';
  if(d.cancelled){msg('#6b7785','&times;','This offer is no longer active','<p>This offer was withdrawn.</p>'+CONTACT);return;}
- if(d.mine){msg('#4f8a4b','&#10003;','Already signed','<p>'+(sak?'You already signed this offer.':'You already signed your offer. Thank you!')+'</p>'+(sak?'':'<p>You&rsquo;ll receive a copy of the fully signed letter by email once all signatures are complete.</p>'));return;}
+ if(d.mine){msg('#4f8a4b','&#10003;','Already signed','<p>'+(sak?'You already signed this '+(d.kind==='transition'?'letter':'offer')+'.':(d.kind==='transition'?'You already signed this letter. Thank you!':'You already signed your offer. Thank you!'))+'</p>'+(sak?'':'<p>You&rsquo;ll receive a copy of the fully signed letter by email once all signatures are complete.</p>'));return;}
  if(d.expired&&!sak){msg('#b42318','!','This offer has expired','<p>The deadline to sign this offer was <b>'+esc(d.signBy)+'</b>.</p><p>If you are still interested, please contact us and we&rsquo;ll be happy to help.</p>'+CONTACT);return;}
  render(d,sak);
 }).catch(function(){msg('#b42318','!','Something went wrong','<p>We couldn&rsquo;t load your offer right now. Please try again in a few minutes.</p>'+CONTACT);});
 function render(d,sak){
- var first=esc(d.first||'');
- app.innerHTML='<div class="hero"><div class="k">'+(sak?'OFFER SIGNATURE':'OFFER OF EMPLOYMENT')+'</div><h1>'+(sak?'Offer for '+esc(d.name):'Welcome, '+first)+'</h1><p>'+(sak?'Review the letter and sign as Clinical Director.':'Please read your offer and sign at the bottom.')+'</p></div><div class="bar"></div>'+
- '<div class="sum"><div><span>Position</span><b>'+esc(d.position)+'</b></div><div><span>Status</span><b>'+esc(d.cls)+'</b></div><div><span>Pay</span><b>'+esc(d.pay)+'</b></div><div><span>Sign by</span><b>'+esc(d.signBy)+'</b></div></div>'+
+ var first=esc(d.first||''); var tr=d.kind==='transition'; if(tr)document.title='Employment Terms \u2013 Aliado Community Health';
+ app.innerHTML='<div class="hero"><div class="k">'+(sak?(tr?'LETTER SIGNATURE':'OFFER SIGNATURE'):(tr?'EMPLOYMENT TERMS':'OFFER OF EMPLOYMENT'))+'</div><h1>'+(sak?(tr?'Letter for ':'Offer for ')+esc(d.name):(tr?'Hi, ':'Welcome, ')+first)+'</h1><p>'+(sak?'Review the letter and sign as Clinical Director.':(tr?'Please read the letter and sign at the bottom.':'Please read your offer and sign at the bottom.'))+'</p></div><div class="bar"></div>'+
+ '<div class="sum"><div><span>Position</span><b>'+esc(d.position)+'</b></div><div><span>Status</span><b>'+esc(d.cls)+'</b></div><div><span>Pay</span><b>'+esc(d.pay)+'</b></div><div><span>'+(tr?'Effective':'Sign by')+'</span><b>'+esc(tr?d.eff:d.signBy)+'</b></div></div>'+
  '<div class="lt"><iframe id="fr" title="Offer letter" sandbox="allow-same-origin"></iframe></div><div class="hint" id="hint">Scroll to read the full letter &mdash; the signature unlocks at the end.</div><div id="end"></div>'+
- '<div class="sign lock" id="sg"><div class="t">'+(sak?'Sign as Clinical Director':'Accept your offer')+'</div>'+
- '<label class="chk"><input type="checkbox" id="ck"><span>'+(sak?'I have reviewed this Offer of Employment and sign on behalf of Aliado Community Health.':'I have read, understood, and accepted the terms outlined in this Offer of Employment.')+'</span></label>'+
+ '<div class="sign lock" id="sg"><div class="t">'+(sak?'Sign as Clinical Director':(tr?'Sign the letter':'Accept your offer'))+'</div>'+
+ '<label class="chk"><input type="checkbox" id="ck"><span>'+(sak?(tr?'I have reviewed this letter and sign on behalf of Aliado Community Health.':'I have reviewed this Offer of Employment and sign on behalf of Aliado Community Health.'):(tr?'I have read, understood, and accepted the terms outlined in this letter.':'I have read, understood, and accepted the terms outlined in this Offer of Employment.'))+'</span></label>'+
  '<div class="f">FULL NAME</div><input class="in" id="nm" autocomplete="name" value="'+(sak?'Dr. Sakima Gonzalez':esc(d.name))+'">'+
  '<div class="f">SIGNATURE</div><div class="padw"><canvas id="cv"></canvas><div class="ph" id="ph">Sign here with your finger or mouse</div><button class="clr" id="clr" type="button">Clear</button></div>'+
  '<div class="f">DATE</div><input class="in" id="dt" readonly value="'+new Date().toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'})+'">'+
- '<button class="go" id="go" disabled>Sign '+(sak?'Offer':'My Offer')+' &rarr;</button><div class="err" id="er"></div></div>';
+ '<button class="go" id="go" disabled>'+(tr?'Sign':'Sign '+(sak?'Offer':'My Offer'))+' &rarr;</button><div class="err" id="er"></div></div>';
  var fr=document.getElementById('fr');
  var css='<style>@media screen{.foot,.wm{display:none!important}body{margin:18px 20px!important;font-size:14px!important}.pg>tfoot{display:none}.head img{width:90px!important;height:90px!important}}</style>';
  fr.srcdoc=String(d.letter||'').replace('</head>',css+'</head>');
@@ -95,9 +95,9 @@ function render(d,sak){
   if(x1<x0)return cv.toDataURL('image/png');var p=6;x0=Math.max(0,x0-p);y0=Math.max(0,y0-p);x1=Math.min(w,x1+p);y1=Math.min(h,y1+p);var c=document.createElement('canvas');c.width=x1-x0;c.height=y1-y0;c.getContext('2d').drawImage(cv,x0,y0,c.width,c.height,0,0,c.width,c.height);return c.toDataURL('image/png');}
  go.onclick=function(){go.disabled=true;go.innerHTML='Signing&hellip;';er.style.display='none';
   call({t:T,a:'sign',name:nm.value.trim(),sig:trimSig()}).then(function(r){
-   if(r&&r.ok){window.scrollTo(0,0);msg('#4f8a4b','&#10003;',sak?'Signed. Thank you!':'Thank you, '+first+'!',sak?'<p>Your signature was added to the offer for <b>'+esc(d.name)+'</b>.</p>'+(r.completed?'<p>Both signatures are complete. The signed PDF is being saved and sent to the candidate.</p>':'<p>The signed PDF will be created automatically once the candidate signs.</p>'):'<p>Your offer has been signed. Welcome to the Aliado family!</p><p>'+(r.completed?'A copy of your fully signed offer letter is on its way to your email.':'You&rsquo;ll receive a copy of the fully signed letter by email once all signatures are complete.')+'</p><p>Our team will contact you soon about the next onboarding steps.</p>');}
-   else{var t={already:'This offer was already signed.',expired:'This offer has expired.',cancelled:'This offer is no longer active.'}[r&&r.err]||'We couldn&rsquo;t save your signature. Please try again.';er.innerHTML=t;er.style.display='block';go.innerHTML='Sign '+(sak?'Offer':'My Offer')+' &rarr;';upd();}
-  }).catch(function(){er.innerHTML='Connection problem. Please try again.';er.style.display='block';go.innerHTML='Sign '+(sak?'Offer':'My Offer')+' &rarr;';upd();});
+   if(r&&r.ok){window.scrollTo(0,0);msg('#4f8a4b','&#10003;',sak?'Signed. Thank you!':(tr?'Thank you, '+first:'Thank you, '+first+'!'),sak?'<p>Your signature was added to the '+(tr?'letter':'offer')+' for <b>'+esc(d.name)+'</b>.</p>'+(r.completed?'<p>Both signatures are complete. The signed PDF is being saved and sent to the candidate.</p>':'<p>The signed PDF will be created automatically once the candidate signs.</p>'):(tr?'<p>Your letter has been signed.</p><p>'+(r.completed?'A copy of the fully signed letter is on its way to your email.':'You&rsquo;ll receive a copy of the fully signed letter by email once all signatures are complete.')+'</p>':'<p>Your offer has been signed. Welcome to the Aliado family!</p><p>'+(r.completed?'A copy of your fully signed offer letter is on its way to your email.':'You&rsquo;ll receive a copy of the fully signed letter by email once all signatures are complete.')+'</p><p>Our team will contact you soon about the next onboarding steps.</p>'));}
+   else{var t={already:'This offer was already signed.',expired:'This offer has expired.',cancelled:'This offer is no longer active.'}[r&&r.err]||'We couldn&rsquo;t save your signature. Please try again.';er.innerHTML=t;er.style.display='block';go.innerHTML=(tr?'Sign':'Sign '+(sak?'Offer':'My Offer'))+' &rarr;';upd();}
+  }).catch(function(){er.innerHTML='Connection problem. Please try again.';er.style.display='block';go.innerHTML=(tr?'Sign':'Sign '+(sak?'Offer':'My Offer'))+' &rarr;';upd();});
  };
 }
 })();
