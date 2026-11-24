@@ -354,6 +354,9 @@ if(C){fetch("tt-flow.txt",{cache:"no-store"}).then(r=>r.ok?r.text():"").then(F=>
    var d=document.createElement("div"); d.id="emCard";
    d.innerHTML='<div class="ic">📧</div><div><h3><b>'+n+' of your youth</b> '+(n===1?"doesn't":"don't")+' have a family email yet</h3><p>When you book sessions from <b>My Active Youth</b>, families with an email on file get an automatic reminder before every session. Fewer no-shows and last-minute cancellations for you.</p><span class="how">Add the email on each youth\'s card in My Active Youth</span></div>';
    w.insertBefore(d,w.firstChild);
+   d.style.margin="0 auto";d.style.width="100%";
+   var sync=function(){var v=[document.getElementById("s1"),document.getElementById("s2")].filter(function(x){return x&&!x.hidden&&x.offsetWidth>0;})[0];d.style.maxWidth=v?v.offsetWidth+"px":"";};
+   sync();setInterval(sync,400);
   }).catch(function(){});
  }catch(e){}
 })();
