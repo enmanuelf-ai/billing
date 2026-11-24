@@ -345,18 +345,24 @@ if(C){fetch("tt-flow.txt",{cache:"no-store"}).then(r=>r.ok?r.text():"").then(F=>
  try{
   var c=(new URLSearchParams(location.search).get("c")||"").trim();
   if(!c||(EM_PILOT.indexOf("*")<0&&EM_PILOT.indexOf(c)<0))return;
+  var LK="emGap_"+c, d=null, timer=null;
+  function render(n){
+   if(!n||n<1){if(d&&d.parentNode)d.parentNode.removeChild(d);d=null;return;}
+   var w=document.querySelector(".wrap"); if(!w)return;
+   if(!d){d=document.createElement("div");d.id="emCard";d.style.margin="0 auto";d.style.width="100%";w.insertBefore(d,w.firstChild);
+    var sync=function(){if(!d)return;var v=[document.getElementById("s1"),document.getElementById("s2")].filter(function(x){return x&&!x.hidden&&x.offsetWidth>0;})[0];d.style.maxWidth=v?v.offsetWidth+"px":"";};
+    sync();if(!timer)timer=setInterval(sync,400);}
+   d.innerHTML='<div class="ic">📧</div><div><h3><b>'+n+' of your youth</b> '+(n===1?"doesn't":"don't")+' have a family email yet</h3><p>When you book sessions from <b>My Active Youth</b>, families with an email on file get an automatic reminder before every session. Fewer no-shows and last-minute cancellations for you.</p><span class="how">Add the email on each youth\'s card in My Active Youth</span></div>';
+  }
+  var cached=null; try{cached=Number(localStorage.getItem(LK));}catch(e){}
+  if(cached>0)render(cached);
   fetch("cases-mail.txt",{cache:"no-store"}).then(function(r){return r.ok?r.text():"";}).then(function(M){
    M=(M||"").trim(); if(M.indexOf("https://")!==0)return null;
    return fetch(M,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"emails",clinician:c})}).then(function(r){return r.ok?r.json():null;});
   }).then(function(j){
-   var n=j&&Number(j.missing); if(!n||n<1)return;
-   var w=document.querySelector(".wrap"); if(!w)return;
-   var d=document.createElement("div"); d.id="emCard";
-   d.innerHTML='<div class="ic">📧</div><div><h3><b>'+n+' of your youth</b> '+(n===1?"doesn't":"don't")+' have a family email yet</h3><p>When you book sessions from <b>My Active Youth</b>, families with an email on file get an automatic reminder before every session. Fewer no-shows and last-minute cancellations for you.</p><span class="how">Add the email on each youth\'s card in My Active Youth</span></div>';
-   w.insertBefore(d,w.firstChild);
-   d.style.margin="0 auto";d.style.width="100%";
-   var sync=function(){var v=[document.getElementById("s1"),document.getElementById("s2")].filter(function(x){return x&&!x.hidden&&x.offsetWidth>0;})[0];d.style.maxWidth=v?v.offsetWidth+"px":"";};
-   sync();setInterval(sync,400);
+   if(!j)return; var n=Number(j.missing); if(isNaN(n)||n<0)return;
+   try{localStorage.setItem(LK,String(n));}catch(e){}
+   render(n);
   }).catch(function(){});
  }catch(e){}
 })();
