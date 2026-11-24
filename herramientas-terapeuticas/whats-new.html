@@ -341,7 +341,7 @@ if(C){fetch("tt-flow.txt",{cache:"no-store"}).then(r=>r.ok?r.text():"").then(F=>
 <script>
 (function(){
  /* Family-email reminder card. Pilot list: add names, or "*" for everyone */
- var EM_PILOT=["Sakima Gonzalez"];
+ var EM_PILOT=["*"];
  try{
   var c=(new URLSearchParams(location.search).get("c")||"").trim();
   if(!c||(EM_PILOT.indexOf("*")<0&&EM_PILOT.indexOf(c)<0))return;
