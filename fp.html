@@ -1,0 +1,63 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Schedule your fingerprints · Aliado</title>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Lato,Arial,sans-serif;background:#F0F3FA;color:#1F2433;padding:24px 16px}
+.wrap{max-width:560px;margin:0 auto}
+.card{background:#fff;border:1px solid #CFD6EA;border-radius:18px;overflow:hidden}
+.top{background:#fff;text-align:center;padding:22px 20px 10px}
+.top img{width:170px}
+.tag{font-size:12px;color:#6B7084;margin-top:4px}
+.bar{height:4px;background:#1A3A8F}
+.hero{padding:22px 24px 6px}
+.hero h1{font-size:24px;font-weight:900;color:#16224A}
+.hero p{font-size:15px;line-height:1.5;color:#3D4766;margin-top:8px}
+.step{display:flex;gap:14px;padding:18px 24px;border-top:1px solid #EEF1F8}
+.n{flex:0 0 32px;height:32px;border-radius:50%;background:#1A3A8F;color:#fff;font-weight:900;display:flex;align-items:center;justify-content:center}
+.n.done{background:#1F7A4D}
+.s h2{font-size:16px;font-weight:900;color:#16224A}
+.s p{font-size:14px;line-height:1.5;color:#3D4766;margin-top:4px}
+.btn{display:inline-block;margin-top:12px;background:#1A3A8F;color:#fff;text-decoration:none;font-weight:700;font-size:15px;padding:12px 20px;border-radius:12px;border:0;cursor:pointer}
+.btn:hover{background:#132c6e}
+.code{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#F4F6FC;border:1px solid #CFD6EA;border-radius:12px;padding:12px 14px;margin-top:10px}
+.code small{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#6B7084;font-weight:700}
+.code b{font-size:24px;letter-spacing:.12em;color:#16224A}
+.cp{background:#fff;border:1px solid #1A3A8F;color:#1A3A8F;font-weight:700;font-size:13px;padding:8px 14px;border-radius:10px;cursor:pointer}
+.cp:hover{background:#E6F1FB}
+.warn{margin-top:10px;font-size:13px;color:#A32D2D;font-weight:700}
+label{display:block;font-size:12px;font-weight:700;color:#6B7084;margin:12px 0 4px}
+input,select{width:100%;font:15px Lato,Arial;padding:11px 12px;border:1px solid #CFD6EA;border-radius:10px;background:#fff}
+.row{display:flex;gap:10px} .row>div{flex:1}
+.foot{text-align:center;font-size:12px;color:#6B7084;padding:18px 16px;line-height:1.6}
+@media(max-width:420px){.row{flex-direction:column;gap:0}.code b{font-size:20px}}
+</style></head><body><div class="wrap"><div class="card">
+<div class="top"><img src="https://www.aliadocommunityhealth.com/img/aliado-logo.png" alt="Aliado Community Health"><div class="tag">Partnering with families to build resilience and hope</div></div>
+<div class="bar"></div>
+<div class="hero"><h1 id="hi">Let's get your fingerprints scheduled</h1><p>This is required before you can start seeing families. It takes about 5 minutes.</p></div>
+<div class="step"><div class="n">1</div><div class="s"><h2>Open IdentoGO</h2><p>It opens in a new tab with Aliado's service code already entered. Fill in your personal information.</p><a class="btn" href="https://uenroll.identogo.com/workflows/2F18YV/appointment/bio" target="_blank" rel="noopener">Open IdentoGO →</a></div></div>
+<div class="step"><div class="n">2</div><div class="s" style="flex:1"><h2>When it asks for the Agency Identifier, paste this</h2>
+<div class="code"><div><small>Agency identifier</small><b>BA4025</b></div><button class="cp" onclick="cp(this,'BA4025')">Copy</button></div>
+<div class="warn">⚠ Please paste it, don't type it. A wrong code delays your clearance.</div></div></div>
+<div class="step"><div class="n">3</div><div class="s" style="flex:1"><h2>Tell us when you booked</h2><p>Once you have your appointment, enter the confirmation code IdentoGO gives you and your appointment details. We use the code to track your clearance.</p>
+<div id="frm"><div class="row"><div><label>Date</label><input id="fd" type="date"></div><div><label>Time</label><input id="ft" type="time"></div></div>
+<label>IdentoGO confirmation code</label><input id="fc" placeholder="From IdentoGO’s last screen"><label>Location</label><input id="fl" placeholder="e.g. IdentoGO – Hackensack, Main St">
+<div id="err" style="display:none;color:#b42318;font-weight:700;margin:10px 0 0">&#9888; <span id="errt"></span></div><button id="go" class="btn" style="width:100%" onclick="save()">I scheduled my appointment</button></div><div id="ok" style="display:none;background:#e7f5ee;border:1px solid #a9d9bf;border-radius:12px;padding:16px;margin-top:10px;color:#1f5f3b"><b style="font-size:17px">&#10003; Thank you! We have your appointment.</b><div id="okd" style="margin-top:8px;line-height:1.6"></div><div style="margin-top:8px">Bring your original driver’s license. If you need to reschedule, please let us know.</div></div></div></div>
+<div class="foot">Questions? Call Aliado at (201) 620-6440 · info@aliadocommunityhealth.com<br>Aliado Community Health · 116 Terrace Ave, Lodi, NJ 07644</div>
+</div></div>
+<script>
+var U="https://default5c737bedc35d48c39a6d89e766c7c7.03.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/30/workflows/e17d1222d1fa432dbdc900a646e5fcad/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=jIeyDC9b-em_wshM5B3WMjiDjiLcmkwj1dh8qIol17g",T=(location.hash.match(/t=([A-Za-z0-9-]+)/)||[])[1]||"";
+function cp(b,t){try{navigator.clipboard.writeText(t)}catch(e){};b.textContent='Copied ✓';setTimeout(function(){b.textContent='Copy'},1500)}
+function post(o){return fetch(U,{method:"POST",headers:{"Content-Type":"text/plain"},body:JSON.stringify(o)}).then(function(r){return r.json()})}
+function err(m){document.getElementById("errt").textContent=m;document.getElementById("err").style.display="block"}
+function done(d){document.getElementById("frm").style.display="none";document.getElementById("ok").style.display="block";document.getElementById("okd").innerHTML="<b>"+d.date+"</b> at <b>"+d.time+"</b><br>"+d.loc+"<br>Confirmation code: <b>"+d.code+"</b>"}
+function esc(x){return String(x).replace(/[<>&"]/g,function(c){return {"<":"&lt;",">":"&gt;","&":"&amp;",'"':"&quot;"}[c]})}
+if(T){post({t:T,a:"load"}).then(function(d){if(!d.ok)return;if(d.first)document.getElementById("hi").textContent="Hi "+d.first+", let's get your fingerprints scheduled";if(d.done)done({date:esc(d.date),time:esc(d.time),loc:esc(d.loc),code:esc(d.code)})}).catch(function(){})}
+function save(){document.getElementById("err").style.display="none";var D=document.getElementById("fd").value,Tm=document.getElementById("ft").value,C=document.getElementById("fc").value.trim(),L=document.getElementById("fl").value.trim();
+if(!T)return err("This link is incomplete. Please use the link from your Aliado email or call (201) 620-6440.");
+if(!D||!Tm||!C||!L)return err("Please fill in the date, time, confirmation code and location.");
+var p=D.split("-"),date=p[1]+"/"+p[2]+"/"+p[0],h=+Tm.split(":")[0],m=Tm.split(":")[1],time=((h%12)||12)+":"+m+(h<12?" AM":" PM");
+var b=document.getElementById("go");b.disabled=true;b.textContent="Saving…";
+post({t:T,a:"save",date:date,time:time,loc:L,code:C}).then(function(d){if(d.ok&&d.saved)done({date:date,time:time,loc:esc(L),code:esc(C)});else{err("We couldn't save it. Please try again or call (201) 620-6440.");b.disabled=false;b.textContent="I scheduled my appointment"}}).catch(function(){err("Connection problem. Please try again.");b.disabled=false;b.textContent="I scheduled my appointment"})}
+</script>
+</body></html>
